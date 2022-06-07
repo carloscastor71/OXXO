@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\100063771\\source\\repos\\OXXO\\OXXO\\OXXO.csproj": {}
+    "C:\\Users\\Integracorp\\Documents\\GitMadisa\\OXXO\\OXXO\\OXXO\\OXXO.csproj": {}
   },
   "projects": {
-    "C:\\Users\\100063771\\source\\repos\\OXXO\\OXXO\\OXXO.csproj": {
+    "C:\\Users\\Integracorp\\Documents\\GitMadisa\\OXXO\\OXXO\\OXXO\\OXXO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\100063771\\source\\repos\\OXXO\\OXXO\\OXXO.csproj",
+        "projectUniqueName": "C:\\Users\\Integracorp\\Documents\\GitMadisa\\OXXO\\OXXO\\OXXO\\OXXO.csproj",
         "projectName": "OXXO",
-        "projectPath": "C:\\Users\\100063771\\source\\repos\\OXXO\\OXXO\\OXXO.csproj",
-        "packagesPath": "C:\\Users\\100063771\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\100063771\\source\\repos\\OXXO\\OXXO\\obj\\",
+        "projectPath": "C:\\Users\\Integracorp\\Documents\\GitMadisa\\OXXO\\OXXO\\OXXO\\OXXO.csproj",
+        "packagesPath": "C:\\Users\\Integracorp\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Integracorp\\Documents\\GitMadisa\\OXXO\\OXXO\\OXXO\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\100063771\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Integracorp\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Users\\Public\\Documents\\Infragistics\\NuGet\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -63,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -7,6 +7,14 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.logo{
+    padding: 2rem;
+}
+
+#sidebar-nav {
+    width: 250px;
+}
+
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
@@ -58,14 +66,33 @@ html {
   min-height: 100%;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+.boton-menu {
+    display: none;
 }
+
+#sidebar-nav .menu:hover{
+    border-left: 3px solid orange;
+    color: red;
+}
+
+
+a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #C65B05;
+}
+
+a:hover, a.active {
+        text-decoration: none;
+        color: #03B003;
+}
+
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
 }
+
