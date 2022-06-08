@@ -1,8 +1,11 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\Integracorp\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\Integracorp\\.nuget\\packages"
+      "C:\\Users\\IntegraCorp\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\IntegraCorp\\.nuget\\packages",
+      "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+      "C:\\Program Files (x86)\\Progress\\ToolboxNuGetPackages",
+      "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet"
     ]
   }
 }
