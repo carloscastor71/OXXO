@@ -43,31 +43,32 @@
             <div class="col-auto px-0">
                 <div id="sidebar" class="collapse collapse-horizontal show border-end">
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
-                        <a href="/Home" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><img src="~/img/logo.png" class="logo" width="210px" alt="Alternate Text" /></a>
-                        <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-person-circle"></i> <span>Perfil</span> </a>
+                        <a href="/Home" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><img src="~/img/logo.png" class="logo" width="200" alt="Alternate Text" /></a>
+                        <a href="/Perfil/Perfil" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-person-circle"></i> <span>Perfil</span> </a>
                         <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-plus"></i><span>Altas</span></a>
                         <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-file-earmark-plus"></i> <span>Carga de documentos</span></a>
                         <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-patch-check"></i> <span>Verificacion</span></a>
                         <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-clock"></i> <span>Catergorizacion</span></a>
                         <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-archive"></i> <span>Mantenimiento</span></a>
-                        <a href="/Home/Privacy" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Privacidad</span></a>
+                        <a id="Privacy" href="/Home/Privacy" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Privacidad</span></a>
                     </div>
                 </div>
             </div>
             <main class="col ps-md-2 pt-2">
                 <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="boton-menu border rounded-3 p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1"></i> Menu</a>
-                <div class="page-header pt-3">
-                    @RenderBody()
-                </div>
+                    <div class="content pt-3">
+                        @RenderBody()
+                    </div>
             </main>
         </div>
+
     </div>
 
     @*<footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - OXXO - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
+            <div class="container">
+                &copy; 2022 - OXXO - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
@@ -75,12 +76,14 @@
     <script>
 
         $(document).ready(function () {
-            console.log("navbar")
+            //console.log("navbar")
 
         });
-        
+
     </script>
     @RenderSection("Scripts", required: false)
+
+
 </body>
 </html>
 
