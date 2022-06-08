@@ -326,7 +326,6 @@ C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\sco
 C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\OXXO.TagHelpers.input.cache
 C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\OXXO.TagHelpers.output.cache
 C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\OXXO.RazorCoreGenerate.cache
-C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\Razor\Views\Comercio\Index.cshtml.g.cs
 C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
 C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\Razor\Views\Login\Index.cshtml.g.cs
@@ -458,3 +457,5 @@ C:\Users\100063771\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\OXXO.
 C:\Users\100063771\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\OXXO.dll
 C:\Users\100063771\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\OXXO.pdb
 C:\Users\100063771\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\OXXO.genruntimeconfig.cache
+C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\Razor\Views\Comercio\Create.cshtml.g.cs
+C:\Users\IntegraCorp\Documents\GitHub\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout2.cshtml.g.cs
