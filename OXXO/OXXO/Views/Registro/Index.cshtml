@@ -1,36 +1,55 @@
-﻿<section class="vh-90">
-    <div class="container py-5 h-90">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-6">
-                <div class="card shadow-2-strong" style="border-radius: 1rem; box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;">
-                    <div class="card-body p-5 text-center">
-                        <h3 class="mb-5">Registrate</h3>
-                        <div class="form-outline mb-4">
+﻿@{
+    ViewData["Title"] = "Registro";
+}
+@{
+
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<section class="text-center text-lg-start">
+    <style>
+        .card {
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        }
+    </style>
+    <div class="container py-4">
+        <div class="row g-0 align-items-center justify-content-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="card cascading-right">
+                    <div class="card-body p-5 shadow-5 text-center">
+                        <h2 class="fw-bold mb-5">Registrate</h2>
+                        <form>
                             <div class="row">
-                                <div class="col-6">
-                                    <input type="email" id="typeEmailX-2" class="form-control form-control-lg" />
-                                    <label class="form-label" for="typeEmailX-2">Comercio</label>
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-outline">
+                                        <input type="text" id="Comercio" class="form-control" />
+                                        <label class="form-label" for="Comercio">Comercio</label>
+                                    </div>
                                 </div>
-                                <div class="col-6">
-                                    <input type="email" id="typeEmailX-2" class="form-control form-control-lg" />
-                                    <label class="form-label" for="typeEmailX-2">Giro comercial</label>
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-outline">
+                                        <input type="text" id="GiroCom" class="form-control" />
+                                        <label class="form-label" for="GiroCom">Giro comercial</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-outline mb-4">
-                            <input type="password" id="typePasswordX-2" class="form-control form-control-lg" />
-                            <label class="form-label" for="typePasswordX-2">Correo</label>
-                        </div>
-                        <div class="form-outline mb-4">
-                            <input type="password" id="typePasswordX-2" class="form-control form-control-lg" />
-                            <label class="form-label" for="typePasswordX-2">Contraseña</label>
-                        </div>
-
-                        <button class="btn btn-outline-primary btn-lg btn-block" asp-action="Index" type="submit">Registrar</button>
+                            <div class="form-outline mb-4">
+                                <input type="email" id="Correo" class="form-control" />
+                                <label class="form-label" for="Correo">Correo</label>
+                            </div>
+                            <div class="form-outline mb-4">
+                                <input type="password" id="Contrasena" class="form-control" />
+                                <label class="form-label" for="Contrasena">Contraseña</label>
+                            </div>
+                            <button type="submit" class="btn btn-outline-primary btn-block mb-4">
+                                Registrarse
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
