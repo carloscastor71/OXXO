@@ -3,35 +3,30 @@ using Microsoft.Extensions.Logging;
 using OXXO.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace OXXO.Controllers
 {
-    public class LoginController : Controller
+    public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public LoginController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
+        [Route("home/inicio")]
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult Privacy()
         {
-            return View("Privacy");
+            return View();
         }
-
-        //public IActionResult Privacy()
-        //{
-        //    return View();
-        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

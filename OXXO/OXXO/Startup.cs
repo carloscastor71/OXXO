@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace OXXO
 {
@@ -24,6 +26,21 @@ namespace OXXO
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+        }
+        //revisa si existen datos, si no existen creara el user,permisos,controladores y acciones
+        private void CrearUsuariosPermisos()
+        {
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("SP_DatosIniciales", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +67,7 @@ namespace OXXO
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Login}/{action=Index}/{id?}");
+                    pattern: "{controller=Login}/{action=Login}/{id?}");
             });
         }
     }
