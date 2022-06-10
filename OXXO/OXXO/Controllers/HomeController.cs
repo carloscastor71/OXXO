@@ -19,6 +19,10 @@ namespace OXXO.Controllers
         }
 
         [Route("home/inicio")]
+        public IActionResult Home()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
             return View();

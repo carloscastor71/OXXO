@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+
+        <h1 class="titulo">¡Bienvenido!</h1>
+
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

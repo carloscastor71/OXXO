@@ -37,7 +37,7 @@ namespace OXXO.Controllers
                 {
                     connection.Open();
 
-                    using (SqlCommand command = new SqlCommand("sp_BuscarControlador_PorRol", connection))
+                    using (SqlCommand command = new SqlCommand("SP_BuscarControlador_PorRol", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("IdPerfil",IdPerfil);
@@ -49,7 +49,7 @@ namespace OXXO.Controllers
 
                             clsPermisos.IdRol = Convert.ToInt32(dr["IdRol"]);
                             clsPermisos.IdPerfil = Convert.ToInt32(dr["IdPerfil"]);
-                            clsPermisos.Encabezado = Convert.ToString(dr["Encabezado"]);
+                            clsPermisos.Encabezado = Convert.ToString(dr["Texto"]);
                             clsPermisos.ControllerName = Convert.ToString(dr["NombreControlador"]);
                             clsPermisos.ActionName = Convert.ToString(dr["NombreAccion"]);
                             clsPermisos.Leer = Convert.ToBoolean(dr["Leer"]);

@@ -1,41 +1,111 @@
 ﻿@model OXXO.Models.MenuUser
-@{ 
-    Layout = null;
-}
+@{ Layout = "~/Views/Shared/_Layout2.cshtml"; }
 
-<div id="sidebar" class="collapse collapse-horizontal show border-end">
-    <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
-        <a href="/Home" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><img src="~/img/logo.png" class="logo" width="200" alt="Alternate Text" /></a>
+<style>
 
-        @foreach (var item in Model.Menus)
-        {
-            <li class="dropdown">
-                <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar">@item.MenuMain.NombreMenu<span></span> </a>
-                @*<button class="dropbtn">@item.MenuMain.NombreMenu</button>*@
-                <div class="dropdown-content">
-                    @foreach (var subMenu in item.SubMenus)
-                    {
-                        <a class="nav-link text-dark" href="@Url.Action(subMenu.ActionName, subMenu.ControllerName)">@subMenu.Encabezado</a>
-                    }
-                </div>
-            </li>
+    .sidenav {
+        height: 100%;
+        width: 210px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #F9F9F9;
+        overflow-x: hidden;
+        padding-top: 20px;
+        float: left;
+        margin-bottom: 0px;
+    }
+
+        /* drop down */
+        .sidenav a, .dropdown-btn {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #000000;
+            display: block;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            outline: none;
         }
+            /* mouse encima */
+            .sidenav a:hover, .dropdown-btn:hover {
+                color: #FF8F4B;
+            }
+
+    .main {
+        margin-left: 200px;
+        font-size: 20px;
+        padding: 0px 10px;
+    }
+
+
+    .active {
+        background-color: #FCCC5B;
+        color: black;
+    }
+
+
+    .dropdown-container {
+        display: none;
+        background-color: #FFF8E9;
+        padding-left: 8px;
+    }
+
+
+    .fa-caret-down {
+        float: right;
+        padding-right: 8px;
+    }
+
+    .center {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+</style>
+
+<div class="sidenav">
+    <div>
+        <img src="~/img/logo.png" class="logo" width="190" alt="Alternate Text" />
+    </div>
+
+    @foreach (var item in Model.Menus)
+    {
+        <button class="dropdown-btn">
+            @item.MenuMain.NombreMenu
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            @foreach (var subMenu in item.SubMenus)
+            {
+                <a href="@Url.Action(subMenu.ActionName, subMenu.ControllerName)">@subMenu.Encabezado</a>
+            }
+        </div>
+
+    }
     <div>
         <a class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" asp-area="" asp-controller="Login" asp-action="LogOut">Cerrar Sesion</a>
     </div>
-        @*@if (Context.Session.GetString("IdPerfil") != null)
-        {
-            <div id="foo-view" data-url="@Url.Action(action:"MostrarMenu", controller:"Menu")"></div>
-        }*@
-        @*<div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
-            <a href="/Home" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><img src="~/img/logo.png" class="logo" width="200" alt="Alternate Text" /></a>
-            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-person-circle"></i> <span>Perfil</span> </a>
-            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-plus"></i><span>Altas</span></a>
-            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-file-earmark-plus"></i> <span>Carga de documentos</span></a>
-            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-patch-check"></i> <span>Verificacion</span></a>
-            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-clock"></i> <span>Catergorizacion</span></a>
-            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-archive"></i> <span>Mantenimiento</span></a>
-            <a id="Privacy" href="/Home/Privacy" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Privacidad</span></a>
-        </div>*@
-    </div>
 </div>
+
+<script>
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdown.length; i++) {
+        dropdown[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+
+</script>
