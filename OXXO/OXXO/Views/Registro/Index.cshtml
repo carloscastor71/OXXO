@@ -11,10 +11,10 @@
         align-items: center;
         justify-content: center;
         min-height: 80vh;
-        background: #FFD6AA;
-        background: -webkit-radial-gradient(top right, #FFD6AA, #756CA6);
-        background: -moz-radial-gradient(top right, #FFD6AA, #756CA6);
-        background: radial-gradient(to bottom left, #FFD6AA, #756CA6);
+        background: #FFE2C2;
+        background: -webkit-radial-gradient(top right, #FFE2C2, #AAA3D3);
+        background: -moz-radial-gradient(top right, #FFE2C2, #AAA3D3);
+        background: radial-gradient(to bottom left, #FFE2C2, #AAA3D3);
     }
 
     .account-block {
@@ -83,15 +83,21 @@
                                         <label for="exampleInputPassword1">Contraseña</label>
                                         <input type="password" class="form-control" id="exampleInputPassword1">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <button type="submit" class="btn btn-outline-primary ">Registrar</button>
-                                        </div>
-                                        <div class="col-9">
-                                            <p class=" text-muted text-center mt-2 mb-0">¿Ya estas registrado? <a asp-controller="Login" asp-action="Index" class="text-primary ml-1">Ingresa</a></p>
-                                        </div>
+                                    <div class="container-login100-form-btn">
+                                        <button class="btn btn-outline-warning btn-lg">
+                                            Registrar
+                                        </button>
                                     </div>
+
+                                   
+
                                 </form>
+                                <br />
+                                <div>
+                                    <p class="text-center text-muted text-center mt-2 mb-0">
+                                        ¿Aun no estas registrado? <a asp-action="Login" asp-controller="Login">Registrate</a>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
