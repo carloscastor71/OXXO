@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 
 namespace OXXO.Controllers
 {
-    public class RegistroController : Controller
+    public class RegistrosController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public RegistroController(ILogger<HomeController> logger)
+        public RegistrosController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Altas()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Categorizacion()
         {
             return View();
         }
