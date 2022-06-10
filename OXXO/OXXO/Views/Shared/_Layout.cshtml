@@ -9,6 +9,9 @@
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <link href="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js" rel="stylesheet" />
+    <link href="~/css/contenedor.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
     <style>
         .container-fluid {
@@ -23,34 +26,45 @@
         <div class="row flex-nowrap">
             <div class="col-auto px-0">
                 <div id="sidebar" class="collapse collapse-horizontal show border-end">
-                    <input id="idP" type="hidden" value="@Context.Session.GetString("IdPerfil")"/>
-                    @if (Context.Session.GetString("IdPerfil")!=null)
+                    <input id="idP" type="hidden" value="@Context.Session.GetString("IdPerfil")" />
+                    @if (Context.Session.GetString("IdPerfil") != null)
                     {
                         <div id="foo-view" data-url="@Url.Action(action:"MostrarMenu", controller:"Menu")"></div>
                     }
                     @*<div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
-                        <a href="/Home" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><img src="~/img/logo.png" class="logo" width="200" alt="Alternate Text" /></a>
-                        <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-person-circle"></i> <span>Perfil</span> </a>
-                        <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-plus"></i><span>Altas</span></a>
-                        <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-file-earmark-plus"></i> <span>Carga de documentos</span></a>
-                        <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-patch-check"></i> <span>Verificacion</span></a>
-                        <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-clock"></i> <span>Catergorizacion</span></a>
-                        <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-archive"></i> <span>Mantenimiento</span></a>
-                        <a id="Privacy" href="/Home/Privacy" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Privacidad</span></a>
-                    </div>*@
+                            <a href="/Home" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><img src="~/img/logo.png" class="logo" width="200" alt="Alternate Text" /></a>
+                            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-person-circle"></i> <span>Perfil</span> </a>
+                            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-plus"></i><span>Altas</span></a>
+                            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-file-earmark-plus"></i> <span>Carga de documentos</span></a>
+                            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-patch-check"></i> <span>Verificacion</span></a>
+                            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-clock"></i> <span>Catergorizacion</span></a>
+                            <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-archive"></i> <span>Mantenimiento</span></a>
+                            <a id="Privacy" href="/Home/Privacy" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Privacidad</span></a>
+                        </div>*@
                 </div>
             </div>
-            <main class="col ps-md-2 pt-2">
-                <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="boton-menu border rounded-3 p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1"></i> Menu</a>
-                    <div class="content pt-3">
-                        @RenderBody()
+            <main class="col" style="padding: 0px !important;">
+                <nav class="nav navbar navbar-light bg-light">
+                    <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="boton-menu text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1"></i></a>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link" href="#">Features</a>
+                            <a class="nav-link" href="#">Pricing</a>
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        </div>
                     </div>
+                </nav>
+                <script src="~/lib/jquery/dist/jquery.min.js"></script>
+                <div class="content pt-3 ps-md-2 pt-2">
+                    @RenderBody()
+                </div>
             </main>
         </div>
 
     </div>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -61,7 +75,6 @@
 
             $(document).ready(function () {
                 var id_perfil = $("#idP").val()
-                console.log($("#idP").val())
                 if (id_perfil == "") {
                     CerrarSesion();
                 }
