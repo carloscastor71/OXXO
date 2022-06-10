@@ -9,20 +9,24 @@
 
         @foreach (var item in Model.Menus)
         {
-            <li class="dropdown">
-                <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar">@item.MenuMain.NombreMenu<span></span> </a>
-                @*<button class="dropbtn">@item.MenuMain.NombreMenu</button>*@
-                <div class="dropdown-content">
-                    @foreach (var subMenu in item.SubMenus)
-                    {
-                        <a class="nav-link text-dark" href="@Url.Action(subMenu.ActionName, subMenu.ControllerName)">@subMenu.Encabezado</a>
-                    }
-                </div>
-            </li>
-        }
-    <div>
-        <a class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" asp-area="" asp-controller="Login" asp-action="LogOut">Cerrar Sesion</a>
+            //<li class="dropdown">
+            <div id = "sidebar" class="collapse collapse-horizontal show border-end">
+            <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+        <a href="#" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar">@item.MenuMain.NombreMenu<span></span> </a>
+        @*<button class="dropbtn">@item.MenuMain.NombreMenu</button>*@
+       @*<div class="dropdown-content">*@
+            @foreach (var subMenu in item.SubMenus)
+                                            {
+            <a class="nav-link text-dark" href="@Url.Action(subMenu.ActionName, subMenu.ControllerName)">@subMenu.Encabezado</a>
+                                            }
+            @*//*@
+        </div>
     </div>
+        //</li>
+}
+        <div>
+            <a class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" asp-area="" asp-controller="Login" asp-action="LogOut">Cerrar Sesion</a>
+        </div>
         @*@if (Context.Session.GetString("IdPerfil") != null)
         {
             <div id="foo-view" data-url="@Url.Action(action:"MostrarMenu", controller:"Menu")"></div>
@@ -38,4 +42,4 @@
             <a id="Privacy" href="/Home/Privacy" class="menu list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Privacidad</span></a>
         </div>*@
     </div>
-</div>
+    </div>
