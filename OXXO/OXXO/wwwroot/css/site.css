@@ -14,6 +14,16 @@ a.navbar-brand {
 #sidebar-nav {
     width: 250px;
 }
+div.dataTables_wrapper {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.active-nav {
+    border-left: 3px solid orange;
+    background-color: rgb(147, 147, 147, 0.1);
+    color: red;
+}
 
 /* Provide sufficient contrast against white background */
 a {
@@ -66,27 +76,20 @@ html {
   min-height: 100%;
 }
 
-.boton-menu {
-    display: none;
+.boton-menu{
+    border: none;
 }
 
-#sidebar-nav .menu:hover{
+.boton-menu i{
+    font-size: 30px;
+    color: black;
+}
+
+
+#sidebar-nav .menu:hover {
     border-left: 3px solid orange;
     color: red;
 }
-
-
-a {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    color: #C65B05;
-}
-
-a:hover, a.active {
-        text-decoration: none;
-        color: #03B003;
-}
-
 
 .footer {
     position: absolute;

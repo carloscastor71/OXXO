@@ -229,3 +229,4 @@ C:\Users\Integracorp\Documents\GitMadisa\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\
 C:\Users\Integracorp\Documents\GitMadisa\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\OXXO.pdb
 C:\Users\Integracorp\Documents\GitMadisa\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\OXXO.genruntimeconfig.cache
 C:\Users\Integracorp\Documents\GitMadisa\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\Razor\Views\Comercio\Index.cshtml.g.cs
+C:\Users\Integracorp\Documents\GitMadisa\OXXO\OXXO\OXXO\obj\Debug\netcoreapp3.1\Razor\Views\Categorizacion\Index.cshtml.g.cs
