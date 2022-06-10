@@ -7,44 +7,99 @@
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 <style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        background: #FFD6AA;
+        background: -webkit-radial-gradient(top right, #FFD6AA, #756CA6);
+        background: -moz-radial-gradient(top right, #FFD6AA, #756CA6);
+        background: radial-gradient(to bottom left, #FFD6AA, #756CA6);
+    }
+
+    .account-block {
+        padding: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+        position: relative;
+    }
+
     .card {
-        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        padding: 1.5em .5em .5em;
+        border-radius: 2em;
+    }
+
+    .account-block .overlay {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .account-block .account-testimonial {
+        text-align: center;
+        color: #fff;
+        position: absolute;
+        margin: 0 auto;
+        padding: 0 1.75rem;
+        bottom: 3rem;
+        left: 0;
+        right: 0;
+    }
+
+    .text-theme {
+        color: #5369f8 !important;
     }
 </style>
-<section>
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card shadow-2-strong" style="border-radius: 1rem;">
-                    <div class="card-body p-5 text-center">
-                        <h3 class="mb-5">Inicio de sesion</h3>
-                        <div class="form-outline mb-4">
-                            <input type="email" id="Correo" class="form-control form-control-lg" />
-                            <label class="form-label" for="Correo">Correo</label>
-                        </div>
-                        <div class="form-outline mb-4">
-                            <input type="password" id="Contrasena" class="form-control form-control-lg" />
-                            <label class="form-label" for="Contrasena-2">Contraseña</label>
-                        </div>
-                        <div class="form-check d-flex justify-content-start mb-4">
-                            <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
-                            <label class="form-check-label" style="padding-left:10px;" for="Recordar">  Recordar contraseña</label>
-                        </div>
-                        <a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary btn-lg btn-block" type="submit">Iniciar</a>
-                        <br />
-                        <br />
-                        <div>
-                            <p class="text-center">
-                                ¿Aun no estas registrado? <a asp-action="Index" asp-controller="Registro">Registrate</a>
-                            </p>
+
+<div id="main-wrapper" class="container">
+    <div class="row justify-content-center ">
+        <div class="col-xl-5">
+            <div class="card ">
+                <div class="card-body p-0">
+                    <div class="row no-gutters">
+                        <div class="col-lg-12">
+                            <div class="p-5">
+                                <div class="mb-5">
+                                    <h1 class="h2 font-weight-bold text-theme ">Inicio de sesion</h1>
+                                </div>
+                                <h6 class="h5 mb-0">Bienvenido!</h6>
+                                <p class="text-muted mt-2 mb-5">Ingresa tu direccion de correo y contraseña</p>
+                                <form>
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputEmail1">Correo</label>
+                                        <input type="email" class="form-control" id="exampleInputEmail1">
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <label for="exampleInputPassword1">Contraseña</label>
+                                        <input type="password" class="form-control" id="exampleInputPassword1">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <button type="submit" class="btn btn-outline-primary ">Ingresar</button>
+                                        </div>
+                                        <div class="col-9">
+                                            <p class=" text-muted text-center mt-2 mb-0">¿Aun no estas registrado? <a asp-controller="Registro" asp-action="Index" class="text-primary ml-1">Registrarse</a></p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
-</section>
+</div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-

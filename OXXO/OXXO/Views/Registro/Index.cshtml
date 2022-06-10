@@ -5,51 +5,105 @@
 
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
-<section class="text-center text-lg-start">
-    <style>
-        .card {
-            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-        }
-    </style>
-    <div class="container py-4">
-        <div class="row g-0 align-items-center justify-content-center">
-            <div class="col-lg-6 mb-5 mb-lg-0">
-                <div class="card cascading-right">
-                    <div class="card-body p-5 shadow-5 text-center">
-                        <h2 class="fw-bold mb-5">Registrate</h2>
-                        <form>
-                            <div class="row">
-                                <div class="col-md-6 mb-4">
-                                    <div class="form-outline">
-                                        <input type="text" id="Comercio" class="form-control" />
-                                        <label class="form-label" for="Comercio">Comercio</label>
-                                    </div>
+<style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        background: #FFD6AA;
+        background: -webkit-radial-gradient(top right, #FFD6AA, #756CA6);
+        background: -moz-radial-gradient(top right, #FFD6AA, #756CA6);
+        background: radial-gradient(to bottom left, #FFD6AA, #756CA6);
+    }
+
+    .account-block {
+        padding: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+        position: relative;
+    }
+
+    .card {
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        padding: 1.5em .5em .5em;
+        border-radius: 2em;
+    }
+
+    .account-block .overlay {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .account-block .account-testimonial {
+        text-align: center;
+        color: #fff;
+        position: absolute;
+        margin: 0 auto;
+        padding: 0 1.75rem;
+        bottom: 3rem;
+        left: 0;
+        right: 0;
+    }
+
+    .text-theme {
+        color: #5369f8 !important;
+    }
+</style>
+
+
+
+<div id="main-wrapper" class="container">
+    <div class="row justify-content-center ">
+        <div class="col-xl-5">
+            <div class="card ">
+                <div class="card-body p-0">
+                    <div class="row no-gutters">
+                        <div class="col-lg-12">
+                            <div class="p-5">
+                                <div class="mb-5">
+                                    <h1 class="h2 font-weight-bold text-theme ">Registrate</h1>
                                 </div>
-                                <div class="col-md-6 mb-4">
-                                    <div class="form-outline">
-                                        <input type="text" id="GiroCom" class="form-control" />
-                                        <label class="form-label" for="GiroCom">Giro comercial</label>
+                                <h6 class="h5 mb-0">Bienvenido!</h6>
+                                <p class="text-muted mt-2 mb-5">Registrate con un correo y contraseña</p>
+                                <form>
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputEmail1">Correo</label>
+                                        <input type="email" class="form-control" id="exampleInputEmail1">
                                     </div>
-                                </div>
+                                    <div class="form-group mb-5">
+                                        <label for="exampleInputPassword1">Contraseña</label>
+                                        <input type="password" class="form-control" id="exampleInputPassword1">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <button type="submit" class="btn btn-outline-primary ">Registrar</button>
+                                        </div>
+                                        <div class="col-9">
+                                            <p class=" text-muted text-center mt-2 mb-0">¿Ya estas registrado? <a asp-controller="Login" asp-action="Index" class="text-primary ml-1">Ingresa</a></p>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="form-outline mb-4">
-                                <input type="email" id="Correo" class="form-control" />
-                                <label class="form-label" for="Correo">Correo</label>
-                            </div>
-                            <div class="form-outline mb-4">
-                                <input type="password" id="Contrasena" class="form-control" />
-                                <label class="form-label" for="Contrasena">Contraseña</label>
-                            </div>
-                            <button type="submit" class="btn btn-outline-primary btn-block mb-4">
-                                Registrarse
-                            </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
-</section>
+</div>
+
+
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
