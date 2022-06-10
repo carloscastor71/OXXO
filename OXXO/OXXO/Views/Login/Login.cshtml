@@ -1,12 +1,18 @@
 ﻿@model OXXO.Models.Login
 @{
-    ViewData["Title"] = "Inicio de sesion";
+    ViewData["Title"] = "Inicio de sesión";
 }
 @{
 
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 <style>
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        line-height: 1.5;
+        box-sizing: border-box;
+    }
+
     body {
         display: flex;
         align-items: center;
@@ -59,6 +65,7 @@
     .text-theme {
         color: #5369f8 !important;
     }
+
 </style>
 <section>
     <div id="main-wrapper" class="container">
@@ -70,40 +77,40 @@
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="mb-5">
-                                        <h1 class="h2 font-weight-bold text-theme ">Inicio de sesion</h1>
+                                        <h1 class="h2 font-weight-bold text-theme ">Inicio de sesión</h1>
                                     </div>
-                                        <h6 class="h5 mb-0">Bienvenido!</h6>
-                                        <p class="text-muted mt-2 mb-5">Ingresa tu direccion de correo y contraseña</p>
-                                        <form name="Login" asp-controller="Login" asp-action="Login" method="post" class="login100-form validate-form">
-                                            <div class="form-outline mb-4">
-                                                <div class="form-group mb-3" data-validate="El usuario es requerido">
-                                                    <label class="form-label" for="Usuario">Usuario</label>
-                                                    <input class="form-control" type="text" asp-for="UserName">
-                                                </div>
+                                    <h6 class="h5 mb-0">¡Bienvenido!</h6>
+                                    <p class="text-muted mt-2 mb-5">Ingresa tu usuario y contraseña</p>
+                                    <form name="Login" asp-controller="Login" asp-action="Login" method="post" class="login100-form validate-form">
+                                        <div class="form-outline mb-4">
+                                            <div class="form-group mb-3" data-validate="El usuario es requerido">
+                                                <label class="form-label" for="Usuario">Usuario</label>
+                                                <input class="form-control" type="text" asp-for="UserName" autocomplete="off">
                                             </div>
-                                            <div class="form-outline mb-4">
-                                                <div class="wrap-input100 validate-input m-b-10" data-validate="La contraseña es requerida">
-                                                    <label class="form-label" for="Contrasena">Contraseña</label>
-                                                    <input class="form-control" type="password" asp-for="Contrasena">
-                                                </div>
-                                            </div>
-                                            <div class="form-check d-flex justify-content-start mb-4">
-                                                <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
-                                                <label class="form-check-label" style="padding-left:10px;" for="Recordar">  Recordar contraseña</label>
-                                            </div>
-                                            <div class="container-login100-form-btn">
-                                                <button class="btn btn-outline-warning btn-lg">
-                                                    INICIAR SESIÓN
-                                                </button>
-                                            </div>
-                                        </form>
-                                        <br />
-                                        <div>
-                                            <p class="text-center text-muted text-center mt-2 mb-0">
-                                                ¿Aun no estas registrado? <a asp-action="Index" asp-controller="Registro">Registrate</a>
-                                            </p>
                                         </div>
-                                    </div>
+                                        <div class="form-outline mb-4">
+                                            <div class="wrap-input100 validate-input m-b-10" data-validate="La contraseña es requerida">
+                                                <label class="form-label" for="Contrasena">Contraseña</label>
+                                                <input class="form-control" type="password" asp-for="Contrasena">
+                                            </div>
+                                        </div>
+                                        <div class="form-check d-flex justify-content-center mb-4">
+                                            <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                            <label class="form-check-label" style="padding-left:10px;" for="Recordar">  Recordar contraseña</label>
+                                        </div>
+                                        <div class="d-flex p-2 bd-highlight justify-content-center mb-4">
+                                            <button class="btn btn-outline-warning btn-lg">
+                                                INICIAR SESIÓN
+                                            </button>
+                                        </div>
+                                    </form>
+                            <br />
+                            <div>
+                                <p class="text-center text-muted text-center mt-2 mb-0">
+                                    ¿Aun no estas registrado? <a asp-action="Index" asp-controller="Registro">Registrate</a>
+                                </p>
+                            </div>
+                        </div>
                                 </div>
                             </div>
                         </div>
