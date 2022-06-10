@@ -66,7 +66,7 @@ namespace OXXO.Controllers
                             SqlDataReader sdr = comm.ExecuteReader();
                             if (sdr.Read())
                             {
-                                //si existe el usuario verifica si esta vigente
+                                //si existe el usuario verifica si está
                                 if (DateTime.Now > sdr.GetDateTime(8))
                                 {
                                     ViewBag.Alert = CommonServices.ShowAlert(Alerts.Info, "Este usuario no esta vigente.");
@@ -79,7 +79,7 @@ namespace OXXO.Controllers
                                     HttpContext.Session.SetString("UserName", sdr.GetString(3));
                                     HttpContext.Session.SetString("Correo", sdr.GetString(5));
                                     HttpContext.Session.SetString("Puesto", sdr.GetString(6));
-                                    HttpContext.Session.SetString("IdPerfil", sdr.GetString(9));
+                                    HttpContext.Session.SetString("IdPerfil", sdr.GetInt32(9).ToString());
                                     sqlCon.Close();
                                     return RedirectToAction("Index", "Home");
                                 }

@@ -46,7 +46,7 @@ namespace OXXO.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? Vigencia { get; set; }
         [Required(ErrorMessage = " * Seleccione el perfil ")]
-        public int IdPerfil { get; set; }
+        public string IdPerfil { get; set; }
         [Required(ErrorMessage = " * Seleccione una compania ")]
         public int IdCompania { get; set; }
         public DateTime? FechaAlta { get; set; }
