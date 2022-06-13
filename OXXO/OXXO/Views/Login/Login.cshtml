@@ -67,6 +67,13 @@
 
 </style>
 <section>
+    @if (ViewBag.Alert != null) //Agregado por Miguel
+    {
+        <div id="alerta" class="container body-content">
+            @Html.Raw(@ViewBag.Alert)
+            <hr />
+        </div>
+    } @*/////*@
     <div id="main-wrapper" class="container">
         <div class="row justify-content-center ">
             <div class="col-xl-4 col-md-4 col-sm-4">
@@ -122,7 +129,7 @@
 
     <script>
 
-   
+        document.getElementById("alerta").style.display = "none"; //Agregado por Miguel
 
     </script>
 
