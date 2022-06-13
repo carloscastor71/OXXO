@@ -52,9 +52,8 @@ namespace OXXO.Controllers
         //}
 
         [HttpPost]
-        public IActionResult Index( int IdEmisor,string Rfc, string NombreCompleto, string Telefono, string Correo, string Direccion, string CuentaDeposito, int IdBanco , string RazonSocial, string NombreComercial, int IdGiroComercio, string Portal, int Persona, int Estatus, int Usuario_FAl, int Usuario_FUM, int IdTipoDeposito)
+        public IActionResult Index( int IdEmisor,string Rfc, string NombreCompleto, string Telefono, string Correo, string Direccion, string CuentaDeposito, int IdBanco , string RazonSocial, string NombreComercial, int IdGiroComercio, string Portal, int Persona, int Usuario_FAl, int Usuario_FUM, int IdTipoDeposito)
         {
-            Estatus = 1;
             string IdPerfil = HttpContext.Session.GetString("IdPerfil");
             try
             {
@@ -81,7 +80,6 @@ namespace OXXO.Controllers
                             command.Parameters.AddWithValue("@IdGiroComercio", IdGiroComercio);
                             command.Parameters.AddWithValue("@Portal", Portal);
                             command.Parameters.AddWithValue("@Persona",Persona);
-                            command.Parameters.AddWithValue("@Estatus", Estatus);
                             command.Parameters.AddWithValue("@Usuario_FAl", IdPerfil);
                             command.Parameters.AddWithValue("@Usuario_FUM", IdPerfil);
                             command.Parameters.AddWithValue("@IdTipoDeposito", IdTipoDeposito);
