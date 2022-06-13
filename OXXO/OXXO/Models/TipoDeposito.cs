@@ -7,16 +7,15 @@ using System.Collections.Generic;
 
 namespace OXXO.Models
 {
-    public partial class Banco
+    public partial class TipoDeposito
     {
-        public Banco()
+        public TipoDeposito()
         {
             Comercio = new HashSet<Comercio>();
         }
 
-        public int IdBanco { get; set; }
-        public string Bancos { get; set; }
-        public int? Activo { get; set; }
+        public int IdTipoDeposito { get; set; }
+        public string TipoDeposito1 { get; set; }
         public int? UsuarioFal { get; set; }
         public DateTime? Fal { get; set; }
         public int? UsuarioFum { get; set; }
