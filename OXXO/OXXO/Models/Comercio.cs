@@ -16,7 +16,7 @@ namespace OXXO.Models
         public string Correo { get; set; }
         public string Direccion { get; set; }
         public string CuentaDeposito { get; set; }
-        public int IdBanco { get; set; }
+        public int? IdBanco { get; set; }
         public string RazonSocial { get; set; }
         public string NombreComercial { get; set; }
         public int? IdGiroComercio { get; set; }
@@ -30,10 +30,12 @@ namespace OXXO.Models
         public int? UsuarioFum { get; set; }
         public DateTime? Fum { get; set; }
         public int IdCompania { get; set; }
+        public int IdTipoDeposito { get; set; }
 
         public virtual Estatus EstatusNavigation { get; set; }
         public virtual Banco IdBancoNavigation { get; set; }
         public virtual Compania IdCompaniaNavigation { get; set; }
         public virtual GiroComercio IdGiroComercioNavigation { get; set; }
+        public virtual TipoDeposito IdTipoDepositoNavigation { get; set; }
     }
 }
