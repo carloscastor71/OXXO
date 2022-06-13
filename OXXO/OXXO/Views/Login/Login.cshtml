@@ -73,6 +73,13 @@
 
 </style>
 <section>
+    @if (ViewBag.Alert != null) //Agregado por Miguel
+    {
+        <div id="alerta" class="container body-content">
+            @Html.Raw(@ViewBag.Alert)
+            <hr />
+        </div>
+    } @*/////*@
     <div id="main-wrapper" class="container">
         <div class="row justify-content-center ">
             <div class="col-xl-5">
@@ -109,13 +116,12 @@
                                             </button>
                                         </div>
                                     </form>
-                            <br />
-                            <div>
-                                <p class="text-center text-muted text-center mt-2 mb-0">
-                                    ¿Aun no estas registrado? <a asp-action="Index" asp-controller="Registro">Registrate</a>
-                                </p>
-                            </div>
-                        </div>
+                                    <br />
+                                    <div>
+                                        <p class="text-center text-muted text-center mt-2 mb-0">
+                                            ¿Aun no estas registrado? <a asp-action="Index" asp-controller="Registro">Registrate</a>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -123,12 +129,14 @@
                 </div>
             </div>
         </div>
+    </div>
 </section>
 @section Scripts {
 
 
     <script>
 
+        document.getElementById("alerta").style.display = "none"; //Agregado por Miguel
    
 
     </script>
