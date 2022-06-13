@@ -28,7 +28,7 @@ namespace OXXO.Controllers
             string consultaP = "";
             if (!string.IsNullOrEmpty(NombrePerfil))
             {
-                consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechjaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil where Nombre LIKE '%" + NombrePerfil + "%'";
+                consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechjaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil WHERE Nombre LIKE '%" + NombrePerfil + "%'";
 
             }
             else
@@ -59,9 +59,9 @@ namespace OXXO.Controllers
             }
 
             string PuestoUsuario = HttpContext.Session.GetString("IdPerfil");
-           // var result = new PermisoController(Configuration).GetPermisoUsuario("Index","Perfil", PuestoUsuario);
-            //ViewBag.Crear = result.Crear;
-            //ViewBag.Editar = result.Editar;
+            var result = new PermisoController(Configuration).GetPermisosUsuario("Index","Perfil", PuestoUsuario);
+            ViewBag.Crear = result.Crear;
+            ViewBag.Editar = result.Editar;
             
 
             return View(PerfilList);
@@ -85,8 +85,8 @@ namespace OXXO.Controllers
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.AddWithValue("@Nombre",clsPerfil.Nombre);
-                            command.Parameters.AddWithValue("Descripcion",clsPerfil.Descripcion);
-                            command.Parameters.AddWithValue("IdUsuarioFA", currentUser);
+                            command.Parameters.AddWithValue("@Descripcion",clsPerfil.Descripcion);
+                            command.Parameters.AddWithValue("@IdUsuarioFA", currentUser);
                             command.ExecuteNonQuery();
                             connection.Close();
                         }
@@ -108,8 +108,6 @@ namespace OXXO.Controllers
             }
            
         }
-
-        ///PENDIENTE EDIT
 
         public IActionResult Editar(int IdPerfil) 
         {
@@ -161,11 +159,11 @@ namespace OXXO.Controllers
                         using (SqlCommand command = new SqlCommand("SP_EditarPerfil", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.AddWithValue("IdPerfil",clsPefil.IdPerfil);
-                            command.Parameters.AddWithValue("Nombre",clsPefil.Nombre);
-                            command.Parameters.AddWithValue("Descripcion",clsPefil.Descripcion);
-                            command.Parameters.AddWithValue("Activo", Convert.ToInt32(clsPefil.Activo));
-                            command.Parameters.AddWithValue("IdUsuarioFUM", currentUser);
+                            command.Parameters.AddWithValue("@IdPerfil",clsPefil.IdPerfil);
+                            command.Parameters.AddWithValue("@Nombre",clsPefil.Nombre);
+                            command.Parameters.AddWithValue("@Descripcion",clsPefil.Descripcion);
+                            command.Parameters.AddWithValue("@Activo", Convert.ToInt32(clsPefil.Activo));
+                            command.Parameters.AddWithValue("@IdUsuarioFUM", currentUser);
                             command.ExecuteNonQuery();
                             connection.Close();
                         }
