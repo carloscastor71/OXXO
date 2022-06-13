@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using OXXO.Enums;
 
+
 namespace OXXO.Services
 {
     public class CommonServices
     {
+        
         public static string ShowAlert(Alerts obj, string message)
         {
             string alertDiv = null;
@@ -15,16 +17,16 @@ namespace OXXO.Services
             switch (obj)
             {
                 case Alerts.Success:
-                    alertDiv = "<div class='alert alert-success alert-dismissable' id='alert'><button type='button' class='close' data-dismiss='alert'>&times;</button>" + message + "</a>.</div>";
+                    alertDiv = "<script language='javascript'>Swal.fire({ position: 'center', icon: 'success', title: '"+message+"',showConfirmButton: false, timer: 1500})</script>";
                     break;
                 case Alerts.Danger:
-                    alertDiv = "<div class='alert alert-danger alert-dismissible' id='alert'><button type='button' class='close' data-dismiss='alert'>&times;</button>" + message + "</a>.</div>";
+                    alertDiv = "<script language='javascript'>Swal.fire({ icon: 'error', title: 'Oops...', text: '"+message+"'})</script>";
                     break;
                 case Alerts.Info:
-                    alertDiv = "<div class='alert alert-info alert-dismissable' id='alert'><button type='button' class='close' data-dismiss='alert'>&times;</button>" + message + "</a>.</div>";
+                    alertDiv = "<script language='javascript'>Swal.fire({ icon: 'info', title: '¡Atención!', text: '" + message + "'})</script>";
                     break;
                 case Alerts.Warning:
-                    alertDiv = "<div class='alert alert-warning alert-dismissable' id='alert'><button type='button' class='close' data-dismiss='alert'>&times;</button>" + message + "</a>.</div>";
+                    alertDiv = "<script language='javascript'>Swal.fire({ icon: 'warning', title: '¡Atención!', text: '" + message + "'})</script>";
                     break;
             }
 
