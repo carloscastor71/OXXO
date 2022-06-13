@@ -17,7 +17,7 @@ namespace OXXO.Controllers
     {
         string dbConn = "";
         public IConfiguration Configuration { get; }
-
+        
         public LoginController(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -38,6 +38,7 @@ namespace OXXO.Controllers
        [HttpPost]
        public IActionResult Login(Login lg)
         {
+            
             if (ModelState.IsValid)
             {
                 try

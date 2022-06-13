@@ -66,8 +66,14 @@ html {
   min-height: 100%;
 }
 
-.boton-menu {
-    display: none;
+.nav a i {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 28px;
+    color: black;
+}
+
+.nav a{
+    font-size: 26px;
 }
 
 #sidebar-nav .menu:hover{
