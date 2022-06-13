@@ -1,0 +1,124 @@
+﻿@model IEnumerable<OXXO.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div id="PlaceHolderHere"></div>
+<style>
+
+    .input-validation-error {
+        border-color: red;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Raw(@ViewBag.Alert)
+        </div>
+    </div>
+</div>
+<h3 class="labelTitle"><u>Usuarios</u></h3>
+<br />
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" class="btn btnFiltrar" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    Filtrar
+                </a>
+                @if (ViewBag.Crear)
+                {
+                    <a asp-action="Crear" class="btn btnCrear">Crear usuario</a>
+                }
+            </h4>
+        </div>
+        
+        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <form asp-controller="Usuarios" asp-action="Index">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                Nombre<input type="text" class="form-control" name="nombre_Usuario" />
+                            </div>
+                            <div class="col">
+                                Usuario <input type="text" class="form-control" name="user_name" />
+                            </div>
+                            <div class="col">
+                                <br />
+                                <input type="submit" value="Buscar" class="btn btn-dark" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<table class="tableStyle">
+    <thead>
+        <tr class="text-center">
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Nombre de Usuario</th>
+            <th>Correo</th>
+            <th>Puesto</th>
+            <th>Estatus</th>
+            <th>Vigencia</th>
+            <th colspan="2"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td style="display:none">@Html.DisplayFor(modelItem => item.IdUsuario)</td>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
+                <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Correo)</td>
+                <td>@Html.DisplayFor(modelItem => item.Puesto)</td>
+                @if (item.Activo == false)
+                {
+                    <td>Inactivo</td>
+                }
+                else
+                {
+                    <td>Activo</td>
+                }
+                <td style="width:10%">@Html.DisplayFor(modelItem => item.Vigencia)</td>
+                @if (ViewBag.Editar)
+                {
+                    <td>
+                        <a asp-action="Editar" asp-route-id="@item.IdUsuario" title="Editar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                                <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z" />
+                            </svg>
+
+                        </a>
+                    </td>
+
+                }
+                <td>
+                    @if (ViewBag.CambiarContrasena || ViewBag.User == item.IdUsuario)
+                    {
+                        <a class="btn btn-block popup" data-url="CambiarContrasena" data-toggle="modal" data-target="#CambiarContrasena" title="Cambiar contraseña">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                            </svg>
+                        </a>
+                     }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div aria-hidden="true" aria-labelledby="CambiarContrasena" role="dialog" tabindex="-1" id="CambiarContrasena" class="modal fade">
+    <div class="modal-dialog">
+    </div>
+</div>
