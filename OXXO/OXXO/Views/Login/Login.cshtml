@@ -74,48 +74,47 @@
             <hr />
         </div>
     } @*/////*@
-    <div id="main-wrapper" class="container">
-        <div class="row justify-content-center ">
-            <div class="col-xl-4 col-md-4 col-sm-4">
-                <div class="card w-auto">
-                    <div class="card-body p-5">
-                        <div class="row no-gutters">
-                            <div class="col-lg-12 col-sm-12 col-md-12">
-                                <div class="p-0">
-                                    <div class="mb-3">
-                                        <h1 class="h2 font-weight-bold text-theme m-1 ">Inicio de sesión</h1>
+<div id="main-wrapper" class="container">
+    <div class="row justify-content-center ">
+        <div class="col-xl-4 col-md-4 col-sm-4">
+            <div class="card w-auto">
+                <div class="card-body p-5">
+                    <div class="row no-gutters">
+                        <div class="col-lg-12 col-sm-12 col-md-12">
+                            <div class="p-0">
+                                <div class="mb-3">
+                                    <h1 class="h2 font-weight-bold text-theme m-1 ">Inicio de sesión</h1>
+                                </div>
+                                <h6 class="h5 mb-0">¡Bienvenido!</h6>
+                                <p class="text-muted mt-1 mb-4">Ingresa tu usuario y contraseña</p>
+                                <form name="Login" asp-controller="Login" asp-action="Login" method="post" class="login100-form validate-form">
+                                    <div class="form-outline mb-0">
+                                        <div class="form-group mb-3" data-validate="El usuario es requerido">
+                                            <label class="form-label" for="Usuario">Usuario</label>
+                                            <input class="form-control" type="text" asp-for="UserName" autocomplete="off">
+                                        </div>
                                     </div>
-                                    <h6 class="h5 mb-0">¡Bienvenido!</h6>
-                                    <p class="text-muted mt-1 mb-4">Ingresa tu usuario y contraseña</p>
-                                    <form name="Login" asp-controller="Login" asp-action="Login" method="post" class="login100-form validate-form">
-                                        <div class="form-outline mb-0">
-                                            <div class="form-group mb-3" data-validate="El usuario es requerido">
-                                                <label class="form-label" for="Usuario">Usuario</label>
-                                                <input class="form-control" type="text" asp-for="UserName" autocomplete="off">
-                                            </div>
+                                    <div class="form-outline mb-4">
+                                        <div class="wrap-input100 validate-input m-b-10" data-validate="La contraseña es requerida">
+                                            <label class="form-label" for="Contrasena">Contraseña</label>
+                                            <input class="form-control" type="password" asp-for="Contrasena">
                                         </div>
-                                        <div class="form-outline mb-4">
-                                            <div class="wrap-input100 validate-input m-b-10" data-validate="La contraseña es requerida">
-                                                <label class="form-label" for="Contrasena">Contraseña</label>
-                                                <input class="form-control" type="password" asp-for="Contrasena">
-                                            </div>
-                                        </div>
-                                        <div class="form-check d-flex  mb-2">
-                                            <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
-                                            <label class="form-check-label" style="padding-left:10px;" for="Recordar">  Recordar contraseña</label>
-                                        </div>
-                                        <div class="d-flex p-0 bd-highlight justify-content-center  mb-4">
-                                            <button class="btn btn-outline-warning btn-lg ">
-                                                Iniciar sesión
-                                            </button>
-                                        </div>
-                                    </form>
-                                    <br />
-                                    <div>
-                                        <p class="text-center text-muted text-center mt-2 mb-0">
-                                            ¿Aun no estas registrado? <a asp-action="Index" asp-controller="Registro">Registrate</a>
-                                        </p>
                                     </div>
+                                    <div class="form-check d-flex  mb-2">
+                                        <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                        <label class="form-check-label" style="padding-left:10px;" for="Recordar">  Recordar contraseña</label>
+                                    </div>
+                                    <div class="d-flex p-0 bd-highlight justify-content-center  mb-4">
+                                        <button class="btn btn-outline-warning btn-lg ">
+                                            Iniciar sesión
+                                        </button>
+                                    </div>
+                                </form>
+                                <br />
+                                <div>
+                                    <p class="text-center text-muted text-center mt-2 mb-0">
+                                        ¿Aun no estas registrado? <a asp-action="Index" asp-controller="Registro">Registrate</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -123,6 +122,8 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 </section>
 @section Scripts {
 
