@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -9,13 +10,21 @@ namespace OXXO.Models
 {
     public partial class Comercio
     {
-        public string IdEmisor { get; set; }
+        public int IdEmisor { get; set; }
+         
         public string Rfc { get; set; }
         public string NombreCompleto { get; set; }
+         
         public string Telefono { get; set; }
+         
+       
+
         public string Correo { get; set; }
+         
         public string Direccion { get; set; }
+         
         public string CuentaDeposito { get; set; }
+         
         public int? IdBanco { get; set; }
         public string RazonSocial { get; set; }
         public string NombreComercial { get; set; }
@@ -29,7 +38,9 @@ namespace OXXO.Models
         public DateTime? Fal { get; set; }
         public int? UsuarioFum { get; set; }
         public DateTime? Fum { get; set; }
+         
         public int IdCompania { get; set; }
+         
         public int IdTipoDeposito { get; set; }
 
         public virtual Estatus EstatusNavigation { get; set; }
