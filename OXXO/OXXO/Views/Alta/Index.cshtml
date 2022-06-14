@@ -3,181 +3,205 @@
 
 @{
     ViewData["Title"] = "Alta de comercios";
+}
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <h1>Alta</h1>
 
 <hr />
-<div class="container-fluid">
-    <form asp-controller="Alta" asp-action="Index">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-xl-12">
-                <div class="form-group">
-                    <h1>Datos generales</h1>
-                </div>
-            </div>
+<section>
+    @if (ViewBag.Alert != null) //Agregado por Miguel
+    {
+        <div id="alerta" class="container body-content">
+            @Html.Raw(@ViewBag.Alert)
         </div>
-        <hr />
-        <div class="row">
-            @* TIPO PERSONA *@
-            <div class="col-sm-3 col-md-3 col-xl-3">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Tipo persona</label>
-                        <select id="Persona" name="Persona" class="form-select">
-  
-                            <option value="1">Persona fisica</option>
-                            <option value="0">Persona Moral</option>
-                        </select>
-
-                    </div>
-                </div>
-            </div>
-            @* ID EMISOR *@
-            <div class="col-sm-2 col-md-2 col-xl-2">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label  class="control-label">ID Emisor</label>
-                        <input id="IdEmisor" name="IdEmisor" value="" class="form-control  " />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-sm-2 col-md-2 col-xl-2">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">RFC</label>
-                        <input id="Rfc" name="Rfc"  class="form-control" />
+    } @*/////*@
+    <div class="container-fluid">
+        <form asp-controller="Alta" asp-action="Index">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-xl-12">
+                    <div class="form-group">
+                        <h1>Datos generales</h1>
                     </div>
                 </div>
             </div>
             <hr />
-        </div>
-        <div class="row">
-            @*NOMBRE COMPLETO *@
-            <div class="col-sm-4 col-md-4 col-xl-4">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Nombre completo</label>
-                        <input asp-for="NombreCompleto" id="NombreCompleto" name="NombreCompleto" class="form-control" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-xl-3">
-                <div class="form-group">
-                    <div class=" mb-3">
-                        <label class="control-label">Correo</label>
-                        <input asp-for="Correo" id="Correo" name="Correo"  class="form-control  " />
-                        <span class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4 col-md-4 col-xl-4">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label  class="control-label">Nombre comercial</label>
-                        <input asp-for="NombreComercial" id="NombreComercial" name="NombreComercial" class="form-control  " />
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 col-md-4 col-xl-4">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Razon social</label>
-                        <input asp-for="RazonSocial" id="RazonSocial" name="RazonSocial"  class="form-control  " />
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-xl-3">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Giro comercial</label>
-                        <select asp-for="IdGiroComercio" id="IdGiroComercio" name="IdGiroComercio" class="form-select" asp-items="ViewBag.GiroComercio">
-                            <option value="null" selected>Selecciona el giro comercial</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2 col-md-2 col-xl-2">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Telefono</label>
-                        <input id="Telefono" name="Telefono" class="form-control" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 col-md-4 col-xl-4">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Direccion</label>
-                        <input id="Direccion" name="Direccion" class="form-control  " />
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 col-md-4 col-xl-4">
-                <div class="form-group">
-                    <div class=" mb-3">
-                        <label class="control-label">Portal</label>
-                        <input id="Portal" name="Portal" class="form-control  " />
-                        <span class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-2">
-                <div class="form-group col-12">
-                    <div class="mb-3">
-                        <label class="control-label">Cuenta</label>
-                        <input id="CuentaDeposito" name="CuentaDeposito" class="form-control" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="form-group col-12">
-                    <div class="mb-3">
-                        <label class="control-label">Bancos</label>
-                        <select asp-for="IdBanco" id="IdBanco" name="IdBanco" class="form-select" asp-items="ViewBag.Bancos">
-                            <option selected>Selecciona un banco</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-xl-3">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Tipo deposito</label>
-                        <select id="IdTipoDeposito" name="IdTipoDeposito" class="form-select">
-                            <option selected>Selecciona el tipo de deposito</option>
-                            <option value="1">Por transaccion</option>
-                            <option value="2">Diario</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr />
-        <div class="">
             <div class="row">
-                <div class="form-group col-1">
-                    <a class="btn btn-outline-danger" asp-action="Index">Cancelar</a>
+                @* TIPO PERSONA *@
+                <div class="col-sm-3 col-md-3 col-xl-3">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Tipo persona</label>
+                            <select id="Persona" name="Persona" class="form-select">
+                                <option value="0">Persona Moral</option>
+                                <option value="1">Persona fisica</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-1">
-                    <input type="submit" value="Dar de alta" class="btn btn-outline-success" />
+                @* ID EMISOR *@
+                @*<div class="col-sm-2 col-md-2 col-xl-2">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="control-label">ID Emisor</label>
+                                <input id="IdEmisor" name="IdEmisor" value="" class="form-control  " />
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-2 col-md-2 col-xl-2">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">RFC</label>
+                            <input id="Rfc" name="Rfc" class="form-control"   />
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            </div>
+            <div class="row">
+                @*NOMBRE COMPLETO *@
+                <div class="col-sm-4 col-md-4 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Nombre completo</label>
+                            <input asp-for="NombreCompleto" id="NombreCompleto" name="NombreCompleto" class="form-control" value="" disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-xl-3">
+                    <div class="form-group">
+                        <div class=" mb-3">
+                            <label class="control-label">Correo</label>
+                            <input asp-for="Correo" id="Correo" name="Correo" class="form-control  "  />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Nombre comercial</label>
+                            <input asp-for="NombreComercial" id="NombreComercial" name="NombreComercial" class="form-control  " />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Razon social</label>
+                            <input asp-for="RazonSocial" id="RazonSocial" name="RazonSocial" class="form-control  " />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-xl-3">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Giro comercial</label>
+                            <select asp-for="IdGiroComercio" id="IdGiroComercio" name="IdGiroComercio" class="form-select" asp-items="ViewBag.GiroComercio">
+                                <option value="null" selected>Selecciona el giro comercial</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 col-md-2 col-xl-2">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Telefono</label>
+                            <input id="Telefono" name="Telefono" class="form-control"  />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Direccion</label>
+                            <input id="Direccion" name="Direccion" class="form-control  "  />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-xl-4">
+                    <div class="form-group">
+                        <div class=" mb-3">
+                            <label class="control-label">Portal</label>
+                            <input id="Portal" name="Portal" class="form-control  " />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group col-12">
+                        <div class="mb-3">
+                            <label class="control-label">Cuenta</label>
+                            <input id="CuentaDeposito" name="CuentaDeposito" class="form-control"  />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group col-12">
+                        <div class="mb-3">
+                            <label class="control-label">Bancos</label>
+                            <select asp-for="IdBanco" id="IdBanco" name="IdBanco" class="form-select" asp-items="ViewBag.Bancos"  >
+                                <option selected>Selecciona un banco</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-xl-3">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Tipo deposito</label>
+                            <select id="IdTipoDeposito" name="IdTipoDeposito" class="form-select"  >
+                                <option selected>Selecciona el tipo de deposito</option>
+                                <option value="1">Por transaccion</option>
+                                <option value="2">Diario</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="">
+                <div class="row">
+                    <div class="form-group col-1">
+                        <a class="btn btn-outline-danger" asp-controller="Home" asp-action="Inicio">Cancelar</a>
+                    </div>
+                    <div class="form-group col-1">
+                        <input type="submit" value="Dar de alta" class="btn btn-outline-success" />
+                    </div>
+                </div>
+            </div>
+        </form>
 
-</div>
+    </div>
+</section>
 @section Scripts {
+    <script type="text/javascript">
+        function validateData() {
+
+            if ($("#Rfc").val() == "") {
+                swal("Ingresa el RFC");
+                return false;
+            } else {
+                return true;
+            }
+        }
+    </script>
+
+    <script>
+        document.getElementById("alerta").style.display = "none"; //Agregado por Miguel
+    </script>
 
     <script type="text/javascript">
         $(function () {
@@ -185,8 +209,8 @@
             $("#GiroComercio").select();
             $("#IdBanco").select();
             $("#Bancos").select();
-
         });
+
         $(function () {
 
             $("#IdGiroComercio").change(function () {
@@ -211,7 +235,7 @@
                     $("#Bancos").html(row);
                 })
             });
-            
+
             document.getElementById("Persona").onchange = function () {
                 document.getElementById("NombreCompleto").removeAttribute("disabled");
 
@@ -219,17 +243,22 @@
                 document.getElementById("RazonSocial").setAttribute("disabled", "disabled");
                 document.getElementById("IdGiroComercio").setAttribute("disabled", "disabled");
                 document.getElementById("Portal").setAttribute("disabled", "disabled");
-                if (this.value == '0') {
 
+                if (this.value == '0') {
                     document.getElementById("NombreCompleto").setAttribute("disabled", "disabled");
 
                     document.getElementById("NombreComercial").removeAttribute("disabled");
                     document.getElementById("RazonSocial").removeAttribute("disabled");
                     document.getElementById("IdGiroComercio").removeAttribute("disabled");
                     document.getElementById("Portal").removeAttribute("disabled");
-
                 }
-                }
+            }
         });
     </script>
+
+    <script>
+        document.getElementById("alerta").style.display = "none"; //Agregado por Miguel
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
