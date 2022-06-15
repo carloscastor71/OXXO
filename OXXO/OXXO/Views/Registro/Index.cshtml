@@ -63,11 +63,11 @@
 
 <div id="main-wrapper" class="container">
     <div class="row justify-content-center ">
-        <div class="col-xl-5">
+        <div class="col-xl-5 col-md-5 col-sm-5">
             <div class="card ">
                 <div class="card-body p-0">
                     <div class="row no-gutters">
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 col-sm-12 col-md-12">
                             <div class="p-5">
                                 <div class="mb-5">
                                     <h1 class="h2 font-weight-bold text-theme ">Registrate</h1>
@@ -88,14 +88,11 @@
                                             Registrar
                                         </button>
                                     </div>
-
-                                   
-
                                 </form>
                                 <br />
                                 <div>
                                     <p class="text-center text-muted text-center mt-2 mb-0">
-                                        ¿Aun no estas registrado? <a asp-action="Login" asp-controller="Login">Registrate</a>
+                                        ¿Ya tienes cuenta? <a asp-action="Login" asp-controller="Login">Inicia sesion</a>
                                     </p>
                                 </div>
                             </div>
@@ -107,8 +104,6 @@
         </div>
     </div>
 </div>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

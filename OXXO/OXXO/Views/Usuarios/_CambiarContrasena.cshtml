@@ -1,0 +1,81 @@
+﻿@model OXXO.Models.Usuario
+@*<div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Cambiar Contraseña</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+        </div>
+        <div class="container">
+            <label>Usuario: @Html.DisplayFor(model => model.Nombre) @Html.DisplayFor(model => model.Apellido) </label>
+
+            <form asp-action="CambiarContrasena">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdUsuario" />
+                <div class="form-group">
+                    <label asp-for="Contrasena" class="control-label">Nueva Contraseña</label>
+                    <input asp-for="Contrasena" class="form-control" type="password" /><span asp-validation-for="Contrasena" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmarContrasena" class="control-label">Cambiar Contraseña</label>
+                    <input asp-for="ConfirmarContrasena" class="form-control" type="password" /><span asp-validation-for="ConfirmarContrasena" class="text-danger"></span>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" id="cancel" class="btn btn-secondary" type="button">Cancelar</button>
+                    <button class="btn btn-success relative" id="btnSubmit" type="submit"><i class="loader"></i> Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>*@
+
+@*<div class="accordion-bral">*@
+@*<div>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightContrasena" aria-labelledby="offcanvasRightLabel">*@
+<div class="offcanvas-header">
+    <h5>Cambiar Contraseña</h5>
+    <br />
+    <h6 class="card-subtitle mb-2 text-muted">Usuario: @Html.DisplayFor(model => model.UserName)</h6>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <form id="FormContrasena" asp-action="CambiarContrasena">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdUsuario" />
+
+
+        <div class="row">
+            <div class="mb-3">
+                <label asp-for="Contrasena" class="control-label">Nueva Contraseña</label>
+                <input asp-for="Contrasena" class="form-control" type="password" /><span asp-validation-for="Contrasena" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ConfirmarContrasena" class="control-label">Confirmar Contraseña</label>
+                <input asp-for="ConfirmarContrasena" class="form-control" type="password" /><span asp-validation-for="ConfirmarContrasena" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="row p-2">
+            <button class="btn btn-success relative" id="btnSubmit" type="submit"><i class="loader"></i> Guardar</button>
+        </div>
+
+    </form>
+</div>
+@*</div>
+    </div>*@
+@*</div>*@
+
+
+
+@section Scripts {
+    <script>
+        $('#FormContrasena').on('submit', function () {
+            if (this.checkValidity() == false) {
+                return false;
+            }
+        });
+        $(function () {
+            $("#dd2Perfiles").select();
+        });
+
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

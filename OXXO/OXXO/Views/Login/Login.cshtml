@@ -9,9 +9,8 @@
 <style>
     * {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        line-height: 1.5;
         box-sizing: border-box;
-
+        
     }
 
     body {
@@ -23,11 +22,9 @@
         background: -webkit-radial-gradient(top right, #FFE2C2, #AAA3D3);
         background: -moz-radial-gradient(top right, #FFE2C2, #AAA3D3);
         background: radial-gradient(to bottom left, #FFE2C2, #AAA3D3);
-        -moz-transform: scale(0.8, 0.8); /* Moz-browsers */
-        zoom: 0.8; /* Other non-webkit browsers */
-        zoom: 80%; /* Webkit browsers */
+        font-size:smaller;
+        background-repeat:initial;
     }
-
 
     .account-block {
         padding: 0;
@@ -35,13 +32,12 @@
         background-size: cover;
         height: 100%;
         position: relative;
-
     }
 
     .card {
         box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-        padding: 1.5em .5em .5em;
-        border-radius: 2em;
+        padding: .5em .5em;
+        border-radius: 1.5em;
     }
 
     .account-block .overlay {
@@ -61,61 +57,80 @@
         color: #fff;
         position: absolute;
         margin: 0 auto;
-        padding: 0 1.75rem;
+        padding: 0 1rem;
         bottom: 3rem;
         left: 0;
         right: 0;
     }
 
     .text-theme {
-        color: #5369f8 !important;
+        color: #002550 !important;
     }
+
+    #AgmImage {
+        width: 16rem;
+        height: 7rem;
+        align-content: center;
+    }
+    
+
 
 </style>
 <section>
-    <div id="main-wrapper" class="container">
-        <div class="row justify-content-center ">
-            <div class="col-xl-5">
-                <div class="card ">
-                    <div class="card-body p-0">
-                        <div class="row no-gutters">
-                            <div class="col-lg-12">
-                                <div class="p-5">
-                                    <div class="mb-5">
-                                        <h1 class="h2 font-weight-bold text-theme ">Inicio de sesión</h1>
+    @if (ViewBag.Alert != null) //Agregado por Miguel
+    {
+        <div id="alerta" class="container body-content">
+            @Html.Raw(@ViewBag.Alert)
+            <hr />
+        </div>
+    } @*/////*@
+<div id="main-wrapper" class="container">
+    <div class="row justify-content-center p-2">
+        <div class="col-xl-4 col-md-4 col-sm-4">
+            <div class="card w-auto h-auto">
+                <div class="card-body p-2">
+                    <div class="row no-gutters row justify-content-center p-1">
+                        <div class="col-lg-10 col-sm-10 col-md-10">
+                            <div class="p-0">
+                                <div class="mb-1">
+                                    <div class="row justify-content-center">
+                                    <img id="AgmImage" src="~/img/agm.jpg" alt="Alternate Text" />
                                     </div>
-                                    <h6 class="h5 mb-0">¡Bienvenido!</h6>
-                                    <p class="text-muted mt-2 mb-5">Ingresa tu usuario y contraseña</p>
-                                    <form name="Login" asp-controller="Login" asp-action="Login" method="post" class="login100-form validate-form">
-                                        <div class="form-outline mb-4">
-                                            <div class="form-group mb-3" data-validate="El usuario es requerido">
-                                                <label class="form-label" for="Usuario">Usuario</label>
-                                                <input class="form-control" type="text" asp-for="UserName" autocomplete="off">
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <h1 class="h3 font-weight-bold text-theme m-0 ">Inicio de sesión</h1>
                                         </div>
-                                        <div class="form-outline mb-4">
-                                            <div class="wrap-input100 validate-input m-b-10" data-validate="La contraseña es requerida">
-                                                <label class="form-label" for="Contrasena">Contraseña</label>
-                                                <input class="form-control" type="password" asp-for="Contrasena">
-                                            </div>
+                                    </div>
+                                </div>
+                                <p class="h6 mb-3">¡Bienvenido!</p>
+                                <form name="Login" asp-controller="Login" asp-action="Login" method="post" class="login100-form validate-form">
+                                    <div class="form-outline mb-0">
+                                        <div class="form-group mb-2" data-validate="El usuario es requerido">
+                                            <label class="form-label" for="Usuario">Usuario</label>
+                                            <input class="form-control col-lg-5 col-sm-5 col-md-5" placeholder="Usuario" type="text" asp-for="UserName" autocomplete="off">
                                         </div>
-                                        <div class="form-check d-flex justify-content-center mb-4">
-                                            <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
-                                            <label class="form-check-label" style="padding-left:10px;" for="Recordar">  Recordar contraseña</label>
+                                    </div>
+                                    <div class="form-outline mb-2">
+                                        <div class="wrap-input100 validate-input m-b-10" data-validate="La contraseña es requerida">
+                                            <label class="form-label" for="Contrasena">Contraseña</label>
+                                            <input class="form-control" placeholder="Contraseña" type="password" asp-for="Contrasena">
                                         </div>
-                                        <div class="d-flex p-2 bd-highlight justify-content-center mb-4">
-                                            <button class="btn btn-outline-warning btn-lg">
-                                                INICIAR SESIÓN
-                                            </button>
-                                        </div>
-                                    </form>
-                            <br />
-                            <div>
-                                <p class="text-center text-muted text-center mt-2 mb-0">
-                                    ¿Aun no estas registrado? <a asp-action="Index" asp-controller="Registro">Registrate</a>
-                                </p>
-                            </div>
-                        </div>
+                                    </div>
+                                    <div class="form-check d-flex  mb-3">
+                                        <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                        <label class="form-check-label" style="padding-left:10px;" for="Recordar">  Recordar contraseña</label>
+                                    </div>
+                                    <div class="d-flex p-0 bd-highlight justify-content-center ">
+                                        <button class="btn btn-outline-warning ">
+                                            Iniciar sesión
+                                        </button>
+                                    </div>
+                                </form>
+                                <div>
+                                    <p class="text-center text-muted text-center mt-2 mb-0">
+                                        ¿Aun no estas registrado? 
+                                        <a asp-action="Index" asp-controller="Registro">Registrate</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -123,16 +138,13 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 </section>
 @section Scripts {
-
-
     <script>
-
-   
-
+        document.getElementById("alerta").style.display = "none"; //Agregado por Miguel
     </script>
-
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
