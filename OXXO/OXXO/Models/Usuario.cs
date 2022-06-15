@@ -32,7 +32,7 @@ namespace OXXO.Models
         public string Contrasena { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "La contraseña y la confirmación no son iguales.")]
+        [Compare("Contrasena", ErrorMessage = "La contraseña y la confirmación no son iguales.")]
         public string ConfirmarContrasena{ get; set; }
 
         
