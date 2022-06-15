@@ -80,12 +80,12 @@
         transition: all 0.3s ease-in-out;
     }
 
-        .accordion-bral .article p {
+    .accordion-bral .article p {
             color: #777;
             line-height: 23px;
             font-size: 14px;
             padding: 20px;
-        }
+    }
 
     .accordion-bral input:checked ~ .article i {
         -webkit-transition: all 0.5s ease-in-out;
@@ -141,6 +141,11 @@ table.ac-table {
 
 table.ac-table th {
         text-align: left;
+}
+
+.contenedor {
+    padding-left: 2rem;
+    overflow: scroll;
 }
 
 @media (max-width: 550px) {

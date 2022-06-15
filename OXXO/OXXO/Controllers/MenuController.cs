@@ -20,6 +20,7 @@ namespace OXXO.Controllers
         
         public MenuController(IConfiguration configuration) { Configuration = configuration; dbConn = Configuration["ConnectionStrings:ConexionString"]; }
         public PartialViewResult MostrarMenu()
+        
         {
     
             MenuList = GetMenu();

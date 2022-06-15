@@ -1,7 +1,74 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
+.container-fluid a .bi{
+  font-size: 22px;
+  color: black;
+}
+
+.container-fluid .menuu{
+  font-size: 22px;
+  color: black;
+}
+
+#titulo{
+    margin: 2rem 0rem;
+}
+
+.content-chip ul{
+    padding: 1rem;
+    list-style-type: none;
+}
+
+.content-chip ul li {
+     background-color: #3190FA;
+     color: white;
+     margin-right: 0.5rem;
+     border: 1px solid blue;
+     border-radius: 5px;
+     padding: 0.1rem 0.3rem;
+     float: left;
+ }
+
+.accordion-button:not(.collapsed) {
+    color: red !important;
+    background-color: rgb(255, 106, 0, 0.1);
+}
+
+.nav-link {
+    padding-top: 1rem;
+    font-weight: bold;
+    width: 200px;
+    /*border-bottom: 1px solid orange;*/
+}
+
+.collapce-nav li a:hover{
+    
+    background-color: rgb(0, 0, 0,0.1);
+}
+
+.nav-link:active {
+    padding-top: 1rem;
+    font-weight: bold;
+    width: 200px;
+    border-bottom: 1px solid gray;
+    color: red;
+    border-bottom: 1px solid orange;
+}
+
+
+.collapce-nav a {
+    text-decoration: none;
+    color: black;
+    margin: 0.7rem;
+}
+
+#sidebar{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+/*a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
@@ -11,39 +78,35 @@ a.navbar-brand {
     padding: 2rem;
 }
 
-#sidebar-nav {
-    width: 250px;
-}
-
+.sidenav {
+    border-right: 1px solid lightgray;
+    width: 260px;
+}*/
 /* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
-}
-
-.btn-primary {
+/*.container-fluid {
+    
+}*/
+/*.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}*/
+/*.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
+}*/
 /* Sticky footer styles
 -------------------------------------------------- */
-html {
+/*html {
   font-size: 14px;
 }
 @media (min-width: 768px) {
   html {
     font-size: 16px;
   }
-}
-
-.border-top {
+}*/
+/*.border-top {
   border-top: 1px solid #e5e5e5;
 }
 .border-bottom {
@@ -59,22 +122,11 @@ button.accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
 html {
   position:relative ;
   min-height: 100%;
 }
 
-.nav a i {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 28px;
-    color: black;
-}
-
-.nav a{
-    font-size: 26px;
-}
 
 #sidebar-nav .menu:hover{
     border-left: 3px solid orange;
@@ -82,18 +134,11 @@ html {
 }
 
 
-a {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    color: #C65B05;
-}
 
 a:hover, a.active {
         text-decoration: none;
         color: #03B003;
-}
-
-
+}*/
 .footer {
     position: absolute;
     bottom: 0;
