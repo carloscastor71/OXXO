@@ -25,7 +25,7 @@ namespace OXXO.Controllers
             dbConn = Configuration["ConnectionStrings:ConexionString"];
             
         }
-        public IActionResult Index(string? alert, string NombreUsuario, string UserName)
+        public IActionResult Index(string? alert, string Nombre, string UserName)
         {
             ViewBag.Alert = alert;
 
@@ -35,59 +35,72 @@ namespace OXXO.Controllers
             Permisos permisos = new Permisos();
             try
             {
+                ListadoDePerfiles();
                 string consulta = "";
-                if (!String.IsNullOrEmpty(NombreUsuario))
+                if (!String.IsNullOrEmpty(Nombre))
                 {
-                    consulta = "SELECT * FROM Usuario WHERE Nombre LIKE '%" + NombreUsuario + "%'";
+                    consulta = "SELECT * FROM Usuario WHERE Nombre LIKE '%" + Nombre + "%'";
 
                 }
                 else if (!String.IsNullOrEmpty(UserName))
                 {
                     consulta = "SELECT * FROM Usuario WHERE UserName LIKE '%" + UserName + "%'";
                 }
-                else
-                {
-                    consulta = "SELECT * FROM usuario";
-                }
+                //else
+                //{
+                //    consulta = "SELECT * FROM usuario";
+                //}
                 List<Usuario> ListaUsuarios = new List<Usuario>();
-                using (SqlConnection connection = new SqlConnection(dbConn))
+                if (!String.IsNullOrEmpty(consulta))
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand(consulta, connection);
-                    using (SqlDataReader dr = command.ExecuteReader())
+                    
+                    using (SqlConnection connection = new SqlConnection(dbConn))
                     {
-                        while (dr.Read())
+                        connection.Open();
+                        SqlCommand command = new SqlCommand(consulta, connection);
+                        using (SqlDataReader dr = command.ExecuteReader())
                         {
-                            Usuario clsUsuario = new Usuario();
-                            clsUsuario.IdUsuario = Convert.ToString(dr["IdUsuario"]);
-                            clsUsuario.Nombre = Convert.ToString(dr["Nombre"]);
-                            clsUsuario.Apellido = Convert.ToString(dr["Apellido"]);
-                            clsUsuario.UserName = Convert.ToString(dr["UserName"]);
-                            clsUsuario.Correo = Convert.ToString(dr["Correo"]);
-                            clsUsuario.Activo = dr.IsDBNull("Activo") ? false : Convert.ToBoolean(dr["Activo"]);
-                            clsUsuario.Vigencia = Convert.ToDateTime(dr["Vigencia"]);
-                            clsUsuario.Puesto = Convert.ToString(dr["Puesto"]);
-                            ListaUsuarios.Add(clsUsuario);
+                            while (dr.Read())
+                            {
+                                Usuario clsUsuario = new Usuario();
+                                clsUsuario.IdUsuario = Convert.ToString(dr["IdUsuario"]);
+                                clsUsuario.Nombre = Convert.ToString(dr["Nombre"]);
+                                clsUsuario.Apellido = Convert.ToString(dr["Apellido"]);
+                                clsUsuario.UserName = Convert.ToString(dr["UserName"]);
+                                clsUsuario.Correo = Convert.ToString(dr["Correo"]);
+                                clsUsuario.Activo = dr.IsDBNull("Activo") ? false : Convert.ToBoolean(dr["Activo"]);
+                                clsUsuario.Vigencia = Convert.ToDateTime(dr["Vigencia"]);
+                                clsUsuario.Puesto = Convert.ToString(dr["Puesto"]);
+                                ListaUsuarios.Add(clsUsuario);
 
+                            }
                         }
+                        connection.Close();
                     }
-                    connection.Close();
-                }
-                var res = new PermisoController(Configuration).GetPermisosUsuario("Index","Usuarios", puestoUser);
-                ViewBag.Crear = res.Crear;
-                ViewBag.Editar = res.Editar;
+                    var res = new PermisoController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
+                    ViewBag.Crear = res.Crear;
+                    ViewBag.Editar = res.Editar;
 
-                if (puestoUser == "1")
-                {
-                    ViewBag.CambiarContrasena = true;
+                    if (puestoUser == "1")
+                    {
+                        ViewBag.CambiarContrasena = true;
+                    }
+                    else
+                    {
+                        ViewBag.CambiarContrasena = false;
+                    }
+                    ViewBag.User = currentUser;
+
+                    return View(ListaUsuarios);
                 }
                 else
                 {
-                    ViewBag.CambiarContrasena = false;
+                    var res = new PermisoController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
+                    ViewBag.Crear = res.Crear;
+                    ViewBag.Editar = res.Editar;
+                    return View(ListaUsuarios);
                 }
-                ViewBag.User = currentUser;
-          
-                return View(ListaUsuarios);
+               
             }
             catch (Exception ex)
             {
@@ -325,7 +338,7 @@ namespace OXXO.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult CambiarContrasena(int idusuario)
         {
             Usuario clsUsuario = new Usuario();

@@ -1,0 +1,88 @@
+﻿@model OXXO.Models.Usuario
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Crear Usuario</h4>
+        <form asp-action="Crear">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <div class="col">
+                    <label asp-for="Nombre">Nombre(s)</label>
+                    <input asp-for="Nombre" class="form-control" autocomplete="off" /><span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <label asp-for="Apellido">Apellido(s)</label>
+                    <input asp-for="Apellido" class="form-control" autocomplete="off"/><span asp-validation-for="Apellido" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col">
+                    <label asp-for="UserName">Nombre de Usuario</label>
+                    <div class="col-sm-8">
+                        <input asp-for="UserName" class="form-control" autocomplete="off"/><span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Perfil</label>
+                    <div class="col-sm-8">
+                        <select asp-for="IdPerfil" id="ddPerfiles" name="IdPerfil" class="form-select" asp-items="ViewBag.Perfiles">
+                            <option value="">Seleccione el Perfil</option>
+                        </select> <span asp-validation-for="IdPerfil" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group row">
+                <div class="col">
+                    <label asp-for="Contrasena">Contraseña</label>
+                    <div class="col-sm-8">
+                        <input asp-for="Contrasena" class="form-control" type="password" autocomplete="off"/><span asp-validation-for="Contrasena" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <label asp-for="ConfirmarContrasena">Confirmar Contraseña</label>
+                    <div class="col-sm-8">
+                        <input asp-for="ConfirmarContrasena" class="form-control" type="password" autocomplete="off" /><span asp-validation-for="ConfirmarContrasena" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col">
+                    <label asp-for="Correo">Correo</label>
+                    <input asp-for="Correo" class="form-control" type="email" /><span asp-validation-for="Correo" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <label asp-for="Puesto">Puesto</label>
+                    <input asp-for="Puesto" class="form-control" /><span asp-validation-for="Puesto" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="Vigencia">Vigencia</label>
+                    <input asp-for="Vigencia" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" autocomplete="off"/><span asp-validation-for="Vigencia" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <input type="submit" value="Guardar" class="btn btn-success float-end" tabindex="7" />
+                    <a asp-action="Index" class="btn btn-secondary float-end" tabindex="8">Regresar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#ddPerfiles").select();
+    });
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
