@@ -7,9 +7,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h1>Alta</h1>
-
 <hr />
 <section class="container-fluid">
     @if (ViewBag.Alert != null) //Agregado por Miguel
@@ -183,18 +181,6 @@
     </div>
 </section>
 @section Scripts {
-    <script type="text/javascript">
-        function validateData() {
-
-            if ($("#Rfc").val() == "") {
-                swal("Ingresa el RFC");
-                return false;
-            } else {
-                return true;
-            }
-        }
-    </script>
-
     <script>
         document.getElementById("alerta").style.display = "none"; //Agregado por Miguel
     </script>
@@ -208,7 +194,6 @@
         });
 
         $(function () {
-
             $("#IdGiroComercio").change(function () {
                 $.getJSON("/Alta/ListadoGiroComercial", { cid: $("#IdGiroComercio").val() }, function (e) {
                     var row = "";
@@ -234,20 +219,18 @@
 
             document.getElementById("Persona").onchange = function () {
                 document.getElementById("NombreCompleto").removeAttribute("disabled");
-
                 document.getElementById("NombreComercial").setAttribute("disabled", "disabled");
                 document.getElementById("RazonSocial").setAttribute("disabled", "disabled");
                 document.getElementById("IdGiroComercio").setAttribute("disabled", "disabled");
                 document.getElementById("Portal").setAttribute("disabled", "disabled");
 
-                if (this.value == '0') {
-                    document.getElementById("NombreCompleto").setAttribute("disabled", "disabled");
-
-                    document.getElementById("NombreComercial").removeAttribute("disabled");
-                    document.getElementById("RazonSocial").removeAttribute("disabled");
-                    document.getElementById("IdGiroComercio").removeAttribute("disabled");
-                    document.getElementById("Portal").removeAttribute("disabled");
-                }
+            if (this.value == '0') {
+                document.getElementById("NombreCompleto").setAttribute("disabled", "disabled");
+                document.getElementById("NombreComercial").removeAttribute("disabled");
+                document.getElementById("RazonSocial").removeAttribute("disabled");
+                document.getElementById("IdGiroComercio").removeAttribute("disabled");
+                document.getElementById("Portal").removeAttribute("disabled");
+            }
             }
         });
     </script>
