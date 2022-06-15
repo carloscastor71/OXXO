@@ -114,7 +114,7 @@ namespace OXXO.Controllers
         }
 
         [HttpPost]
-        public IActionResult GuardarPermiso(int IdRol, int IdControlador, int IdAcciones, string leer, string crear, string editar) 
+        public IActionResult GuardarPermiso(int IdPerfil, int IdControlador, int IdAcciones, string leer, string crear, string editar) 
         {
             try
             {
@@ -128,7 +128,7 @@ namespace OXXO.Controllers
                     using (SqlCommand command = new SqlCommand("SP_CrearActualizarPermisos", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@IdRol", IdRol);
+                        command.Parameters.AddWithValue("@IdPerfil", IdPerfil);
                         command.Parameters.AddWithValue("@IdControlador",IdControlador);
                         command.Parameters.AddWithValue("@IdAccion", IdAcciones);
                         command.Parameters.AddWithValue("@PuedeLeer", PuedeLeer);
@@ -150,13 +150,13 @@ namespace OXXO.Controllers
             }
         }
 
-        public JsonResult GetPermisos(string IdRol, string IdControlador, string IdAccion) 
+        public JsonResult GetPermisos(string IdPerfil, string IdControlador, string IdAccion) 
         {
             Permisos permiso = new Permisos();
             using (SqlConnection connection = new SqlConnection(dbConn))
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT Leer, Crear, Editar FROM RolControlador WHERE IdRol="+IdRol+" AND IdControlador="+IdControlador+" AND IdAccion="+IdAccion,connection))
+                using (SqlCommand command = new SqlCommand("SELECT Leer, Crear, Editar FROM RolControlador WHERE IdPerfil="+IdPerfil+" AND IdControlador="+IdControlador+" AND IdAccion="+IdAccion,connection))
                 {
                     SqlDataReader dr = command.ExecuteReader();
 
@@ -171,10 +171,10 @@ namespace OXXO.Controllers
             return Json(permiso);
         }
 
-        public PermisosUsuario GetPermisosUsuario(string NombreAccion, string NombreControlador, string IdRol) 
+        public PermisosUsuario GetPermisosUsuario(string NombreAccion, string NombreControlador, string IdPerfil) 
         {
             PermisosUsuario userPermiso = new PermisosUsuario();
-            if (IdRol != null)
+            if (IdPerfil != null)
             {
                 using (SqlConnection connection = new SqlConnection(dbConn))
                 {
@@ -182,7 +182,7 @@ namespace OXXO.Controllers
                     using (SqlCommand command= new SqlCommand("SP_BuscaPermisoUsuario", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@IdRol", IdRol);
+                        command.Parameters.AddWithValue("@IdPerfil", IdPerfil);
                         command.Parameters.AddWithValue("@NombreControlador", NombreControlador);
                         command.Parameters.AddWithValue("@NombreAccion", NombreAccion);
 

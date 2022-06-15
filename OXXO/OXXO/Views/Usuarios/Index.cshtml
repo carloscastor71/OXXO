@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<OXXO.Models.Usuario>
 
+
 @{
     ViewData["Title"] = "Usuario";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
 
@@ -13,62 +13,213 @@
         border-color: red;
     }
 </style>
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            @Html.Raw(@ViewBag.Alert)
-        </div>
-    </div>
-</div>
-<h3 class="labelTitle"><u>Usuarios</u></h3>
+
+<h3 class="labelTitle">Usuarios</h3>
 <br />
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-    <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingOne">
-            <h4 class="panel-title">
-                <a role="button" class="btn btnFiltrar" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    Filtrar
-                </a>
-                @if (ViewBag.Crear)
-                {
-                    <a asp-action="Crear" class="btn btnCrear">Crear usuario</a>
-                }
-            </h4>
-        </div>
-        
-        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-            <div class="panel-body">
-                <form asp-controller="Usuarios" asp-action="Index">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                Nombre<input type="text" class="form-control" name="nombre_Usuario" />
-                            </div>
-                            <div class="col">
-                                Usuario <input type="text" class="form-control" name="user_name" />
-                            </div>
-                            <div class="col">
-                                <br />
-                                <input type="submit" value="Buscar" class="btn btn-dark" />
-                            </div>
+<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i> Filtrar</button>
+@if (ViewBag.Crear)
+{
+
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightCrear" aria-controls="offcanvasRightCrear" style="border-radius: 0px; "><i class="bi bi-person-plus-fill"></i> Crear nuevo usuario</button>
+}
+<div class="accordion-bral">
+    <div>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5>Filtrar</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <form name="myForm" asp-controller="Usuarios" asp-action="Index" onsubmit="return validateForm()">
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre</label>
+                            <input type="text" name="Nombre" class="form-control form-control-sm">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre de Usuario</label>
+                            <input type="text" name="UserName" class="form-control form-control-sm">
                         </div>
                     </div>
+                    <div class="row p-2">
+                        <input type="submit" value="Buscar" class="btn btn-dark float-right" />
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <script>
+                        function validateForm() {
+                            var x = document.forms["myForm"]["Nombre"].value;
+                            var y = document.forms["myForm"]["UserName"].value;
+                            if (x == "" && y == "") {
+                                Swal.fire({ icon: 'info', title: '¡Atención!', text: 'Debes seleccionar al menos un valor para buscar.' })
+                                return false;
+                            }
+                        }
+                    </script>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<div class="accordion-bral">
+    <div>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightCrear" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5>Crear Un Nuevo Usuario</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <form id="FormCrear" asp-action="Crear">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre(s)</label>
+                            <input type="text" name="Nombre" class="form-control form-control-sm" autocomplete="off" required><span></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Apellido(s)</label>
+                            <input type="text" name="Apellido" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre de Usuario</label>
+                            <input type="text" name="UserName" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Perfil</label>
+                            <select id="ddPerfiles" name="IdPerfil" class="form-select" asp-items="ViewBag.Perfiles">
+                                <option value="">Selecciona un perfil</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Contraseña</label>
+                            <input type="password" name="Contrasena" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Confirmar Contraseña</label>
+                            <input type="password" name="ConfirmarContrasena" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Correo</label>
+                            <input type="email" name="Correo" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Puesto</label>
+                            <input type="text" name="Puesto" class="form-control form-control-sm" autocomplete="off">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Vigencia</label>
+                            <input type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" name="Vigencia" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <input type="submit" value="Crear Usuario" class="btn btn-success" />
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+                    <script>
+                        $('#FormCrear').on('submit', function () {
+                            if (this.checkValidity() == false) {
+                                return false;
+                            }
+                        });
+                        $(function () {
+                            $("#ddPerfiles").select();
+                        });
+
+                    </script>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="accordion-bral">
+    <div>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightEditar" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5>Editar al Usuario</h5>
+                <h6 class="card-subtitle mb-2 text-muted"></h6>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <form id="FormEditar" asp-action="Editar">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @*<input type="hidden" asp-for="IdUsuario" />
+                        <input type="hidden" asp-for="Contrasena" />
+                        <input type="hidden" asp-for="ConfirmarContrasena" />*@
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre(s)</label>
+                            <input type="text" name="Nombre" class="form-control form-control-sm" autocomplete="off" required><span></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Apellido(s)</label>
+                            <input type="text" name="Apellido" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre de Usuario</label>
+                            <input type="text" name="UserName" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Perfil</label>
+                            <select id="dd2Perfiles" name="IdPerfil" class="form-select" asp-items="ViewBag.Perfiles">
+                                <option value="">Selecciona un perfil</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-check-label">Activo</label>
+                            <input type="checkbox" name="Activo" class="form-check-input" autocomplete="off">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Correo</label>
+                            <input type="email" name="Correo" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Puesto</label>
+                            <input type="text" name="Puesto" class="form-control form-control-sm" autocomplete="off">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Vigencia</label>
+                            <input type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" name="Vigencia" class="form-control form-control-sm" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <input type="submit" value="Guardar" class="btn btn-success" />
+                        <i class="bi bi-person-check"></i>
+                    </div>
+                    <script>
+                        $('#FormEditar').on('submit', function () {
+                            if (this.checkValidity() == false) {
+                                return false;
+                            }
+                        });
+                        $(function () {
+                            $("#dd2Perfiles").select();
+                        });
+
+                    </script>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <br />
-<table class="tableStyle">
+
+<table id="tableusers" class="table">
     <thead>
         <tr class="text-center">
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Nombre de Usuario</th>
-            <th>Correo</th>
-            <th>Puesto</th>
-            <th>Estatus</th>
-            <th>Vigencia</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Nombre de Usuario</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Puesto</th>
+            <th scope="col">Estatus</th>
+            <th scope="col">Vigencia</th>
             <th colspan="2"></th>
         </tr>
     </thead>
@@ -76,8 +227,8 @@
         @foreach (var item in Model)
         {
             <tr class="text-center">
-                <td style="display:none">@Html.DisplayFor(modelItem => item.IdUsuario)</td>
-                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td id="idusu" style="display:none">@Html.DisplayFor(modelItem => item.IdUsuario)</td>
+                <td scope="row">@Html.DisplayFor(modelItem => item.Nombre)</td>
                 <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
                 <td>@Html.DisplayFor(modelItem => item.UserName)</td>
                 <td>@Html.DisplayFor(modelItem => item.Correo)</td>
@@ -91,34 +242,74 @@
                     <td>Activo</td>
                 }
                 <td style="width:10%">@Html.DisplayFor(modelItem => item.Vigencia)</td>
-                @if (ViewBag.Editar)
-                {
-                    <td>
-                        <a asp-action="Editar" asp-route-id="@item.IdUsuario" title="Editar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                                <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z" />
-                            </svg>
-
-                        </a>
-                    </td>
-
-                }
+                <td>
+                    @if (ViewBag.Editar)
+                    {
+                        <button class="btn btn-block popup btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEditar" aria-controls="offcanvasRightEditar" style="border-radius: 0px; " title="Editar" asp-route-id="@item.IdUsuario"><i class="bi bi-person-lines-fill" ></i> Editar</button>
+                    }
+                </td>
                 <td>
                     @if (ViewBag.CambiarContrasena || ViewBag.User == item.IdUsuario)
                     {
-                        <a class="btn btn-block popup" data-url="CambiarContrasena" data-toggle="modal" data-target="#CambiarContrasena" title="Cambiar contraseña">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
-                            </svg>
-                        </a>
-                     }
-                </td>
+                      <button value="id" id="editPassword" class="btn btn-block popup btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightContrasena" aria-controls="offcanvasRightContrasena" style="border-radius: 0px; " title="Cambiar Contraseña">
+                        <i class="bi bi-shield-lock"></i> Cambiar Contrasena</button>
+                      @*<a id="editPassword" class="btn btn-block popup" data-url="CambiarContrasena" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightContrasena" aria-controls="offcanvasRightContrasena" title="Cambiar contraseña">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                              <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                          </svg>
+                      </a>*@
+                      }
+                    </td>
             </tr>
         }
     </tbody>
 </table>
 
-<div aria-hidden="true" aria-labelledby="CambiarContrasena" role="dialog" tabindex="-1" id="CambiarContrasena" class="modal fade">
-    <div class="modal-dialog">
+
+<div class="accordion-bral">
+    <div>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightContrasena" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5>Cambiar Contraseña</h5>
+                
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div id="createBody" class="offcanvas-body">
+                
+            </div>
+        </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+
+ /*   document.getElementById("alerta").style.display = "none";*/
+
+    $(document).ready(function () {
+        $('#tableusers tbody').on('click', '#editPassword', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            var id = $(this).attr("editPassword").match(/\d+/)[0];
+            var data = $('#tableuser').DataTable().row(id).data();
+            console.log(data[0]);
+
+            $.ajax({
+                url: '/Usuarios/CambiarContrasena/',
+                type: 'GET',
+                data: {idusuario: data},
+                success: function (res) {
+                    $('#offcanvasRightContrasena').html(res);
+                    $('#createBody').modal('show');
+                },
+                error: function () {
+                    alert("There is some problem in the service!")
+                }
+            });
+        });
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
