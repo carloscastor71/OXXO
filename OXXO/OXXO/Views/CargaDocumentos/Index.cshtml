@@ -80,32 +80,30 @@
                 </div>
             </div>
         </div>
-        <div class="row col-sm-6 col-md-6 col-xl-6 justify-content-end">
-            <div class="form-group">
-                <div class="col-sm-2 col-md-2 col-xl-2">
-                    <div class="form-group">
-                        <div class="mb-3">
-                            <input type="submit" value="Agregar" class="btn btn-outline-success" />
-                        </div>
+        <div class="row row-cols-2 justify-content-end">
+            <div class="col-sm-1 col-md-1 col-xl-1">
+                <div class="form-group col-2">
+                    <div class="mb-3">
+                        <input type="submit" value="Agregar" class="btn btn-outline-success" />
                     </div>
                 </div>
-                <div class="col-sm-2 col-md-2 col-xl-2">
-                    <div class="form-group">
-                        <div class="mb-3">
-                            <input type="submit" value="Eliminar" class="btn btn-outline-warning" />
-                        </div>
+            </div>
+            <div class="col-sm-1 col-md-1 col-xl-1">
+                <div class="form-group col-2">
+                    <div class="mb-3">
+                        <input type="submit" value="Eliminar" class="btn btn-outline-warning" />
                     </div>
                 </div>
-                <div class="col-sm-2 col-md-2 col-xl-2">
-                    <div class="form-group">
-                        <div class="mb-3">
-                            <a class="btn btn-outline-danger" asp-controller="Home" asp-action="Inicio">Salie</a>
-                        </div>
+            </div>
+            <div class="col-sm-1 col-md-1 col-xl-1">
+                <div class="form-group col-2">
+                    <div class="mb-3">
+                        <a class="btn btn-outline-danger" asp-controller="Home" asp-action="Inicio">Salir</a>
                     </div>
                 </div>
             </div>
         </div>
-</form>
+    </form>
 </div>
 </section>
 @section Scripts {
@@ -163,9 +161,9 @@
         });
     </script>
 
-    <script>
+    @*<script>
         document.getElementById("alerta").style.display = "none"; //Agregado por Miguel
-    </script>
+    </script>*@
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
