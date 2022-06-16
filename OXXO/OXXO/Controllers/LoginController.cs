@@ -43,14 +43,9 @@ namespace OXXO.Controllers
             {
                 try
                 {
-                    if (existeEmpleado(lg.UserName) == true)
+                    if (existeEmpleado(lg.UserName) == true || existeContraseña(lg.Contrasena) == true)
                     {
-                        ViewBag.Alert = CommonServices.ShowAlert(Alerts.Info, "Este usuario no existe");
-                        return View();
-                    }
-                    else if (existeContraseña(lg.Contrasena) == true)
-                    {
-                        ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "Contraseña incorrecta");
+                        ViewBag.Alert = CommonServices.ShowAlert(Alerts.Info, "Usuario y/o contraseña incorrectas, favor de ingresarlas correctamente.");
                         return View();
                     }
                     else
@@ -75,7 +70,7 @@ namespace OXXO.Controllers
                                 }
                                 else
                                 {
-                                    HttpContext.Session.SetInt32("IdUsuario", sdr.GetInt32(0));
+                                    HttpContext.Session.SetString("IdUsuario", sdr.GetInt32(0).ToString());
                                     HttpContext.Session.SetString("Nombre", sdr.GetString(1) + " " + sdr.GetString(2));
                                     HttpContext.Session.SetString("UserName", sdr.GetString(3));
                                     HttpContext.Session.SetString("Correo", sdr.GetString(5));
