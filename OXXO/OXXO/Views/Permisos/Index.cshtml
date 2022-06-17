@@ -1,0 +1,261 @@
+﻿<style type="text/css">
+
+    .middle {
+        width: 100%;
+        text-align: center;
+    }
+
+        .middle h6 {
+            font-family: "Inter", sans-serif;
+            color: #000;
+        }
+
+        .middle input[type=checkbox] {
+            display: none;
+        }
+
+            .middle input[type=checkbox]:checked + .box {
+                background-color: #007e90;
+            }
+
+                .middle input[type=checkbox]:checked + .box p {
+                    color: white;
+                    transform: translateY(10px);
+                }
+
+                    .middle input[type=checkbox]:checked + .box p:before {
+                        transform: translateY(0px);
+                        opacity: 1;
+                    }
+
+        .middle .box {
+            background-color: #E1E1E1;
+            transition: all 250ms ease;
+            will-change: transition;
+            display: inline-block;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            font-family: "Inter", sans-serif;
+            font-weight: 100;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+
+            .middle .box:active {
+                transform: translateY(0px);
+            }
+
+            .middle .box p {
+                position: absolute;
+                transform: translate(0, 0px);
+                left: 0;
+                right: 0;
+                transition: all 300ms ease;
+                font-size: 0.8em;
+                user-select: none;
+                color: #007e90;
+            }
+
+                .middle .box p:before {
+                    font-size: 2.0em;
+                    font-family: FontAwesome;
+                    display: block;
+                    transform: translateY(-10px);
+                    opacity: 0;
+                    transition: all 300ms ease-in-out;
+                    font-weight: normal;
+                    color: white;
+                }
+
+        .middle .lectura p:before {
+            content: "\f06e";
+        }
+
+        .middle .creacion p:before {
+            content: "\f271";
+        }
+
+        .middle .edicion p:before {
+            content: "\f044";
+        }
+</style>
+
+<div class="container">
+    <h1 id="titulo">Permisos</h1>
+    <h5 id="titulo">Asignación de Permisos y accesos al tipo de Usuario</h5>
+
+    <form asp-action="GuardarPermiso" asp-controller="Permisos">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Perfiles</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Selecciona un perfil</h6>
+                        <p>
+                            <select id="IdPerfil" name="IdPerfil" class="form-control" asp-items="ViewBag.Perfil">
+                            </select>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Controladores</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Selecciona un controlador</h6>
+                        <p>
+                            <select class="form-control" id="IdControlador" name="IdControlador" asp-items="ViewBag.Controlador" required>
+                                <option value="">Seleccione un controlador...</option>
+                            </select>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Acciones</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Selecciona una acción.</h6>
+                        <p>
+                            <select id="IdAccion" name="IdAccion" class="form-control" asp-items="@(new SelectList(string.Empty, "Value", "Text"))" required></select>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+
+            <div class="col">
+
+                <div class="middle">
+                    <h6>¿Tendrá permisos de lectura?</h6>
+                    <label>
+                        <input id="leer" type="checkbox" name="leer" onclick="mostrar()" />
+                        <a class="lectura box">
+                            <p id="span1">No por esta ocasión.</p>
+                        </a>
+                    </label>
+                </div>
+
+            </div>
+            <div class="col">
+
+                <div class="middle">
+                    <h6>¿Tendrá permisos de creación?</h6>
+                    <label>
+                        <input id="crear" type="checkbox" name="crear" onclick="mostrar2()" />
+                        <a class="creacion box">
+                            <p id="span2">No por esta ocasión.</p>
+                        </a>
+                    </label>
+                </div>
+
+            </div>
+            <div class="col">
+
+                <div class="middle">
+                    <h6>¿Tendrá permisos de edición?</h6>
+                    <label>
+                        <input id="editar" type="checkbox" name="editar" onclick="mostrar3()" />
+                        <a class="edicion box">
+                            <p id="span3">No por esta ocasión.</p>
+                        </a>
+                    </label>
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+                <input id="url" type="hidden" data-url="@Url.Action("ListadoAcciones", "Permisos")" data-url2="@Url.Action("GetPermisos", "Permisos")" />
+                <input type="submit" id="guardar" value="Guardar" class="btn btn-success btn-block btn-lg" tabindex="7" />
+        </div>
+    </form>
+</div>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+@*<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>*@
+<script>
+
+    $(function () {
+        var url;
+        $("#IdPerfil").select();
+        $("#IdControlador").select();
+        $("#IdAccion").select();
+    });
+
+    $(function () {
+        $("#IdControlador").change(function () {
+            url = $("#url").data('url')
+            $.getJSON(url, { IdControlador: $("#IdControlador").val() }, function (e) {
+                var row = "";
+                row += '<option value="">Seleccione una acción...</option>';
+                $.each(e, function (i, v) {
+                    row += "<option value=" + v.value + ">" + v.text + "</option>";
+                });
+                $("#IdAccion").html(row);
+            });
+        });
+
+        $("#IdAccion").change(function () {
+            url = $("#url").data('url2')
+            $.getJSON(url, { IdPerfil: $("#IdPerfil").val(), IdControlador: $("#IdControlador").val(), IdAccion: $("#IdAccion").val() }, function (i) {
+                $("#crear").attr("checked", i.crear);
+                $("#leer").attr("checked", i.leer);
+                $("#editar").attr("checked", i.editar);
+
+            });
+        });
+    });
+
+
+
+    function mostrar() {
+
+        document.getElementById('span1').innerHTML = '¡Si! Hagámoslo.';
+        if ($("input[name='leer']:checked").val()) {
+
+            document.getElementById('span1').innerHTML = '¡Si! Hagámoslo.';
+        }
+        else {
+            document.getElementById('span1').innerHTML = 'No por esta ocasión.';
+        }
+
+    }
+    function mostrar2() {
+
+        document.getElementById('span2').innerHTML = '¡Si! Hagámoslo.';
+        if ($("input[name='crear']:checked").val()) {
+
+            document.getElementById('span2').innerHTML = '¡Si! Hagámoslo.';
+        }
+        else {
+            document.getElementById('span2').innerHTML = 'No por esta ocasión.';
+        }
+
+    }
+
+    function mostrar3() {
+
+        document.getElementById('span3').innerHTML = '¡Si! Hagámoslo.';
+        if ($("input[name='editar']:checked").val()) {
+
+            document.getElementById('span3').innerHTML = '¡Si! Hagámoslo.';
+        }
+        else {
+            document.getElementById('span3').innerHTML = 'No por esta ocasión.';
+        }
+
+    }
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+

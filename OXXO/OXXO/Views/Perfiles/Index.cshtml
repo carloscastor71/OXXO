@@ -1,4 +1,5 @@
-﻿@model IEnumerable<OXXO.Models.Usuario>
+﻿@model IEnumerable<OXXO.Models.Perfil>
+
 <div class="container">
     <div id="PlaceHolderHere"></div>
     <style>
@@ -14,12 +15,12 @@
         </div>
     }
 
-    <h1 id="titulo">Usuarios</h1>
+    <h1 id="titulo">Perfiles</h1>
     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i> Filtrar</button>
     @if (ViewBag.Crear)
     {
 
-        <button id="CreateUser" class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightCrear" aria-controls="offcanvasRightCrear" style="border-radius: 0px; "><i class="bi bi-person-plus-fill"></i> Crear nuevo usuario</button>
+        <button id="CreatePerfil" class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightCrear" aria-controls="offcanvasRightCrear" style="border-radius: 0px; "><i class="bi bi-person-plus-fill"></i> Crear un nuevo perfil</button>
     }
     <div class="accordion-bral">
         <div>
@@ -30,26 +31,26 @@
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <form name="myForm" asp-controller="Usuarios" asp-action="Index" onsubmit="return validateForm()" class="p-3">
+                    <form name="myForm" asp-controller="Perfiles" asp-action="Index" onsubmit="return validateForm()" class="p-3">
                         <div class="row">
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Nombre</label>
-                                <input type="text" name="Nombre" class="form-control form-control-sm">
+                                <label for="exampleFormControlInput1" class="form-label">Nombre Perfil</label>
+                                <input type="text" name="NombrePerfil" class="form-control form-control-sm">
                             </div>
-                            <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Nombre de Usuario</label>
-                                <input type="text" name="UserName" class="form-control form-control-sm">
-                            </div>
+                            @*<div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Nombre de Usuario</label>
+                                    <input type="text" name="UserName" class="form-control form-control-sm">
+                                </div>*@
                         </div>
                         <div class="row p-2">
                             <input type="submit" value="Buscar" class="btn btn-dark float-right" />
                         </div>
                         <script>
                             function validateForm() {
-                                var x = document.forms["myForm"]["Nombre"].value;
-                                var y = document.forms["myForm"]["UserName"].value;
-                                if (x == "" && y == "") {
-                                    Swal.fire({ icon: 'info', title: '¡Atención!', text: 'Debes seleccionar al menos un valor para buscar.' })
+                                var x = document.forms["myForm"]["NombrePerfil"].value;
+                                /*    var y = document.forms["myForm"]["UserName"].value;*/
+                                if (x == "") {
+                                    Swal.fire({ icon: 'info', title: '¡Atención!', text: 'Debes seleccionar un valor para buscar.' })
                                     return false;
                                 }
                             }
@@ -62,29 +63,22 @@
 
     <br />
 
-    <table id="tableusers" class="table">
+    <table id="tableperfil" class="table">
         <thead>
             <tr class="text-center">
                 <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Nombre de Usuario</th>
-                <th scope="col">Correo</th>
-                <th scope="col">Puesto</th>
+                <th scope="col">Descripción</th>
                 <th scope="col">Estatus</th>
-                <th scope="col">Vigencia</th>
-                <th colspan="2"></th>
+                <th colspan="1"></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr class="text-center">
-                    <td style="display:none">@Html.DisplayFor(modelItem => item.IdUsuario)</td>
+                    <td style="display:none">@Html.DisplayFor(modelItem => item.IdPerfil)</td>
                     <td scope="row">@Html.DisplayFor(modelItem => item.Nombre)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
-                    <td>@Html.DisplayFor(modelItem => item.UserName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Correo)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Puesto)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
                     @if (item.Activo == false)
                     {
                         <td>Inactivo</td>
@@ -93,17 +87,10 @@
                     {
                         <td>Activo</td>
                     }
-                    <td style="width:10%">@Html.DisplayFor(modelItem => item.Vigencia)</td>
                     <td>
                         @if (ViewBag.Editar)
                         {
-                            <button id="editUser" data-url="Editar" onclick="datos(@item.IdUsuario)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" aria-controls="offcanvasRightEdit" title="Editar Usuario" class="btn btn-block popup btn-sm" type="button" style="border-radius: 0px;"><i class="bi bi-person-lines-fill"></i> Editar</button>
-                        }
-                    </td>
-                    <td>
-                        @if (ViewBag.CambiarContrasena || ViewBag.User == item.IdUsuario)
-                        {
-                            <button id="editPassword" data-url="CambiarContrasena" onclick="datos(@item.IdUsuario)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightContrasena" aria-controls="offcanvasRightContrasena" title="Cambiar contraseña" class="btn btn-block popup btn-sm" type="button" style="border-radius: 0px;"><i class="bi bi-shield-lock"></i> Cambiar Contrasena</button>
+                            <button id="editPerfil" data-url="Editar" onclick="datos(@item.IdPerfil)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" aria-controls="offcanvasRightEdit" title="Editar Perfil" class="btn btn-block popup btn-sm" type="button" style="border-radius: 0px;"><i class="bi bi-person-lines-fill"></i> Editar</button>
                         }
                     </td>
                 </tr>
@@ -112,27 +99,12 @@
     </table>
 
 
-    <div class="accordion-bral">
-        <div>
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightContrasena" aria-labelledby="offcanvasRightLabel">
-                <div class="offcanvas-header">
-                    <h5>Cambiar Contraseña</h5>
-
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div id="createBody" class="offcanvas-body">
-
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="accordion-bral">
         <div>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightEdit" aria-labelledby="offcanvasRightLabel">
                 <div class="offcanvas-header">
-                    <h5>Editar Usuario</h5>
+                    <h5>Editar Perfil</h5>
 
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
@@ -150,7 +122,7 @@
 
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightCrear" aria-labelledby="offcanvasRightLabel">
                 <div class="offcanvas-header">
-                    <h5>Crear un nuevo Usuario</h5>
+                    <h5>Crear un nuevo perfil</h5>
 
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
@@ -163,41 +135,20 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script>
 
-  /*     document.getElementById("alerta").style.display = "none";*/
+    /*     document.getElementById("alerta").style.display = "none";*/
     let idt;
     function datos(id) {
         idt = id;
     }
 
-
-    $('#tableusers tbody').on('click', '#editPassword', function (event) {
+    $('#tableperfil tbody').on('click', '#editPerfil', function (event) {
         event.preventDefault();
         event.stopImmediatePropagation();
 
         $.ajax({
-            url: '/Usuarios/CambiarContrasena/',
+            url: '/Perfiles/Editar/',
             type: 'GET',
-            data: { Id: idt },
-            success: function (result) {
-                $('#offcanvasRightContrasena').html(result);
-                $('#createBody').modal('show');
-                   
-            },
-            error: function () {
-                alert("¡Hay un problema con el servicio, favor de reiniciar!")
-            }
-        });
-
-    });
-
-    $('#tableusers tbody').on('click', '#editUser', function (event) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-
-        $.ajax({
-            url: '/Usuarios/Editar/',
-            type: 'GET',
-            data: { Id: idt },
+            data: { IdPerfil: idt },
             success: function (res) {
                 $('#offcanvasRightEdit').html(res);
                 $('#createBodyEdit').modal('show');
@@ -208,14 +159,14 @@
         });
 
     });
-        
 
-    $('#CreateUser').click(function (event) {
+
+    $('#CreatePerfil').click(function (event) {
         event.preventDefault();
         event.stopImmediatePropagation();
 
         $.ajax({
-            url: '/Usuarios/Crear/',
+            url: '/Perfiles/Crear/',
             type: 'GET',
             success: function (res) {
                 $('#offcanvasRightCrear').html(res);

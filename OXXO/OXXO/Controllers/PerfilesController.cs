@@ -13,27 +13,28 @@ using Microsoft.Extensions.Configuration;
 
 namespace OXXO.Controllers
 {
-    public class PerfilController : Controller
+    public class PerfilesController : Controller
     {
         string dbConn = "";
         public IConfiguration Configuration { get; }
 
-        public PerfilController(IConfiguration configuration)
+        public PerfilesController(IConfiguration configuration)
         {
             Configuration = configuration;
             dbConn = Configuration["ConnectionStrings:ConexionString"];
         }
         public IActionResult Index(string? alert, string NombrePerfil)
         {
+            ViewBag.Alert = alert;
             string consultaP = "";
             if (!string.IsNullOrEmpty(NombrePerfil))
             {
-                consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechjaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil WHERE Nombre LIKE '%" + NombrePerfil + "%'";
+                consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil WHERE Nombre LIKE '%" + NombrePerfil + "%'";
 
             }
             else
             {
-                consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechjaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil";
+                consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil";
             }
 
             ViewBag.Alert = alert;
@@ -59,7 +60,7 @@ namespace OXXO.Controllers
             }
 
             string PuestoUsuario = HttpContext.Session.GetString("IdPerfil");
-            var result = new PermisoController(Configuration).GetPermisosUsuario("Index","Perfil", PuestoUsuario);
+            var result = new PermisosController(Configuration).GetPermisosUsuario("Index","Perfiles", PuestoUsuario);
             ViewBag.Crear = result.Crear;
             ViewBag.Editar = result.Editar;
             
@@ -67,7 +68,7 @@ namespace OXXO.Controllers
             return View(PerfilList);
         }
 
-        public IActionResult Crear() { return View(); }
+        public IActionResult Crear() { return PartialView("Crear"); }
 
         [HttpPost]
         public IActionResult Crear(Perfil clsPerfil)
@@ -132,7 +133,7 @@ namespace OXXO.Controllers
                     }
                     connection.Close();
             }
-                return View(clsPerfil);
+                return PartialView("Editar",clsPerfil);
             }
             catch (Exception ex)
             {
@@ -153,7 +154,7 @@ namespace OXXO.Controllers
                 if (ModelState.IsValid)
                 {
                     string currentUser = HttpContext.Session.GetInt32("IdUsuario").ToString();
-                    using (SqlConnection connection = new SqlConnection())
+                    using (SqlConnection connection = new SqlConnection(dbConn))
                     {
                         connection.Open();
                         using (SqlCommand command = new SqlCommand("SP_EditarPerfil", connection))

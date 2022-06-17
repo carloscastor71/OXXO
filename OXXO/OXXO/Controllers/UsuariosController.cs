@@ -77,7 +77,7 @@ namespace OXXO.Controllers
                         }
                         connection.Close();
                     }
-                    var res = new PermisoController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
+                    var res = new PermisosController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
                     ViewBag.Crear = res.Crear;
                     ViewBag.Editar = res.Editar;
 
@@ -95,7 +95,7 @@ namespace OXXO.Controllers
                 }
                 else
                 {
-                    var res = new PermisoController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
+                    var res = new PermisosController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
                     ViewBag.Crear = res.Crear;
                     ViewBag.Editar = res.Editar;
                     return View(ListaUsuarios);

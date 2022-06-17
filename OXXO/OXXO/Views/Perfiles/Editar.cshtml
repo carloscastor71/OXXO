@@ -1,0 +1,49 @@
+﻿@model OXXO.Models.Perfil
+<style>
+    .input-validation-error {
+        border-color: red;
+    }
+</style>
+
+<div class="offcanvas-header">
+    <h5>Editar Perfil</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <h6 class="card-subtitle mb-2 text-muted">Perfil: @Model.Nombre</h6>
+    <form id="FormEditar" asp-action="Editar" class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdPerfil" />
+
+        <div class="row">
+            <div class="mb-3">
+                <label asp-for="Nombre">Nombre del Perfil</label>
+                <input asp-for="Nombre" class="form-control" autocomplete="off" /><span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Descripcion">Descripción</label>
+                <textarea asp-for="Descripcion" class="form-control" autocomplete="off" rows="3"></textarea><span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Activo" class="form-check-label"></label>
+                <input asp-for="Activo" class="form-check-input" type="checkbox" /><span asp-validation-for="Activo" class="text-danger"></span>
+
+            </div>
+
+        </div>
+        <div class="row p-2">
+                <input type="submit" value="Guardar Perfil Seleccionado" class="btn btn-success" />
+        </div>
+
+    </form>
+</div>
+
+<script>
+    $('#FormEditar').on('submit', function () {
+        if (this.checkValidity() == false) {
+            return false;
+        }
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
