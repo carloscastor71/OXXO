@@ -36,9 +36,9 @@ namespace OXXO.Controllers
         }
 
        [HttpPost]
-       public IActionResult Login(Login lg)
+       public IActionResult Login(Login lg, string? alert)
         {
-            
+            ViewBag.Alert = alert;
             if (ModelState.IsValid)
             {
                 try
@@ -54,11 +54,12 @@ namespace OXXO.Controllers
                         {
                             sqlCon.Open();
                             string query = "Select * from Usuario where UserName = @UserName AND Contrasena = @Contrasena";
+
                             SqlCommand comm = new SqlCommand(query, sqlCon);
                             comm.Parameters.AddWithValue("@UserName", lg.UserName);
-                            // string pass = Usuario.GetMD5Hash(lg.Contrasena);
-                            // comm.Parameters.AddWithValue("@Contrasena",pass);
-                            comm.Parameters.AddWithValue("@Contrasena", lg.Contrasena);
+                            string pass = Usuario.GetMD5Hash(lg.Contrasena);
+                            comm.Parameters.AddWithValue("@Contrasena", pass);
+
                             SqlDataReader sdr = comm.ExecuteReader();
                             if (sdr.Read())
                             {
@@ -80,7 +81,11 @@ namespace OXXO.Controllers
                                     return RedirectToAction("Home", "Home");
                                 }
                             }
-                            return View();
+                            else
+                            {
+                                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Info, "Usuario y/o contraseña incorrectas, favor de ingresarlas correctamente.");
+                                return View();
+                            }
                         }
                     }
                 }
@@ -88,15 +93,16 @@ namespace OXXO.Controllers
                 {
 
                     ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
-                    return View();
+                    return View(new { alert = ViewBag.Alert});
                 }
 
             }
             else
             {
                 ViewBag.Alert = CommonServices.ShowAlert(Alerts.Warning, "Favor de ingresar el usuario y contraseña");
+                return View(new { alert = ViewBag.Alert });
             }
-            return View();
+            
         }
 
         public bool existeEmpleado(string UserName)
@@ -126,8 +132,8 @@ namespace OXXO.Controllers
                 conn.Open();
 
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                //string pass = Usuario.GetMD5Hash(password);
-                cmd.Parameters.AddWithValue("@Contrasena", password);
+                string pass = Usuario.GetMD5Hash(password);
+                cmd.Parameters.AddWithValue("@Contrasena", pass);
 
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
                 return count == 0;
