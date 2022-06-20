@@ -1,88 +1,124 @@
 ﻿@model OXXO.Models.Usuario
+@using Microsoft.AspNetCore.Http
 <style>
-
-    .input-validation-error {
+    .input-validation-error 
+    {
         border-color: red;
     }
 </style>
-<div class="card">
-    <div class="card-body">
-        <h4 class="card-title">Editar Usuario</h4>
-        <h6 class="card-subtitle mb-2 text-muted">@Model.IdUsuario</h6>
-        <form asp-action="Editar">
-            
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdUsuario" />
-            <input type="hidden" asp-for="Contrasena" />
-            <input type="hidden" asp-for="ConfirmarContrasena" />
 
-            <div class="form-group row">
-                <div class="col">
-                    <label asp-for="Nombre">Nombre(s)</label>
-                    <input asp-for="Nombre" class="form-control" autocomplete="off" /><span asp-validation-for="Nombre" class="text-danger"></span>
-                </div>
-                <div class="col">
-                    <label asp-for="Apellido">Apellido(s)</label>
-                    <input asp-for="Apellido" class="form-control" autocomplete="off" /><span asp-validation-for="Apellido" class="text-danger"></span>
-                </div>
+<div class="offcanvas-header">
+    <h5>Editar al Usuario</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <h6 class="card-subtitle mb-2 text-muted">Usuario: @Model.UserName</h6>
+    <form id="FormEditar" asp-action="Editar" class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdUsuario" />
+        <input type="hidden" asp-for="Contrasena" />
+        <input type="hidden" asp-for="ConfirmarContrasena" />
+
+        <div class="row">
+            <div class="mb-3">
+                <label asp-for="Nombre">Nombre(s)</label>
+                <input asp-for="Nombre" class="form-control" autocomplete="off" /><span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
+            <div class="mb-3">
+                <label asp-for="Apellido">Apellido(s)</label>
+                <input asp-for="Apellido" class="form-control" autocomplete="off" /><span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserName">Nombre de Usuario</label>
+                @if (Context.Session.GetString("IdPerfil") == "1")
+                {
+                    <input asp-for="UserName" class="form-control" autocomplete="off" /><span asp-validation-for="UserName" class="text-danger"></span>
+                }
+                else
+                {
+                    <input asp-for="UserName" class="form-control" autocomplete="off" disabled /><span asp-validation-for="UserName" class="text-danger"></span>
+                }
 
-            <br />
 
-            <div class="form-group row">
-                <div class="col">
-                    <label asp-for="UserName">Nombre de Usuario</label>
-                    <div class="col-sm-8">
-                        <input asp-for="UserName" class="form-control" autocomplete="off" /><span asp-validation-for="UserName" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col">
-                    <label>Perfil</label>
-                    <div class="col-sm-8">
-                        <select asp-for="IdPerfil" id="ddPerfiles" name="IdPerfil" class="form-select" asp-items="ViewBag.Perfiles">
+            </div>
+            <div class="mb-3">
+                <div class="col-sm-8">
+                    <label asp-for="IdPerfil">Perfil</label>
+                    @if (Context.Session.GetString("IdPerfil") == "1")
+                    {
+                        <select asp-for="IdPerfil" id="dd2Perfiles" name="IdPerfil" class="form-select" asp-items="ViewBag.Perfiles">
                             <option value="">Seleccione el Perfil</option>
                         </select> <span asp-validation-for="IdPerfil" class="text-danger"></span>
-                    </div>
+                    }
+                    else
+                    {
+                        <select asp-for="IdPerfil" id="dd2Perfiles" name="IdPerfil" class="form-select" asp-items="ViewBag.Perfiles" disabled>
+                            <option value="">Seleccione el Perfil</option>
+                        </select> <span asp-validation-for="IdPerfil" class="text-danger"></span>
+                    }
+
                 </div>
-                <div class="col">
-                    <br />
-                    <label asp-for="Activo" class="form-check-label"></label>
-                    @*<div class="col-sm-8">*@
+            </div>
+            <div class="mb-3">
+                <label asp-for="Activo" class="form-check-label"></label>
+                @if (Context.Session.GetString("IdPerfil") == "1")
+                {
                     <input asp-for="Activo" class="form-check-input" type="checkbox" /><span asp-validation-for="Activo" class="text-danger"></span>
-                    @*</div>*@
-                </div>
+                }
+                else
+                {
+                    <input asp-for="Activo" class="form-check-input" type="checkbox" disabled /><span asp-validation-for="Activo" class="text-danger"></span>
+                }
+
+
             </div>
-
-            <br />
-
-            <div class="row">
-                <div class="col">
-                    <label asp-for="Correo">Correo</label>
-                    <input asp-for="Correo" class="form-control" type="email" /><span asp-validation-for="Correo" class="text-danger"></span>
-                </div>
-                <div class="col">
-                    <label asp-for="Puesto">Puesto</label>
+            <div class="mb-3">
+                <label asp-for="Correo">Correo</label>
+                <input asp-for="Correo" class="form-control" type="email" /><span asp-validation-for="Correo" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Puesto">Puesto</label>
+                @if (Context.Session.GetString("IdPerfil") == "1")
+                {
                     <input asp-for="Puesto" class="form-control" /><span asp-validation-for="Puesto" class="text-danger"></span>
-                </div>
-                <div class="col-sm-3">
-                    <label asp-for="Vigencia">Vigencia</label>
+                }
+                else
+                {
+                    <input asp-for="Puesto" class="form-control" disabled /><span asp-validation-for="Puesto" class="text-danger"></span>
+                }
+
+
+            </div>
+            <div class="mb-3">
+                <label asp-for="Vigencia">Vigencia</label>
+                @if (Context.Session.GetString("IdPerfil") == "1")
+                {
                     <input asp-for="Vigencia" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" autocomplete="off" /><span asp-validation-for="Vigencia" class="text-danger"></span>
-                </div>
-            </div>
+                }
+                else
+                {
+                    <input asp-for="Vigencia" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" autocomplete="off" disabled /><span asp-validation-for="Vigencia" class="text-danger"></span>
 
-            <br />
-            <div class="row">
-                <div class="col-md-12 text-right">
-                    <input type="submit" value="Guardar" class="btn btn-success float-end" tabindex="7" />
-                    <a asp-action="Index" class="btn btn-secondary float-end" tabindex="8">Regresar</a>
-                </div>
+                }
             </div>
+        </div>
+        <div class="row p-2">
+                <input type="submit" value="Guardar Usuario" class="btn btn-success" />
 
-        </form>
-    </div>
+        </div>
+
+    </form>
 </div>
+
 <script>
-    $(function () {
-        $("#ddPerfiles").select();
+    $('#FormEditar').on('submit', function () {
+        if (this.checkValidity() == false) {
+            return false;
+        }
     });
+    $(function () {
+        $("#dd2Perfiles").select();
+    });
+
 </script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

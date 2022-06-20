@@ -13,12 +13,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace OXXO.Controllers
 {
-    public class PermisoController : Controller
+    public class PermisosController : Controller
     {
         string dbConn = "";
         public IConfiguration Configuration { get; }
 
-        public PermisoController(IConfiguration configuration) 
+        public PermisosController(IConfiguration configuration) 
         {
             Configuration = configuration;
             dbConn = Configuration["ConnectionStrings:ConexionString"];
@@ -114,7 +114,7 @@ namespace OXXO.Controllers
         }
 
         [HttpPost]
-        public IActionResult GuardarPermiso(int IdPerfil, int IdControlador, int IdAcciones, string leer, string crear, string editar) 
+        public IActionResult GuardarPermiso(int IdPerfil, int IdControlador, int IdAccion, string leer, string crear, string editar) 
         {
             try
             {
@@ -130,7 +130,7 @@ namespace OXXO.Controllers
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@IdPerfil", IdPerfil);
                         command.Parameters.AddWithValue("@IdControlador",IdControlador);
-                        command.Parameters.AddWithValue("@IdAccion", IdAcciones);
+                        command.Parameters.AddWithValue("@IdAccion", IdAccion);
                         command.Parameters.AddWithValue("@PuedeLeer", PuedeLeer);
                         command.Parameters.AddWithValue("@PuedeCrear", PuedeCrear);
                         command.Parameters.AddWithValue("@PuedeEditar", PuedeEditar);
