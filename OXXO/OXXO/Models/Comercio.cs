@@ -10,6 +10,11 @@ namespace OXXO.Models
 {
     public partial class Comercio
     {
+        public Comercio  ()
+        {
+            Documento = new HashSet<Documento>();
+        }
+
         public int IdEmisor { get; set; }
         public int IdComercio { get; set; }
 
@@ -53,5 +58,6 @@ namespace OXXO.Models
         public virtual Compania IdCompaniaNavigation { get; set; }
         public virtual GiroComercio IdGiroComercioNavigation { get; set; }
         public virtual TipoDeposito IdTipoDepositoNavigation { get; set; }
+        public virtual ICollection<Documento> Documento { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Http;
+using OXXO.Models;
 
 namespace OXXO
 {
@@ -27,6 +28,8 @@ namespace OXXO
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connection = Configuration.GetConnectionString("ConexionString");
+           
             services.AddDistributedMemoryCache();
             services.Configure<CookiePolicyOptions>(options => {
                 options.CheckConsentNeeded = context => false;
@@ -36,13 +39,15 @@ namespace OXXO
 
 
             services.AddControllersWithViews();
-            services.AddControllersWithViews();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession( options => {
                 options.IdleTimeout = TimeSpan.FromSeconds(3600);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            
         }
         //revisa si existen datos, si no existen creara el user,permisos,controladores y acciones
         private void CrearUsuariosPermisos()

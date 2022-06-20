@@ -35,7 +35,7 @@ namespace OXXO.Controllers
             Permisos permisos = new Permisos();
             try
             {
-                ListadoDePerfiles();
+                //ListadoDePerfiles();
                 string consulta = "";
                 if (!String.IsNullOrEmpty(Nombre))
                 {
@@ -46,10 +46,10 @@ namespace OXXO.Controllers
                 {
                     consulta = "SELECT * FROM Usuario WHERE UserName LIKE '%" + UserName + "%'";
                 }
-                //else
-                //{
-                //    consulta = "SELECT * FROM usuario";
-                //}
+                else
+                {
+                    consulta = "SELECT * FROM usuario";
+                }
                 List<Usuario> ListaUsuarios = new List<Usuario>();
                 if (!String.IsNullOrEmpty(consulta))
                 {
@@ -77,7 +77,7 @@ namespace OXXO.Controllers
                         }
                         connection.Close();
                     }
-                    var res = new PermisoController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
+                    var res = new PermisosController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
                     ViewBag.Crear = res.Crear;
                     ViewBag.Editar = res.Editar;
 
@@ -95,7 +95,7 @@ namespace OXXO.Controllers
                 }
                 else
                 {
-                    var res = new PermisoController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
+                    var res = new PermisosController(Configuration).GetPermisosUsuario("Index", "Usuarios", puestoUser);
                     ViewBag.Crear = res.Crear;
                     ViewBag.Editar = res.Editar;
                     return View(ListaUsuarios);
@@ -181,8 +181,8 @@ namespace OXXO.Controllers
             }
         }
 
-
-        public IActionResult Crear() { ListadoDePerfiles(); return View(); }
+        [HttpGet]
+        public IActionResult Crear(string? alert) { ViewBag.Alert = alert; ListadoDePerfiles(); return PartialView("Crear"); }
 
         [HttpPost]
         public IActionResult Crear(Usuario clsUsuario) 
@@ -196,10 +196,9 @@ namespace OXXO.Controllers
                     {
                         ModelState.AddModelError("UserName","Este usuario ya existe.");
                         ListadoDePerfiles();
-                        return View();
+                        ViewBag.Alert = CommonServices.ShowAlert(Alerts.Warning, "Este usuario ya existe, por favor intenta con otro.");
+                        return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
                     }
-
-                    
 
                     using (SqlConnection connection = new SqlConnection(dbConn))
                     {
@@ -218,9 +217,9 @@ namespace OXXO.Controllers
                             command.Parameters.AddWithValue("@IdUsuarioFA", currentUser);
                             command.Parameters.AddWithValue("IdPerfil", clsUsuario.IdPerfil);
                             command.ExecuteNonQuery();
-                            connection.Close();
+                            
                         }
-
+                        connection.Close();
                         ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Registro completado con éxito.");
                         return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
                     }
@@ -240,14 +239,15 @@ namespace OXXO.Controllers
         }
 
 
-        public IActionResult Editar(int idusuario)
+        [HttpGet]
+        public IActionResult Editar(int Id)
         {
             Usuario clsUsuario = new Usuario();
             try
             {
                 using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    string consulta = $"SELECT * FROM Usuario WHERE IdUsuario='{idusuario}'";
+                    string consulta = $"SELECT * FROM Usuario WHERE IdUsuario='{Id}'";
                     SqlCommand command = new SqlCommand(consulta, connection);
 
                     connection.Open();
@@ -272,7 +272,7 @@ namespace OXXO.Controllers
                     connection.Close();
                 }
                 ListadoDePerfiles();
-                return View(clsUsuario);
+                return PartialView("Editar", clsUsuario);
             }
             catch (Exception ex)
             {
@@ -302,7 +302,7 @@ namespace OXXO.Controllers
                     using (SqlConnection connection = new SqlConnection(dbConn))
                     {
                         connection.Open();
-                        using (SqlCommand command = new SqlCommand("SP_EditarUsuario"))
+                        using (SqlCommand command = new SqlCommand("SP_EditarUsuarios",connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.AddWithValue("@IdUsuario",clsUsuario.IdUsuario);
@@ -316,10 +316,10 @@ namespace OXXO.Controllers
                             command.Parameters.AddWithValue("@Activo", Convert.ToInt32(clsUsuario.Activo));
                             command.Parameters.AddWithValue("IdPerfil", clsUsuario.IdPerfil);
                             command.ExecuteNonQuery();
-                            
-                        }
-                        connection.Close();
+                            connection.Close();
 
+                        }
+                        
                         ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Registro actualizado con éxito.");
                         return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert});
                     }
@@ -339,33 +339,42 @@ namespace OXXO.Controllers
         }
 
         [HttpGet]
-        public IActionResult CambiarContrasena(int idusuario)
+        public IActionResult CambiarContrasena(int Id)
         {
             Usuario clsUsuario = new Usuario();
-            using (SqlConnection connection = new SqlConnection(dbConn))
+            if (ModelState.IsValid)
             {
-                string consulta = $"SELECT * FROM Usuario WHERE IdUsuario='{idusuario}'";
-                SqlCommand command = new SqlCommand(consulta,connection);
-                connection.Open();
-                using (SqlDataReader dr = command.ExecuteReader())
+              
+                using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    while (dr.Read())
+                    string consulta = $"SELECT * FROM Usuario WHERE IdUsuario='{Id}'";
+                    SqlCommand command = new SqlCommand(consulta, connection);
+                    connection.Open();
+                    using (SqlDataReader dr = command.ExecuteReader())
                     {
-                        clsUsuario.IdUsuario = Convert.ToString(dr["IdUsuario"]);
-                        clsUsuario.Nombre = Convert.ToString(dr["Nombre"]);
-                        clsUsuario.Apellido = Convert.ToString(dr["Apellido"]);
-                        clsUsuario.UserName = Convert.ToString(dr["UserName"]);
-                        clsUsuario.Correo = Convert.ToString(dr["Correo"]);
-                        clsUsuario.Activo = dr.IsDBNull("Activo") ? false : Convert.ToBoolean(dr["Activo"]);
-                        clsUsuario.Vigencia = Convert.ToDateTime(dr["Vigencia"]);
-                        clsUsuario.Puesto = Convert.ToString(dr["Puesto"]);
-                        clsUsuario.IdPerfil = Convert.ToString(dr["IdPerfil"]);
+                        while (dr.Read())
+                        {
+                            clsUsuario.IdUsuario = Convert.ToString(dr["IdUsuario"]);
+                            clsUsuario.Nombre = Convert.ToString(dr["Nombre"]);
+                            clsUsuario.Apellido = Convert.ToString(dr["Apellido"]);
+                            clsUsuario.UserName = Convert.ToString(dr["UserName"]);
+                            clsUsuario.Correo = Convert.ToString(dr["Correo"]);
+                            clsUsuario.Activo = dr.IsDBNull("Activo") ? false : Convert.ToBoolean(dr["Activo"]);
+                            clsUsuario.Vigencia = Convert.ToDateTime(dr["Vigencia"]);
+                            clsUsuario.Puesto = Convert.ToString(dr["Puesto"]);
+                            clsUsuario.IdPerfil = Convert.ToString(dr["IdPerfil"]);
+                        }
                     }
+                    connection.Close();
                 }
-                connection.Close();
+
+                ModelState.Clear();
+               
             }
 
+            
             return PartialView("_CambiarContrasena", clsUsuario);
+
         }
 
         [HttpPost]
