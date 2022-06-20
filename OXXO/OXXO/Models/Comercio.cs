@@ -16,7 +16,8 @@ namespace OXXO.Models
         }
 
         public int IdEmisor { get; set; }
-         
+        public int IdComercio { get; set; }
+
         public string Rfc { get; set; }
         public string NombreCompleto { get; set; }
          

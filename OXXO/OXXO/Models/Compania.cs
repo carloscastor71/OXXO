@@ -16,7 +16,7 @@ namespace OXXO.Models
         }
 
         public int IdCompania { get; set; }
-        public string Conpania { get; set; }
+        public string Companias { get; set; }
         public int? Activo { get; set; }
         public int? UsuarioFal { get; set; }
         public DateTime? Fal { get; set; }

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -11,11 +11,12 @@ namespace OXXO.Models
     public partial class Documento
     {
         public int IdArchivo { get; set; }
+        public int IdAComercio { get; set; }
         public string Nombre { get; set; }
-        public byte[] archivo { get; set; }
-        public string extension { get; set; }        
-        public int IdTipoDeposito { get; set; }
+        public byte[] Archivo { get; set; }
+        public string Extension { get; set; }
+        public bool? Activo { get; set; }
 
-        public virtual Comercio IdComercioNavigation { get; set; }
+        public IFormFile FormFile { get; set; }
     }
 }

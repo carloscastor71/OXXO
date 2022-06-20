@@ -7,7 +7,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>Alta</h1>
+<h1 >Alta</h1>
 <hr />
 <section class="container-fluid">
     @if (ViewBag.Alert != null) //Agregado por Miguel
@@ -17,7 +17,7 @@
         </div>
     } @*/////*@
     <div class="container-fluid">
-        <form asp-controller="Alta" asp-action="Index">
+        <form method="post" asp-controller="Alta"enctype="multipart/form-data" asp-action="Index">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-xl-12">
                     <div class="form-group">
@@ -32,7 +32,7 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Tipo persona</label>
-                            <select id="Persona" name="Persona" class="form-select">
+                            <select id="Persona" name="Persona" class="form-select" required>
                                 <option value="0">Persona Moral</option>
                                 <option value="1">Persona fisica</option>
                             </select>
@@ -46,7 +46,7 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">RFC</label>
-                            <input id="Rfc" name="Rfc" class="form-control"   />
+                            <input id="Rfc" name="Rfc" class="form-control" required  />
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Nombre completo</label>
-                            <input asp-for="NombreCompleto" id="NombreCompleto" name="NombreCompleto" class="form-control" value="" disabled="disabled" />
+                            <input asp-for="NombreCompleto" id="NombreCompleto" name="NombreCompleto" class="form-control" value="" disabled="disabled" required />
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                     <div class="form-group">
                         <div class=" mb-3">
                             <label class="control-label">Correo</label>
-                            <input asp-for="Correo" id="Correo" name="Correo" class="form-control  "  />
+                            <input asp-for="Correo" id="Correo" name="Correo" class="form-control  " required />
                             <span class="text-danger"></span>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Nombre comercial</label>
-                            <input asp-for="NombreComercial" id="NombreComercial" name="NombreComercial" class="form-control  " />
+                            <input asp-for="NombreComercial" id="NombreComercial" name="NombreComercial" class="form-control  " required />
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Razon social</label>
-                            <input asp-for="RazonSocial" id="RazonSocial" name="RazonSocial" class="form-control  " />
+                            <input asp-for="RazonSocial" id="RazonSocial" name="RazonSocial" class="form-control  " required />
                         </div>
                     </div>
                 </div>
@@ -93,8 +93,8 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Giro comercial</label>
-                            <select asp-for="IdGiroComercio" id="IdGiroComercio" name="IdGiroComercio" class="form-select" asp-items="ViewBag.GiroComercio">
-                                <option value="null" selected>Selecciona el giro comercial</option>
+                            <select asp-for="IdGiroComercio" id="IdGiroComercio" name="IdGiroComercio" class="form-select" asp-items="ViewBag.GiroComercio" required>
+                                <option value="">Selecciona el giro comercial</option>
                             </select>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Telefono</label>
-                            <input id="Telefono" name="Telefono" class="form-control"  />
+                            <input id="Telefono" name="Telefono" class="form-control" required />
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Direccion</label>
-                            <input id="Direccion" name="Direccion" class="form-control  "  />
+                            <input id="Direccion" name="Direccion" class="form-control" required />
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                     <div class="form-group">
                         <div class=" mb-3">
                             <label class="control-label">Portal</label>
-                            <input id="Portal" name="Portal" class="form-control  " />
+                            <input id="Portal" name="Portal" class="form-control" required />
                             <span class="text-danger"></span>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Cuenta</label>
-                            <input id="CuentaDeposito" name="CuentaDeposito" class="form-control"  />
+                            <input id="CuentaDeposito" name="CuentaDeposito" class="form-control" required />
                         </div>
                     </div>
                 </div>
@@ -141,8 +141,8 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Bancos</label>
-                            <select asp-for="IdBanco" id="IdBanco" name="IdBanco" class="form-select" asp-items="ViewBag.Bancos"  >
-                                <option selected>Selecciona un banco</option>
+                            <select asp-for="IdBanco" id="IdBanco" name="IdBanco" class="form-select" asp-items="ViewBag.Bancos" required>
+                                <option value="">Selecciona un banco</option>
                             </select>
                         </div>
                     </div>
@@ -151,11 +151,22 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label class="control-label">Tipo deposito</label>
-                            <select id="IdTipoDeposito" name="IdTipoDeposito" class="form-select"  >
-                                <option selected>Selecciona el tipo de deposito</option>
+                            <select id="IdTipoDeposito" name="IdTipoDeposito" class="form-select" required>
+                                <option value="">Selecciona el tipo de deposito</option>
                                 <option value="1">Por transaccion</option>
                                 <option value="2">Diario</option>
                             </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-xl-4">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <p>Selecciona los archivos a evaluar</p>
+                            <input class="form-control" name="documentos" type="file" multiple required/>
                         </div>
                     </div>
                 </div>
@@ -181,9 +192,6 @@
     </div>
 </section>
 @section Scripts {
-    @*<script>
-        document.getElementById("alerta").style.display = "none"; //Agregado por Miguel
-    </script>*@
 
     <script type="text/javascript">
         $(function () {
@@ -223,6 +231,7 @@
                 document.getElementById("RazonSocial").setAttribute("disabled", "disabled");
                 document.getElementById("IdGiroComercio").setAttribute("disabled", "disabled");
                 document.getElementById("Portal").setAttribute("disabled", "disabled");
+              
 
             if (this.value == '0') {
                 document.getElementById("NombreCompleto").setAttribute("disabled", "disabled");
@@ -233,11 +242,8 @@
             }
             }
         });
+      
     </script>
-
-    @*<script>
-        document.getElementById("alerta").style.display = "none"; //Agregado por Miguel
-    </script>*@
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
