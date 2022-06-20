@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 namespace OXXO.Models
 {
     public partial class RolControlador
-    {
+    {   [Key]
         public int IdRol { get; set; }
         public int IdPerfil { get; set; }
         public int IdControlador { get; set; }

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,51 +39,109 @@ namespace OXXO.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(string Rfc, string NombreCompleto, string Telefono, string Correo, string Direccion, string CuentaDeposito, int IdBanco, string RazonSocial, string NombreComercial, int IdGiroComercio, string Portal, int Persona, int Usuario_FAl, int Usuario_FUM, int IdTipoDeposito)
+        public async Task<IActionResult> Index(string Rfc, string NombreCompleto, string Telefono, string Correo, string Direccion, string CuentaDeposito, int IdBanco, string RazonSocial, string NombreComercial, int IdGiroComercio, string Portal, int Persona, int Usuario_FAl, int Usuario_FUM, int IdTipoDeposito, List<IFormFile> documentos)
         {
+            //Id perfil asociado a la sesion abierta.
             int IdPerfil = Int32.Parse(HttpContext.Session.GetString("IdPerfil"));
-            if (String.IsNullOrEmpty(Rfc)|| String.IsNullOrEmpty(Telefono) || String.IsNullOrEmpty(Correo) || String.IsNullOrEmpty(Direccion) || String.IsNullOrEmpty(CuentaDeposito) || String.IsNullOrEmpty(IdBanco.ToString()) || String.IsNullOrEmpty(IdTipoDeposito.ToString()))
+
+            //Validacion de campos
+
+            try
             {
-                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Warning, "Tienes campos sin llenar.");
-                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
-            }
-            else
-            {
+                string connectionString = Configuration["ConnectionStrings:ConexionString"];
+                using SqlConnection connection = new SqlConnection(connectionString);
+
+                connection.Open();
+                Guid RFC = Guid.NewGuid();
+
+                using SqlCommand command = new SqlCommand("SP_ComercioAlta", connection);
+
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@RFC", Rfc);
+                command.Parameters.AddWithValue("@NombreCompleto", NombreCompleto);
+                command.Parameters.AddWithValue("@Telefono", Telefono);
+                command.Parameters.AddWithValue("@Correo", Correo);
+                command.Parameters.AddWithValue("@Direccion", Direccion);
+                command.Parameters.AddWithValue("@CuentaDeposito", CuentaDeposito);
+                command.Parameters.AddWithValue("@IdBanco", IdBanco);
+                command.Parameters.AddWithValue("@RazonSocial", RazonSocial);
+                command.Parameters.AddWithValue("@NombreComercial", NombreComercial);
+                command.Parameters.AddWithValue("@IdGiroComercio", IdGiroComercio);
+                command.Parameters.AddWithValue("@Portal", Portal);
+                command.Parameters.AddWithValue("@Persona", Persona);
+                command.Parameters.AddWithValue("@Usuario_FAl", IdPerfil);
+                command.Parameters.AddWithValue("@Usuario_FUM", IdPerfil);
+                command.Parameters.AddWithValue("@IdTipoDeposito", IdTipoDeposito);
+
+                command.ExecuteNonQuery();
+                connection.Close();
+         
+                //Agregando los archivos
                 try
                 {
-                    string connectionString = Configuration["ConnectionStrings:ConexionString"];
-                    using SqlConnection connection = new SqlConnection(connectionString);
+                    int idc;
 
                     connection.Open();
-                    Guid RFC = Guid.NewGuid();
-
-                    using SqlCommand command = new SqlCommand("SP_ComercioAlta", connection);
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    command.Parameters.AddWithValue("@RFC", Rfc);
-                    command.Parameters.AddWithValue("@NombreCompleto", NombreCompleto);
-                    command.Parameters.AddWithValue("@Telefono", Telefono);
-                    command.Parameters.AddWithValue("@Correo", Correo);
-                    command.Parameters.AddWithValue("@Direccion", Direccion);
-                    command.Parameters.AddWithValue("@CuentaDeposito", CuentaDeposito);
-                    command.Parameters.AddWithValue("@IdBanco", IdBanco);
-                    command.Parameters.AddWithValue("@RazonSocial", RazonSocial);
-                    command.Parameters.AddWithValue("@NombreComercial", NombreComercial);
-                    command.Parameters.AddWithValue("@IdGiroComercio", IdGiroComercio);
-                    command.Parameters.AddWithValue("@Portal", Portal);
-                    command.Parameters.AddWithValue("@Persona", Persona);
-                    command.Parameters.AddWithValue("@Usuario_FAl", IdPerfil);
-                    command.Parameters.AddWithValue("@Usuario_FUM", IdPerfil);
-                    command.Parameters.AddWithValue("@IdTipoDeposito", IdTipoDeposito);
-
-                    command.ExecuteNonQuery();
+                    SqlCommand command2 = new SqlCommand("EXEC SP_NumeroComercio @Usuario = " + IdPerfil, connection);
+                    idc = (int)command2.ExecuteScalar();
                     connection.Close();
 
-                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Comercio dado de alta correctamente");
+                    int IdComercioFIinal = idc;
 
-                    return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+                    long size = documentos.Sum(f => f.Length);
 
+                    foreach (var formFile in documentos)
+                    {
+                        if (documentos != null)
+                        {
+                            if (formFile.Length > 0)
+                            {
+                                //Getting FileName
+
+                                var fileName = Path.GetFileNameWithoutExtension(formFile.FileName);
+                                //Getting file Extension
+                                var fileExtension = Path.GetExtension(formFile.FileName);
+                                // concatenating  FileName + FileExtension
+                                var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
+                                var objfiles = new Documento()
+                                {
+                                    Nombre = newFileName,
+                                    Extension = fileExtension
+
+                                };
+
+                                using (var target = new MemoryStream())
+                                {
+                                    await formFile.CopyToAsync(target);
+                                    objfiles.Archivo = target.ToArray();
+                                }
+
+                                try
+                                {
+                                    connection.Open();
+                                    using SqlCommand command3 = new SqlCommand("SP_cargaDocumentos", connection);
+
+                                    command3.CommandType = CommandType.StoredProcedure;
+
+                                    command3.Parameters.AddWithValue("@IdComercio", IdComercioFIinal);
+                                    command3.Parameters.AddWithValue("@nombre", objfiles.Nombre);
+                                    command3.Parameters.AddWithValue("@archivo", objfiles.Archivo);
+                                    command3.Parameters.AddWithValue("@extension", objfiles.Extension);
+
+
+                                    command3.ExecuteNonQuery();
+                                    connection.Close();
+
+                                }
+                                catch (SqlException ex)
+                                {
+                                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                                    return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+                                }
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -90,6 +149,13 @@ namespace OXXO.Controllers
                     return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
                 }
             }
+            catch (Exception ex)
+            {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+            ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Comercio dado de alta correctamente");
+            return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
         }
 
         public object ListadoBancos()
@@ -124,6 +190,8 @@ namespace OXXO.Controllers
                 return ViewData["Bancos"];
             }
         }
+
+
         public object ListadoGiroComercial()
         {
             List<GiroComercio> GiroComercioList = new List<GiroComercio>();
@@ -194,8 +262,6 @@ namespace OXXO.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
-
-
-    
