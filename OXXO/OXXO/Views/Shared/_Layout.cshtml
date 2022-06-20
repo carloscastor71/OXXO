@@ -57,6 +57,7 @@
 <body>
 
     <input id="idP" type="hidden" value="@Context.Session.GetString("IdPerfil")" />
+
         <div id="menu"></div>
             <div class="container-fluid">
                 @if (Context.Session.Get("IdPerfil") != null)
@@ -91,6 +92,7 @@
                                                 </ul>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </nav>
@@ -134,16 +136,12 @@
     @*else
     {
         @RenderBody()
-    }*@
-
-
-
-
-    <!-- JavaScript Bundle with Popper -->
+    }
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
 
@@ -162,11 +160,6 @@
                 alert("La sesión ha caducado, se cerrará la sesión.");
                 window.location = '/Login/Login';
             }
-
-
-            //document.getElementById("alerta").style.display = "none";    //Agregado por Miguel
-
-            /*document.getElementById("alerta").style.display = "none";  */  //Agregado por Miguel
 
 
 

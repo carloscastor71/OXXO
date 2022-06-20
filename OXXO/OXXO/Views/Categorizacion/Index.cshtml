@@ -13,20 +13,26 @@
                     <form id="dataForm" class="p-4">
                         <div class="row">
                             <div class="mb-2">
-                                <label for="exampleFormControlInput1" class="form-label">ID Emisor</label>
-                                <input type="email" name="IdEmisor" class="form-control form-control-sm" id="exampleFormControlInput1">
-                            </div>
-                            <div class="mb-2">
                                 <label for="exampleFormControlInput1" class="form-label">RFC</label>
-                                <input type="email" name="RFC" class="form-control form-control-sm" id="exampleFormControlInput1">
+                                <input type="text" name="Rfc" class="form-control form-control-sm" id="exampleFormControlInput1">
                             </div>
                             <div class="mb-2">
-                                <label for="exampleFormControlInput1" class="form-label">Telefono</label>
-                                <input type="email" name="Telefono" class="form-control form-control-sm" id="exampleFormControlInput1">
+                                <label for="exampleFormControlInput1" class="form-label">Nombre Completo</label>
+                                <input type="text" name="NombreCompleto" class="form-control form-control-sm" id="exampleFormControlInput1">
                             </div>
                             <div class="mb-2">
-                                <label for="exampleFormControlInput1" class="form-label">Correo</label>
-                                <input type="email" name="Correo" class="form-control form-control-sm" id="exampleFormControlInput1" placeholder="name@example.com">
+                                <label for="exampleFormControlInput1" class="form-label">Razon Social</label>
+                                <input type="text" name="RazonSocial" class="form-control form-control-sm" id="exampleFormControlInput1">
+                            </div>
+                            <div class="mb-2">
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <input type="checkbox" name="Persona" id="checkGrado" value="fisica" class="only-one">Fisica
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <input type="checkbox" name="Persona" id="checkResumen" value="moral" class="only-one">Moral
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row p-2">
@@ -42,15 +48,15 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <table id="example" class="table" style="width:100%">
+            <table id="categorizacion" class="table" style="width:100%">
                 <thead>
                     <tr>
                         <th>ID Emisor</th>
+                        <th>nombreCompleto</th>
                         <th>RFC</th>
-                        <th>Telefono</th>
                         <th>Direccion</th>
-                        <th></th>
-                        <th>Salary</th>
+                        <th>Banco</th>
+                        <th>Estatus</th>
                     </tr>
                 </thead>
                 <tbody>

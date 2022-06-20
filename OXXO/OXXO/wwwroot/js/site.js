@@ -3,7 +3,7 @@
 
 // Write your JavaScript code.
 $(document).ready(function () {
-    $('#example').DataTable({
+    /*$('#example').DataTable({
         "lengthChange": false,
         "bInfo": false,
         "searching": false,
@@ -22,15 +22,27 @@ $(document).ready(function () {
                 "previous": "Anterior"
             }
         }
-    });
+    });*/
    
 });
 
+let Checked = null;
+//The class name can vary
+for (let CheckBox of document.getElementsByClassName('only-one')) {
+    CheckBox.onclick = function () {
+        if (Checked != null) {
+            Checked.checked = false;
+            Checked = CheckBox;
+        }
+        Checked = CheckBox;
+    }
+}
+
 $('#filtrar').click(function (e) {
     var data = [];
+    var search = []; 
     const $elemento = document.querySelector("#chips");
     $elemento.innerHTML = "";
-
 
     e.preventDefault();
     var frm = $('#dataForm');
@@ -40,7 +52,33 @@ $('#filtrar').click(function (e) {
 
         if (data[i].value != '') {
             $("#chips").append("<li>" + data[i].name + ": " + data[i].value + "</li>");
+            search[i] = { "name" : data[i].name, "value": data[i].value }; 
+        }else{
+            search[i] = { "name": data[i].name , "value" : "NULL" }
         }
     }
+
+    $.ajax({
+        url: '/Categorizacion/Buscar',
+        data: search,
+        type: 'POST',
+        success: function (json) {
+
+            $(document).ready(function () {
+                $('#categorizacion').DataTable({
+                    data: json.data,
+                    destroy: true,
+                    columns: [
+                        { data: 'idEmisor' },
+                        { data: 'nombreCompleto' },
+                        { data: 'rfc' },
+                        { data: 'direccion' },
+                        { data: 'banco' },
+                        { data: 'estatus' },
+                    ],
+                });
+            });
+        }
+    });
 
 });
