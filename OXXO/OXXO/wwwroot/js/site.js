@@ -1,30 +1,6 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
-// Write your JavaScript code.
-$(document).ready(function () {
-    /*$('#example').DataTable({
-        "lengthChange": false,
-        "bInfo": false,
-        "searching": false,
-        language: {
-            "decimal": "",
-            "emptyTable": "No hay información",
-            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-            "loadingRecords": "Cargando...",
-            "processing": "Procesando...",
-            "search": "Buscar:",
-            "zeroRecords": "Sin resultados encontrados",
-            "paginate": {
-                "first": "Primero",
-                "last": "Ultimo",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            }
-        }
-    });*/
-   
-});
 
 let Checked = null;
 //The class name can vary
@@ -59,24 +35,24 @@ $('#filtrar').click(function (e) {
     }
 
     $.ajax({
-        url: '/Categorizacion/Buscar',
+        url: '/MesaControl/Buscar',
         data: search,
         type: 'POST',
+        bFilter: false,
         success: function (json) {
-
-            $(document).ready(function () {
-                $('#categorizacion').DataTable({
-                    data: json.data,
-                    destroy: true,
-                    columns: [
-                        { data: 'idEmisor' },
-                        { data: 'nombreCompleto' },
-                        { data: 'rfc' },
-                        { data: 'direccion' },
-                        { data: 'banco' },
-                        { data: 'estatus' },
-                    ],
-                });
+            $('#categorizacion').DataTable({
+                data: json.data,
+                paging: false,
+                destroy: true,
+                searching: false,
+                columns: [
+                    { data: 'idEmisor' },
+                    { data: 'nombreCompleto' },
+                    { data: 'rfc' },
+                    { data: 'direccion' },
+                    { data: 'banco' },
+                    { data: 'estatus' },
+                ],
             });
         }
     });
