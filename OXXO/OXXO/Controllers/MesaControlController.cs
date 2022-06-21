@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace OXXO.Controllers
 {
-    public class CategorizacionController : Controller
+    public class MesaControlController : Controller
     {
         // GET: CategorizacionController
 
         string dbConn = "";
 
         public IConfiguration Configuration { get; }
-        public CategorizacionController(IConfiguration configuration)
+        public MesaControlController(IConfiguration configuration)
         {
             Configuration = configuration;
             dbConn = Configuration["ConnectionStrings:ConexionString"];
