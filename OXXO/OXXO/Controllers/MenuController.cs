@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using System.Data;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
+using OXXO.Services;
+using OXXO.Enums;
 
 namespace OXXO.Controllers
 {
@@ -22,82 +24,96 @@ namespace OXXO.Controllers
         public PartialViewResult MostrarMenu()
         
         {
-    
-            MenuList = GetMenu();
-
-            string IdPerfil = HttpContext.Session.GetString("IdPerfil");
-            MenuUser menuuser = new MenuUser();
-            MenuUserItem menuItem;
-            foreach (var menuMain in MenuList)
+            try
             {
-                menuItem = new MenuUserItem() {
-                    MenuMain = menuMain
-                };
+                MenuList = GetMenu();
 
-                using (SqlConnection connection = new SqlConnection(dbConn))
+                string IdPerfil = HttpContext.Session.GetString("IdPerfil");
+                MenuUser menuuser = new MenuUser();
+                MenuUserItem menuItem;
+                foreach (var menuMain in MenuList)
                 {
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand("SP_BuscarControlador_PorRol", connection))
+                    menuItem = new MenuUserItem()
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("IdPerfil",IdPerfil);
-                        command.Parameters.AddWithValue("IdMenu",menuMain.IdMenu);
-                        SqlDataReader dr = command.ExecuteReader();
-                        while (dr.Read())
+                        MenuMain = menuMain
+                    };
+
+                    using (SqlConnection connection = new SqlConnection(dbConn))
+                    {
+                        connection.Open();
+
+                        using (SqlCommand command = new SqlCommand("SP_BuscarControlador_PorRol", connection))
                         {
-                            Permisos clsPermisos = new Permisos();
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.AddWithValue("IdPerfil", IdPerfil);
+                            command.Parameters.AddWithValue("IdMenu", menuMain.IdMenu);
+                            SqlDataReader dr = command.ExecuteReader();
+                            while (dr.Read())
+                            {
+                                Permisos clsPermisos = new Permisos();
 
-                            clsPermisos.IdRol = Convert.ToInt32(dr["IdRol"]);
-                            clsPermisos.IdPerfil = Convert.ToInt32(dr["IdPerfil"]);
-                            clsPermisos.Encabezado = Convert.ToString(dr["Texto"]);
-                            clsPermisos.ControllerName = Convert.ToString(dr["NombreControlador"]);
-                            clsPermisos.ActionName = Convert.ToString(dr["NombreAccion"]);
-                            clsPermisos.Leer = Convert.ToBoolean(dr["Leer"]);
-                            clsPermisos.Crear = Convert.ToBoolean(dr["Crear"]);
-                            clsPermisos.Editar = Convert.ToBoolean(dr["Editar"]);
-                            clsPermisos.IdMenuPadre = Convert.ToInt32(dr["IdMenuPadre"]);
-                            permisos.Add(clsPermisos);
+                                clsPermisos.IdRol = Convert.ToInt32(dr["IdRol"]);
+                                clsPermisos.IdPerfil = Convert.ToInt32(dr["IdPerfil"]);
+                                clsPermisos.Encabezado = Convert.ToString(dr["Texto"]);
+                                clsPermisos.ControllerName = Convert.ToString(dr["NombreControlador"]);
+                                clsPermisos.ActionName = Convert.ToString(dr["NombreAccion"]);
+                                clsPermisos.Leer = Convert.ToBoolean(dr["Leer"]);
+                                clsPermisos.Crear = Convert.ToBoolean(dr["Crear"]);
+                                clsPermisos.Editar = Convert.ToBoolean(dr["Editar"]);
+                                clsPermisos.IdMenuPadre = Convert.ToInt32(dr["IdMenuPadre"]);
+                                permisos.Add(clsPermisos);
 
+                            }
                         }
-                    }
-                    connection.Close();
+                        connection.Close();
 
-                    if (permisos.Count()>0)
-                    {
-                        menuItem.SubMenus.AddRange(permisos);
-                        menuuser.Menus.Add(menuItem);
+                        if (permisos.Count() > 0)
+                        {
+                            menuItem.SubMenus.AddRange(permisos);
+                            menuuser.Menus.Add(menuItem);
+                        }
+                        permisos.Clear();
                     }
-                    permisos.Clear();
+
                 }
-
+                return PartialView("_MenuPartial", menuuser);
             }
-            return PartialView("_MenuPartial",menuuser);
+            catch (Exception)
+            {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "Hubo un problema al cargar el menú. (MostrarMenu)");
+         
+                return PartialView("_MenuPartial", new { alert = ViewBag.Alert });
+            }
+            
         }
 
         public List<Menu> GetMenu()
         {
-            using (SqlConnection connection = new SqlConnection(dbConn))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand("SELECT * FROM Menu", connection);
-                using (SqlDataReader dr = command.ExecuteReader())
+           
+                using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    while (dr.Read())
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT * FROM Menu", connection);
+                    using (SqlDataReader dr = command.ExecuteReader())
                     {
-                        Menu clsMenu = new Menu();
-                        clsMenu.IdMenu = Convert.ToInt32(dr["IdMenu"]);
-                        clsMenu.NombreMenu = Convert.ToString(dr["NombreMenu"]);
-                        clsMenu.Orden = Convert.ToInt32(dr["Orden"]);
-                        clsMenu.Predeterminado = Convert.ToInt32(dr["Predeterminado"]);
-                        MenuList.Add(clsMenu);
+                        while (dr.Read())
+                        {
+                            Menu clsMenu = new Menu();
+                            clsMenu.IdMenu = Convert.ToInt32(dr["IdMenu"]);
+                            clsMenu.NombreMenu = Convert.ToString(dr["NombreMenu"]);
+                            clsMenu.Orden = Convert.ToInt32(dr["Orden"]);
+                            clsMenu.Predeterminado = Convert.ToInt32(dr["Predeterminado"]);
+                            MenuList.Add(clsMenu);
 
+                        }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
 
-            return MenuList;
+                return MenuList;
+           
+
+         
         }
     }
 }
