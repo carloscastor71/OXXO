@@ -27,45 +27,56 @@ namespace OXXO.Controllers
         {
             ViewBag.Alert = alert;
             string consultaP = "";
-            if (!string.IsNullOrEmpty(NombrePerfil))
+            try
             {
-                consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil WHERE Nombre LIKE '%" + NombrePerfil + "%'";
-
-            }
-            else
-            {
-                consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil";
-            }
-
-            ViewBag.Alert = alert;
-            List<Perfil> PerfilList = new List<Perfil>();
-            using (SqlConnection connection = new SqlConnection(dbConn))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(consultaP, connection);
-                using (SqlDataReader dr = command.ExecuteReader())
+                if (!string.IsNullOrEmpty(NombrePerfil))
                 {
-                    while (dr.Read())
-                    {
-                        Perfil clsPerfil = new Perfil();
-                        clsPerfil.IdPerfil = Convert.ToString(dr["IdPerfil"]);
-                        clsPerfil.Nombre = Convert.ToString(dr["Nombre"]);
-                        clsPerfil.Descripcion = Convert.ToString(dr["Descripcion"]);
-                        clsPerfil.Activo = Convert.ToBoolean(dr["Activo"]);
-                        PerfilList.Add(clsPerfil);
-                    }
+                    consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil WHERE Nombre LIKE '%" + NombrePerfil + "%'";
 
                 }
-                connection.Close();
+                else
+                {
+                    consultaP = "SELECT IdPerfil,Nombre,Descripcion,Activo,FechaAlta,FechaUltimaMod,IdUsuarioFA,IdUsuarioFUM FROM Perfil";
+                }
+
+                ViewBag.Alert = alert;
+                List<Perfil> PerfilList = new List<Perfil>();
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(consultaP, connection);
+                    using (SqlDataReader dr = command.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            Perfil clsPerfil = new Perfil();
+                            clsPerfil.IdPerfil = Convert.ToString(dr["IdPerfil"]);
+                            clsPerfil.Nombre = Convert.ToString(dr["Nombre"]);
+                            clsPerfil.Descripcion = Convert.ToString(dr["Descripcion"]);
+                            clsPerfil.Activo = Convert.ToBoolean(dr["Activo"]);
+                            PerfilList.Add(clsPerfil);
+                        }
+
+                    }
+                    connection.Close();
+                }
+
+                string PuestoUsuario = HttpContext.Session.GetString("IdPerfil");
+                var result = new PermisosController(Configuration).GetPermisosUsuario("Index", "Perfiles", PuestoUsuario);
+                ViewBag.Crear = result.Crear;
+                ViewBag.Editar = result.Editar;
+
+
+                return View(PerfilList);
+
             }
+            catch (Exception)
+            {
 
-            string PuestoUsuario = HttpContext.Session.GetString("IdPerfil");
-            var result = new PermisosController(Configuration).GetPermisosUsuario("Index","Perfiles", PuestoUsuario);
-            ViewBag.Crear = result.Crear;
-            ViewBag.Editar = result.Editar;
-            
-
-            return View(PerfilList);
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "Hubo un problema a la hora de cargar los perfiles. (Index Perfiles)");
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+           
         }
 
         public IActionResult Crear() { return PartialView("Crear"); }
@@ -101,10 +112,10 @@ namespace OXXO.Controllers
                     return View();
                 }
             }
-            catch (Exception ex )
+            catch (Exception)
             {
 
-                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudo crear el perfil. (Crear)");
                 return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert});
             }
            
@@ -135,10 +146,10 @@ namespace OXXO.Controllers
             }
                 return PartialView("Editar",clsPerfil);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudo editar el perfil. (Editar)");
                 return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
             }
 
@@ -178,10 +189,9 @@ namespace OXXO.Controllers
                     return View();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudo editar el perfil. (Editar HTTPPOST)");
                 return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
             }
         }

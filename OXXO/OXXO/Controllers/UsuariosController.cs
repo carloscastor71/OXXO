@@ -113,29 +113,39 @@ namespace OXXO.Controllers
 
        public object ListadoDePerfiles() 
        {
-            List<Perfil> ListaPerfiles = new List<Perfil>();
-            using (SqlConnection connection = new SqlConnection(dbConn))
+            try
             {
-                connection.Open();
-
-                string consulta = "SELECT * FROM Perfil WHERE Activo = 1";
-                SqlCommand command = new SqlCommand(consulta,connection);
-                using (SqlDataReader dr = command.ExecuteReader())
+                List<Perfil> ListaPerfiles = new List<Perfil>();
+                using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    while (dr.Read())
+                    connection.Open();
+
+                    string consulta = "SELECT * FROM Perfil WHERE Activo = 1";
+                    SqlCommand command = new SqlCommand(consulta, connection);
+                    using (SqlDataReader dr = command.ExecuteReader())
                     {
-                        Perfil clsPerfil = new Perfil();
-                        clsPerfil.IdPerfil = Convert.ToString(dr["IdPerfil"]);
-                        clsPerfil.Nombre = Convert.ToString(dr["Nombre"]);
+                        while (dr.Read())
+                        {
+                            Perfil clsPerfil = new Perfil();
+                            clsPerfil.IdPerfil = Convert.ToString(dr["IdPerfil"]);
+                            clsPerfil.Nombre = Convert.ToString(dr["Nombre"]);
 
-                        ListaPerfiles.Add(clsPerfil);
+                            ListaPerfiles.Add(clsPerfil);
+                        }
                     }
-                }
-                ViewData["Perfiles"] = new SelectList(ListaPerfiles.ToList(), "IdPerfil", "Nombre");
-                connection.Close();
+                    ViewData["Perfiles"] = new SelectList(ListaPerfiles.ToList(), "IdPerfil", "Nombre");
+                    connection.Close();
 
-                return ViewData["Perfiles"];
+                    return ViewData["Perfiles"];
+                }
             }
+            catch (Exception ex)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+            
        }
 
         public bool ValidarNumero(string username, string? iduser) 
@@ -342,38 +352,48 @@ namespace OXXO.Controllers
         public IActionResult CambiarContrasena(int Id)
         {
             Usuario clsUsuario = new Usuario();
-            if (ModelState.IsValid)
+            try
             {
-              
-                using (SqlConnection connection = new SqlConnection(dbConn))
+                if (ModelState.IsValid)
                 {
-                    string consulta = $"SELECT * FROM Usuario WHERE IdUsuario='{Id}'";
-                    SqlCommand command = new SqlCommand(consulta, connection);
-                    connection.Open();
-                    using (SqlDataReader dr = command.ExecuteReader())
+
+                    using (SqlConnection connection = new SqlConnection(dbConn))
                     {
-                        while (dr.Read())
+                        string consulta = $"SELECT * FROM Usuario WHERE IdUsuario='{Id}'";
+                        SqlCommand command = new SqlCommand(consulta, connection);
+                        connection.Open();
+                        using (SqlDataReader dr = command.ExecuteReader())
                         {
-                            clsUsuario.IdUsuario = Convert.ToString(dr["IdUsuario"]);
-                            clsUsuario.Nombre = Convert.ToString(dr["Nombre"]);
-                            clsUsuario.Apellido = Convert.ToString(dr["Apellido"]);
-                            clsUsuario.UserName = Convert.ToString(dr["UserName"]);
-                            clsUsuario.Correo = Convert.ToString(dr["Correo"]);
-                            clsUsuario.Activo = dr.IsDBNull("Activo") ? false : Convert.ToBoolean(dr["Activo"]);
-                            clsUsuario.Vigencia = Convert.ToDateTime(dr["Vigencia"]);
-                            clsUsuario.Puesto = Convert.ToString(dr["Puesto"]);
-                            clsUsuario.IdPerfil = Convert.ToString(dr["IdPerfil"]);
+                            while (dr.Read())
+                            {
+                                clsUsuario.IdUsuario = Convert.ToString(dr["IdUsuario"]);
+                                clsUsuario.Nombre = Convert.ToString(dr["Nombre"]);
+                                clsUsuario.Apellido = Convert.ToString(dr["Apellido"]);
+                                clsUsuario.UserName = Convert.ToString(dr["UserName"]);
+                                clsUsuario.Correo = Convert.ToString(dr["Correo"]);
+                                clsUsuario.Activo = dr.IsDBNull("Activo") ? false : Convert.ToBoolean(dr["Activo"]);
+                                clsUsuario.Vigencia = Convert.ToDateTime(dr["Vigencia"]);
+                                clsUsuario.Puesto = Convert.ToString(dr["Puesto"]);
+                                clsUsuario.IdPerfil = Convert.ToString(dr["IdPerfil"]);
+                            }
                         }
+                        connection.Close();
                     }
-                    connection.Close();
+
+                    ModelState.Clear();
+
                 }
 
-                ModelState.Clear();
-               
-            }
 
-            
-            return PartialView("_CambiarContrasena", clsUsuario);
+                return PartialView("_CambiarContrasena", clsUsuario);
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+           
 
         }
 

@@ -69,48 +69,69 @@ namespace OXXO.Controllers
 
         public object ListasControladores()
         {
-            List<Controlador> ControladoresList = new List<Controlador>();
-            using (SqlConnection connection = new SqlConnection(dbConn))
+            try
             {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand("SELECT IdControlador, Texto FROM Controlador", connection))
+                List<Controlador> ControladoresList = new List<Controlador>();
+                using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    SqlDataReader dr = command.ExecuteReader();
-                    while (dr.Read())
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand("SELECT IdControlador, Texto FROM Controlador", connection))
                     {
-                        Controlador clsControlador = new Controlador();
-                        clsControlador.IdControlador = Convert.ToInt32(dr["IdControlador"]);
-                        clsControlador.NombreControlador = Convert.ToString(dr["Texto"]);
+                        SqlDataReader dr = command.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            Controlador clsControlador = new Controlador();
+                            clsControlador.IdControlador = Convert.ToInt32(dr["IdControlador"]);
+                            clsControlador.NombreControlador = Convert.ToString(dr["Texto"]);
 
-                        ControladoresList.Add(clsControlador);
+                            ControladoresList.Add(clsControlador);
+                        }
                     }
-                }
 
-                ViewData["Controlador"] = new SelectList(ControladoresList.ToList(), "IdControlador","NombreControlador");
-                connection.Close();
-                return ViewData["Controlador"];
+                    ViewData["Controlador"] = new SelectList(ControladoresList.ToList(), "IdControlador", "NombreControlador");
+                    connection.Close();
+                    return ViewData["Controlador"];
+                }
             }
+            catch (Exception)
+            {
+
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudieron generar la lista de controladores.");
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+            
 
         }
 
         public JsonResult ListadoAcciones(int IdControlador) 
         {
-            List<SelectListItem> ActionList = new List<SelectListItem>();
-            using (SqlConnection connection = new SqlConnection(dbConn))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT IdAccion, Encabezado FROM AccionControlador WHERE IdControlador ="+IdControlador, connection))
+                List<SelectListItem> ActionList = new List<SelectListItem>();
+                using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    SqlDataReader dr = command.ExecuteReader();
-                    while (dr.Read())
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("SELECT IdAccion, Encabezado FROM AccionControlador WHERE IdControlador =" + IdControlador, connection))
                     {
-                        ActionList.Add(new SelectListItem { Text = dr["Encabezado"].ToString(), Value = dr["IdAccion"].ToString()});
+                        SqlDataReader dr = command.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            ActionList.Add(new SelectListItem { Text = dr["Encabezado"].ToString(), Value = dr["IdAccion"].ToString() });
+                        }
                     }
+                    connection.Close();
+                    return Json(ActionList);
                 }
-                connection.Close();
-                return Json(ActionList);
             }
+            catch (Exception)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudieron generar la lista de acciones.");
+                return Json(nameof(Index), new { alert = ViewBag.Alert });
+            }
+            
         }
 
         [HttpPost]
@@ -142,62 +163,81 @@ namespace OXXO.Controllers
                 ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Permiso creado con éxito.");
                 return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert});
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
-                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert});
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudieron guardar los permisos.");
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
             }
         }
 
         public JsonResult GetPermisos(string IdPerfil, string IdControlador, string IdAccion) 
         {
-            Permisos permiso = new Permisos();
-            using (SqlConnection connection = new SqlConnection(dbConn))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT Leer, Crear, Editar FROM RolControlador WHERE IdPerfil="+IdPerfil+" AND IdControlador="+IdControlador+" AND IdAccion="+IdAccion,connection))
+                Permisos permiso = new Permisos();
+                using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    SqlDataReader dr = command.ExecuteReader();
-
-                    while (dr.Read())
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("SELECT Leer, Crear, Editar FROM RolControlador WHERE IdPerfil=" + IdPerfil + " AND IdControlador=" + IdControlador + " AND IdAccion=" + IdAccion, connection))
                     {
-                        permiso.Leer = Convert.ToBoolean(dr["Leer"]);
-                        permiso.Crear = Convert.ToBoolean(dr["Crear"]);
-                        permiso.Editar = Convert.ToBoolean(dr["Editar"]);
+                        SqlDataReader dr = command.ExecuteReader();
+
+                        while (dr.Read())
+                        {
+                            permiso.Leer = Convert.ToBoolean(dr["Leer"]);
+                            permiso.Crear = Convert.ToBoolean(dr["Crear"]);
+                            permiso.Editar = Convert.ToBoolean(dr["Editar"]);
+                        }
                     }
                 }
+                return Json(permiso);
             }
-            return Json(permiso);
+            catch (Exception)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudieron obtener los permisos.");
+                return Json(nameof(Index), new { alert = ViewBag.Alert });
+            }
+            
         }
 
         public PermisosUsuario GetPermisosUsuario(string NombreAccion, string NombreControlador, string IdPerfil) 
         {
-            PermisosUsuario userPermiso = new PermisosUsuario();
-            if (IdPerfil != null)
+            try
             {
-                using (SqlConnection connection = new SqlConnection(dbConn))
+                PermisosUsuario userPermiso = new PermisosUsuario();
+                if (IdPerfil != null)
                 {
-                    connection.Open();
-                    using (SqlCommand command= new SqlCommand("SP_BuscaPermisoUsuario", connection))
+                    using (SqlConnection connection = new SqlConnection(dbConn))
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@IdPerfil", IdPerfil);
-                        command.Parameters.AddWithValue("@NombreControlador", NombreControlador);
-                        command.Parameters.AddWithValue("@NombreAccion", NombreAccion);
-
-                        SqlDataReader dr = command.ExecuteReader();
-                        while (dr.Read())
+                        connection.Open();
+                        using (SqlCommand command = new SqlCommand("SP_BuscaPermisoUsuario", connection))
                         {
-                            userPermiso.Crear = Convert.ToBoolean(dr["Crear"]);
-                            userPermiso.Editar = Convert.ToBoolean(dr["Editar"]);
-                            userPermiso.Leer = Convert.ToBoolean(dr["Leer"]);
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.AddWithValue("@IdPerfil", IdPerfil);
+                            command.Parameters.AddWithValue("@NombreControlador", NombreControlador);
+                            command.Parameters.AddWithValue("@NombreAccion", NombreAccion);
+
+                            SqlDataReader dr = command.ExecuteReader();
+                            while (dr.Read())
+                            {
+                                userPermiso.Crear = Convert.ToBoolean(dr["Crear"]);
+                                userPermiso.Editar = Convert.ToBoolean(dr["Editar"]);
+                                userPermiso.Leer = Convert.ToBoolean(dr["Leer"]);
+                            }
                         }
+                        connection.Close();
                     }
-                    connection.Close();
                 }
+                return userPermiso;
             }
-            return userPermiso;
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
 
 

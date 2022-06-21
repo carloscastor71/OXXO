@@ -28,7 +28,7 @@ namespace OXXO.Controllers
             return View();
         }
 
-        [HttpGet]
+  
         public ActionResult Login(string? alert)
         {
             ViewBag.Alert = alert;
@@ -108,46 +108,73 @@ namespace OXXO.Controllers
         public bool existeEmpleado(string UserName)
         {
             string sql = @"SELECT COUNT(*) FROM Usuario WHERE UserName = @UserName";
-
-            using (SqlConnection conn = new SqlConnection(dbConn))
+            try
             {
-                conn.Open();
+                using (SqlConnection conn = new SqlConnection(dbConn))
+                {
+                    conn.Open();
 
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@UserName", UserName);
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@UserName", UserName);
 
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
 
-                return count == 0;
+                    return count == 0;
 
+                }
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
 
         public bool existeContraseña(string password)
         {
             string sql = @"SELECT COUNT(*) FROM Usuario WHERE Contrasena = @Contrasena";
 
-            using (SqlConnection conn = new SqlConnection(dbConn))
+            try
             {
-                conn.Open();
+                using (SqlConnection conn = new SqlConnection(dbConn))
+                {
+                    conn.Open();
 
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                string pass = Usuario.GetMD5Hash(password);
-                cmd.Parameters.AddWithValue("@Contrasena", pass);
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    string pass = Usuario.GetMD5Hash(password);
+                    cmd.Parameters.AddWithValue("@Contrasena", pass);
 
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count == 0;
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    return count == 0;
 
+                }
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+      
         }
 
 
 
         public IActionResult LogOut()
         {
-            HttpContext.Session.Clear();
-            ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Sesión cerrada correctamente");
-            return RedirectToAction(nameof(Login), new { alert = ViewBag.Alert });
+            try
+            {
+                HttpContext.Session.Clear();
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Sesión cerrada correctamente");
+                return RedirectToAction(nameof(Login), new { alert = ViewBag.Alert });
+            }
+            catch (Exception)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "Hubo un problema al cerrar la sesión. (LOGOUT)");
+                return View(new { alert = ViewBag.Alert });
+            }
+          
         }
 
     }
