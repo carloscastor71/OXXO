@@ -28,8 +28,6 @@ namespace OXXO.Controllers
             Configuration = configuration;
         }
 
-        private readonly ILogger<HomeController> _logger;
-
         public IActionResult Index(string? alert)
         {
             ViewBag.Alert = alert;
@@ -44,43 +42,52 @@ namespace OXXO.Controllers
             //Id perfil asociado a la sesion abierta.
             int IdPerfil = Int32.Parse(HttpContext.Session.GetString("IdPerfil"));
 
-            //Validacion de campos
 
-            try
-            {
-                string connectionString = Configuration["ConnectionStrings:ConexionString"];
-                using SqlConnection connection = new SqlConnection(connectionString);
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+            using SqlConnection connection = new SqlConnection(connectionString);
 
-                connection.Open();
-                Guid RFC = Guid.NewGuid();
+            connection.Open();
+            Guid RFC = Guid.NewGuid();
 
-                using SqlCommand command = new SqlCommand("SP_ComercioAlta", connection);
+            using SqlCommand command = new SqlCommand("SP_ComercioAlta", connection);
 
-                command.CommandType = CommandType.StoredProcedure;
+            command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.AddWithValue("@RFC", Rfc);
-                command.Parameters.AddWithValue("@NombreCompleto", NombreCompleto);
-                command.Parameters.AddWithValue("@Telefono", Telefono);
-                command.Parameters.AddWithValue("@Correo", Correo);
-                command.Parameters.AddWithValue("@Direccion", Direccion);
-                command.Parameters.AddWithValue("@CuentaDeposito", CuentaDeposito);
-                command.Parameters.AddWithValue("@IdBanco", IdBanco);
-                command.Parameters.AddWithValue("@RazonSocial", RazonSocial);
-                command.Parameters.AddWithValue("@NombreComercial", NombreComercial);
-                command.Parameters.AddWithValue("@IdGiroComercio", IdGiroComercio);
-                command.Parameters.AddWithValue("@Portal", Portal);
-                command.Parameters.AddWithValue("@Persona", Persona);
-                command.Parameters.AddWithValue("@Usuario_FAl", IdPerfil);
-                command.Parameters.AddWithValue("@Usuario_FUM", IdPerfil);
-                command.Parameters.AddWithValue("@IdTipoDeposito", IdTipoDeposito);
+            command.Parameters.AddWithValue("@RFC", Rfc);
+            command.Parameters.AddWithValue("@NombreCompleto", NombreCompleto);
+            command.Parameters.AddWithValue("@Telefono", Telefono);
+            command.Parameters.AddWithValue("@Correo", Correo);
+            command.Parameters.AddWithValue("@Direccion", Direccion);
+            command.Parameters.AddWithValue("@CuentaDeposito", CuentaDeposito);
+            command.Parameters.AddWithValue("@IdBanco", IdBanco);
+            command.Parameters.AddWithValue("@RazonSocial", RazonSocial);
+            command.Parameters.AddWithValue("@NombreComercial", NombreComercial);
+            command.Parameters.AddWithValue("@IdGiroComercio", IdGiroComercio);
+            command.Parameters.AddWithValue("@Portal", Portal);
+            command.Parameters.AddWithValue("@Persona", Persona);
+            command.Parameters.AddWithValue("@Usuario_FAl", IdPerfil);
+            command.Parameters.AddWithValue("@Usuario_FUM", IdPerfil);
+            command.Parameters.AddWithValue("@IdTipoDeposito", IdTipoDeposito);
 
-                command.ExecuteNonQuery();
-                connection.Close();
-         
+            command.Parameters.Add("@Mensaje", SqlDbType.NVarChar, 100);
+            command.Parameters["@Mensaje"].Direction = ParameterDirection.Output;
+
+            int i = command.ExecuteNonQuery();
+
+            string mensaje = Convert.ToString(command.Parameters["@Mensaje"].Value);
+
+            connection.Close();
+
+            if (i != 0) {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Warning, mensaje);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+            else {
                 //Agregando los archivos
                 try
                 {
                     int idc;
+
 
                     connection.Open();
                     SqlCommand command2 = new SqlCommand("EXEC SP_NumeroComercio @Usuario = " + IdPerfil, connection);
@@ -136,25 +143,21 @@ namespace OXXO.Controllers
                                 }
                                 catch (SqlException ex)
                                 {
-                                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Warning, mensaje);
                                     return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
                                 }
                             }
                         }
                     }
                 }
+
                 catch (Exception ex)
                 {
-                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, mensaje);
                     return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
                 }
             }
-            catch (Exception ex)
-            {
-                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
-                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
-            }
-            ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Comercio dado de alta correctamente");
+            ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, mensaje);
             return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
         }
 
