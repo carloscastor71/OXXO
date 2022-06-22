@@ -48,6 +48,7 @@ $('#filtrar').click(function (e) {
                 columns: [
                     { data: 'idEmisor' },
                     { data: 'nombreCompleto' },
+                    { data: 'nombreComercial' },
                     { data: 'rfc' },
                     { data: 'direccion' },
                     { data: 'banco' },

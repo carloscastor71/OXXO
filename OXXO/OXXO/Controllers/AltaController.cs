@@ -78,7 +78,7 @@ namespace OXXO.Controllers
 
             connection.Close();
 
-            if (i != 0) {
+            if (i == -1) {
                 ViewBag.Alert = CommonServices.ShowAlert(Alerts.Warning, mensaje);
                 return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
             }
@@ -135,6 +135,7 @@ namespace OXXO.Controllers
                                     command3.Parameters.AddWithValue("@nombre", objfiles.Nombre);
                                     command3.Parameters.AddWithValue("@archivo", objfiles.Archivo);
                                     command3.Parameters.AddWithValue("@extension", objfiles.Extension);
+                                    command3.Parameters.AddWithValue("@itd", 1);
 
 
                                     command3.ExecuteNonQuery();
