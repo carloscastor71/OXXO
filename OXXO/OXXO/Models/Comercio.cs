@@ -40,9 +40,7 @@ namespace OXXO.Models
         public string Portal { get; set; }
         public int PersonaMoral { get; set; }
         public int PersonaFisica { get; set; }
-        public int Estatus { get; set; }
-
-        public string Estatus_string { get; set; }
+        public string Estatus { get; set; }
         public int? Activo { get; set; }
         public int? UsuarioFal { get; set; }
         public DateTime? Fal { get; set; }

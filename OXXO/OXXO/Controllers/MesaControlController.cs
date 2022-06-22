@@ -42,12 +42,16 @@ namespace OXXO.Controllers
                 {
                     var persona = "NULL";
 
-                    if (data.Persona != "Fisica") {
+                    if (data.Persona == "Fisica") {
                         persona = "1";
                     }
-                    else if(data.Persona != "Moral")
+                    else if(data.Persona == "Moral")
                     {
                         persona = "0";
+                    }
+                    else
+                    {
+                        persona = "NULL";
                     }
 
                     List<Comercio> listComercio = new List<Comercio>();
@@ -80,7 +84,7 @@ namespace OXXO.Controllers
                             cmc.Portal = Convert.ToString(dr["Portal"]);
                             cmc.PersonaMoral =  Convert.ToInt32(dr["PersonaMoral"]);
                             cmc.PersonaFisica = Convert.ToInt32(dr["PersonaFisica"]);
-                            cmc.Estatus_string = Convert.ToString(dr["Estatus"]);
+                            cmc.Estatus = Convert.ToString(dr["Estatus"]);
                             cmc.Activo = Convert.ToInt32(dr["Activo"]);
                             cmc.IdCompania =  Convert.ToString(dr["Compania"]);
                             cmc.IdTipoDeposito = Convert.ToString(dr["TipoDeposito"]);
@@ -90,10 +94,11 @@ namespace OXXO.Controllers
                         res.status = true;
                         res.mensaje = "Success";
                         res.data = listComercio;
-
+                        connection.Close();
                         return Json(res);
+                       
                     }
-                    connection.Close();
+               
                 }
             }
             catch (Exception ex)
