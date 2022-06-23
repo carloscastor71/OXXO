@@ -1,3 +1,5 @@
 
 OXXO/.vs/OXXO/config/applicationhost.config
 *.dll
+OXXO/OXXO/obj/
+OXXO/OXXO/bin/
