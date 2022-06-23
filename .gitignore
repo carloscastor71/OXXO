@@ -1,5 +1,15 @@
-
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
+packages
 OXXO/.vs/OXXO/config/applicationhost.config
 *.dll
 OXXO/OXXO/obj/
 OXXO/OXXO/bin/
+OXXO/OXXO/bin/Debug/
+OXXO/.vs/OXXO/v16/
+OXXO/OXXO/obj/Debug/
+OXXO/OXXO/obj/Debug/netcoreapp3.1/
+OXXO/OXXO/bin/Debug/netcoreapp3.1/
