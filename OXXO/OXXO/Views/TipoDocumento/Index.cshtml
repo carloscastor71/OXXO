@@ -1,0 +1,205 @@
+﻿@model IEnumerable<OXXO.Models.TipoDocumento>
+
+<div class="container">
+    <div id="PlaceHolderHere"></div>
+    <style>
+
+        .input-validation-error {
+            border-color: red;
+        }
+    </style>
+    @if (ViewBag.Alert != null)
+    {
+        <div id="alerta" class="container body-content">
+            @Html.Raw(@ViewBag.Alert)
+        </div>
+    }
+
+    <h1 id="titulo">Tipos de Documentos Permitidos</h1>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i> Filtrar</button>
+    @if (ViewBag.Crear)
+    {
+        <button id="CreateDoc" class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightCrear" aria-controls="offcanvasRightCrear" style="border-radius: 0px; "><i class="bi bi-person-plus-fill"></i> Crear Nuevo Tipo de Documento</button>
+    }
+    <div class="accordion-bral">
+        <div>
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5>Filtrar</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form name="myForm" asp-controller="TipoDocumento" asp-action="Index" class="p-3">
+                        <div class="row">
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Nombre de Documento</label>
+                                <input type="text" name="NombreDocumento" class="form-control form-control-sm">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Descripcion del Documento</label>
+                                <input type="text" name="Descripcion" class="form-control form-control-sm">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Tipo de Archivo</label>
+                                <input type="text" name="TipoArchivo" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <input type="submit" value="Buscar" class="btn btn-dark float-right" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <table id="tabletipos" class="table">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Tipo de Archivo</th>
+                <th scope="col">Persona Física</th>
+                <th scope="col">Persona Moral</th>
+                <th scope="col">¿Documento Obligatorio?</th>
+                <th colspan="1"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td style="display:none">@Html.DisplayFor(modelItem => item.IdTipoDocumento)</td>
+                    <td scope="row">@Html.DisplayFor(modelItem => item.NombreDocumento)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TipoArchivo)</td>
+                    <td>
+                        @if (@item.PersonaFisica == true)
+                        {
+                            <span>Requerido</span>
+                        }
+                        else
+                        {
+                            <span>No Requerido</span>
+                        }
+
+                    </td>
+                    <td>
+                        @if (@item.PersonaMoral == true)
+                        {
+                            <span>Requerido</span>
+                        }
+                        else
+                        {
+                            <span>No Requerido</span>
+                        }
+                    </td>
+                    <td>
+                        @if (@item.Obligatorio == true)
+                        {
+                            <span>SI</span>
+                        }
+                        else
+                        {
+                            <span>NO</span>
+                        }
+                    </td>
+                    <td>
+                        @if (ViewBag.Editar)
+                        {
+                            <button id="editDoc" data-url="Editar" onclick="datos(@item.IdTipoDocumento)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" aria-controls="offcanvasRightEdit" title="Editar Documento" class="btn btn-block popup btn-sm" type="button" style="border-radius: 0px;"><i class="bi bi-person-lines-fill"></i> Editar</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <div class="accordion-bral">
+        <div>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightEdit" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5>Editar Tipo de Documento</h5>
+
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div id="createBodyEdit" class="offcanvas-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="accordion-bral">
+        <div>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightCrear" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5>Crear un nuevo tipo de documento</h5>
+
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div id="createBodyCrear" class="offcanvas-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+
+    let idt;
+    function datos(id) {
+        idt = id;
+    }
+
+
+    $('#tabletipos tbody').on('click', '#editDoc', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        $.ajax({
+            url: '/TipoDocumento/Editar/',
+            type: 'GET',
+            data: { Id: idt },
+            success: function (res) {
+                $('#offcanvasRightEdit').html(res);
+                $('#createBodyEdit').modal('show');
+            },
+            error: function () {
+                alert("¡Hay un problema con el servicio, favor de reiniciar!")
+            }
+        });
+
+    });
+
+
+    $('#CreateDoc').click(function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+       
+        $.ajax({
+            url: '/TipoDocumento/Crear/',
+            type: 'GET',
+            success: function (data) {
+                $('#offcanvasRightCrear').html(data);
+                $('#createBodyCrear').modal('show');
+            },
+            error: function () {
+                console.log(error);
+                alert("¡Hay un problema con el servicio, favor de reiniciar!")
+            }
+        });
+    });
+    $(document).ready(function () {
+
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

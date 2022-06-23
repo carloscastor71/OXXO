@@ -135,8 +135,9 @@ namespace OXXO.Controllers
         }
 
         [HttpPost]
-        public IActionResult GuardarPermiso(int IdPerfil, int IdControlador, int IdAccion, string leer, string crear, string editar) 
+        public IActionResult GuardarPermiso(string? alert, int IdPerfil, int IdControlador, int IdAccion, string leer, string crear, string editar) 
         {
+            ViewBag.Alert = alert;
             try
             {
                 bool PuedeLeer = (leer ?? "").Equals("on", StringComparison.CurrentCultureIgnoreCase);

@@ -1,0 +1,63 @@
+﻿@model OXXO.Models.TipoDocumento
+@using Microsoft.AspNetCore.Http
+<style>
+    .input-validation-error 
+    {
+        border-color: red;
+    }
+</style>
+
+<div class="offcanvas-header">
+    <h5>Editar Tipo de Documento</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <h6 class="card-subtitle mb-2 text-muted">Nombre del documento: @Model.NombreDocumento</h6>
+    <form id="FormEditar" asp-action="Editar" class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdTipoDocumento" />
+
+        <div class="row">
+            <div class="mb-3">
+                <label asp-for="NombreDocumento">Nombre</label>
+                <input asp-for="NombreDocumento" class="form-control" autocomplete="off" /><span asp-validation-for="NombreDocumento" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Descripcion">Descripción</label>
+                <input asp-for="Descripcion" class="form-control" autocomplete="off" /><span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TipoArchivo">Tipo de Archivo</label>
+                <input asp-for="TipoArchivo" class="form-control" autocomplete="off" /><span asp-validation-for="TipoArchivo" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+
+                <input asp-for="PersonaFisica" class="form-check-input" type="checkbox" /><span asp-validation-for="PersonaFisica" class="text-danger"></span>
+                <label asp-for="PersonaFisica" class="form-check-label"></label>
+            </div>
+            <div class="mb-3">
+
+                <input asp-for="PersonaMoral" class="form-check-input" type="checkbox" /><span asp-validation-for="PersonaMoral" class="text-danger"></span>
+                <label asp-for="PersonaMoral" class="form-check-label"></label>
+            </div>
+            <div class="mb-3">
+                <input asp-for="Obligatorio" class="form-check-input" type="checkbox" /><span asp-validation-for="Obligatorio" class="text-danger"></span>
+                <label asp-for="Obligatorio" class="form-check-label"></label>
+            </div>
+        </div>
+        <div class="row p-2">
+                <input type="submit" value="Guardar" class="btn btn-success" />
+        </div>
+
+    </form>
+</div>
+
+<script>
+    $('#FormEditar').on('submit', function () {
+        if (this.checkValidity() == false) {
+            return false;
+        }
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
