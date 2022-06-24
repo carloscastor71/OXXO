@@ -1,0 +1,95 @@
+﻿@model OXXO.Models.Categorizacion
+@using Microsoft.AspNetCore.Http
+<style>
+    .input-validation-error 
+    {
+        border-color: red;
+    }
+</style>
+
+<div class="offcanvas-header">
+    <h5>Categorizar Información</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <h6 class="card-subtitle mb-2 text-muted">Nombre del Comercio: @Model.NombreComercial</h6>
+    <form id="FormEditar" asp-action="Editar" class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdEmisor" />
+
+        <div class="row">
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-6 col-sm-3">
+                        <label asp-for="IdEmisor">IdEmisor</label>
+                        <input asp-for="IdEmisor" class="form-control" disabled /><span asp-validation-for="IdEmisor" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label asp-for="RFC">RFC</label>
+                        <input asp-for="RFC" class="form-control" disabled /><span asp-validation-for="RFC" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label asp-for="Giro">Giro</label>
+                        <input asp-for="Giro" class="form-control" disabled /><span asp-validation-for="Giro" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="RazonSocial">Razón Social</label>
+                <input asp-for="RazonSocial" class="form-control" disabled /><span asp-validation-for="RazonSocial" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="NombreComercial">Nombre Comercial</label>
+                <input asp-for="NombreComercial" class="form-control" disabled /><span asp-validation-for="NombreComercial" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="Cuenta">Cuenta</label>
+                        <input asp-for="Cuenta" class="form-control" disabled /><span asp-validation-for="Cuenta" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label asp-for="Banco">Banco</label>
+                        <input asp-for="Banco" class="form-control" disabled /><span asp-validation-for="Banco" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="Cluster">Cluster (Grupo)</label>
+                        <select asp-for="Cluster" id="ddClusters" name="IdCluster" class="form-select" asp-items="ViewBag.Clusters">
+                            <option value="">Seleccione el grupo...</option>
+                        </select> <span asp-validation-for="Cluster" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label asp-for="Comision">Tasa/Comisión</label>
+                        <input asp-for="Comision" class="form-control" disabled /><span asp-validation-for="Comision" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row p-2">
+            <input type="button" value="Cancelar" class="btn btn-danger" data-bs-dismiss="offcanvas" aria-label="Close" />
+        </div>
+        <div class="row p-2">
+            <input type="submit" value="Aprobar" class="btn btn-success" />
+        </div>
+
+
+    </form>
+</div>
+
+<script>
+    $('#FormEditar').on('submit', function () {
+        if (this.checkValidity() == false) {
+            return false;
+        }
+    });
+    $(function () {
+        $("#ddClusters").select();
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

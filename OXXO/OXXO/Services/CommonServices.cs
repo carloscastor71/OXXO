@@ -17,10 +17,10 @@ namespace OXXO.Services
             switch (obj)
             {
                 case Alerts.Success:
-                    alertDiv = "<script language='javascript'>Swal.fire({ position: 'center', icon: 'success', title: '"+message+"',showConfirmButton: false, timer: 1500})</script>";
+                    alertDiv = "<script language='javascript'>Swal.fire({ position: 'center', icon: 'success', title: '"+message+ "',showConfirmButton: false, timer: 1500})</script>";
                     break;
                 case Alerts.Danger:
-                    alertDiv = "<script language='javascript'>Swal.fire({ icon: 'error', title: 'Oops...', text: '"+message+"'})</script>";
+                    alertDiv = "<script language='javascript'>Swal.fire({ icon: 'error', title: 'Oops...', text: '"+message+ "'})</script>";
                     break;
                 case Alerts.Info:
                     alertDiv = "<script language='javascript'>Swal.fire({ icon: 'info', title: '¡Atención!', text: '" + message + "'})</script>";

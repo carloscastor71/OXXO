@@ -95,10 +95,9 @@ namespace OXXO.Controllers
                         connection.Close();
                     }
                     var res = new PermisosController(Configuration).GetPermisosUsuario("Index", "TipoDocumento", puestoUser);
-                    //ViewBag.Crear = res.Crear;
-                    //ViewBag.Editar = res.Editar;
-                    ViewBag.Crear = true;
-                    ViewBag.Editar = true;
+                    ViewBag.Crear = res.Crear;
+                    ViewBag.Editar = res.Editar;
+
 
                     ViewBag.User = currentUser;
                     return View(TipoDocsLista);
