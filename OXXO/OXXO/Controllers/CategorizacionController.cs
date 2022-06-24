@@ -107,6 +107,7 @@ namespace OXXO.Controllers
             Categorizacion clsCategorizacion = new Categorizacion();
             try
             {
+                //ListadoDeClusters();
                 using (SqlConnection connection = new SqlConnection(dbConn))
                 {
                     string consulta = $"SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, B.Banco, E.Estatus FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Estatus as E ON C.Estatus = E.IdEstatus INNER JOIN Banco as B ON C.IdBanco = B.IdBanco WHERE C.IdComercio = '{Id}'";
