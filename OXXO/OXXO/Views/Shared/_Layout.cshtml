@@ -140,7 +140,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
 
-        $(document).ready(function () {
+      /*  $(document).ready(function () {*/
 
             var id_perfil = $("#idP").val()
             if (id_perfil == "") {
@@ -163,7 +163,7 @@
                 $("#foo-view").load(url);
             }
 
-        });
+     /*   });*/
 
         function MostrarContrasena() {
             var id = '@HttpContextAccessor.HttpContext.Session.GetString("IdUsuario")';
