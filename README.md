@@ -17,12 +17,13 @@
     Para subir cambios:
         Situado en la rama personal del desarrollador:
         1. Hacer commit a la rama del desarrollador (Siempre poner que se módifico y si está terminado o pendiente).
-        2. Crear Pull Request
-        3. Si hay algún conflicto al momento de realizar el MERGE, solucionarlo.
-        4. Hacer merge.
-        5. En el GitDesktop en la rama MAIN, hacer UN PULL (Repository/Pull)
-            6. Cambiarse de rama a la personal y hacer un UPDATE FROM MAIN (Branch/Update From Main)
-            7. En la rama personal PUSHORIGIN y listo.
+        2. Push Origin a la rama del desarrollador.
+        3. Crear Pull Request.
+        4. Si hay algún conflicto al momento de realizar el MERGE, solucionarlo.
+        5. Hacer merge.
+        6. En el GitDesktop en la rama MAIN, hacer UN PULL (Repository/Pull)
+            7. Cambiarse de rama a la personal y hacer un UPDATE FROM MAIN (Branch/Update From Main)
+            8. En la rama personal PUSHORIGIN y listo.
             
 
 # Proceso de Funcionamiento de Menu/Controlador/Acciones:
@@ -33,6 +34,7 @@
             3. En la tabla ACCIONCONTROLADOR: INSERT NOMBREACCION = 'Index', ENCABEZADO = 'Indice', ITEM = 1, IDCONTROLADOR = [Al que acabamos de insertar en el PUNTO 2]
             4. En tabla ROLCONTROLADOR: INSERT IdPerfil(El que quieras que tenga acceso a ese SUBMENÚ), IdControlador y IdAccion del submenú que insertamos en los PUNTOS anteriores, y las actividades que puede hacer (LEER,CREAR,EDITAR, poner todas en 1 si se requieren todas)
     
+
 # Comportamiento de Ventanas cómo Laterales Derechas (Para Editar, Crear o Cambiar Contraseña)
     El flujo de estas es mediante un accordion.
     VISTAS: INDEX
@@ -43,6 +45,7 @@
         - En el controlador principal "TipoDocumentoController.cs" solamente retornamos primero la vista parcial  con RETURN PARTIALVIEW("CREAR"). Y otro para ya crear pues ya tiene sus funciones RedirectToAction(...)
 
         NOTA: Se usa lo mismo para otras ventanas cómo Editar o cambiar contraseña, a excepción de algunos que filtran o son para buscar datos.
+
 
 # Cómo mostrar mensajes:
 
@@ -59,12 +62,14 @@
         Warning para tener cuidado con valores utilizados anteriormente, cómo un nombre de usuario o algo especifico.
         Danger para operaciones incorrectas o de extrema atención.
 
+
 # Sesiones
 
     Utiliza este valor para obtener alguna variable especifica que necesites usar del usuario que está actualizando o utilizando algún recurso de la aplicacion en ese momento:
 
                 HttpContext.Session.GetString("IdUsuario"); --- Para usuario loggeado en la sesión (Digamos "fulanito de tal Rodriguez")
                 HttpContext.Session.GetString("IdPerfil"); --- Para el TIPO de Usuario que está en la sesión (Administrador, Manager, Usuario Común, etc.)
+
 
 # site.js
     En el archivo site.js, dentro de la carpeta wwwwroot/js/
