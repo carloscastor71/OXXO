@@ -1,0 +1,210 @@
+﻿@model IEnumerable<OXXO.Models.Tablero>
+<style>
+
+</style>
+<div class="container">
+    <h1 id="titulo">Tablero</h1>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <h6>$ OPERACIÓN DIARIA MES ACTUAL</h6>
+                    <div id="OperacionDiaria"></div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <div id="OpMesActual1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Emisores TOP 10</h6>
+                    <table id="tableTopTen" class="table" style="width:100%">
+                        <thead>
+                            <tr class="text-center">
+                                <th scope="col">ID Emisor</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Transacciones</th>
+                                <th scope="col">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="text-center">
+                                    <td>@Html.DisplayFor(modelItem => item.id)</td>
+                                    <td scope="row">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Transaccion)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Monto)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br />
+            <div class="card">
+                <div class="card-body">
+                    <h6>Emisores Inactivos</h6>
+                    <table id="tableInactivos" class="table" style="width:100%">
+                        <thead>
+                            <tr class="text-center">
+                                <th scope="col">ID Emisor</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Transacciones</th>
+                                <th scope="col">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="text-center">
+                                    <td>@Html.DisplayFor(modelItem => item.id)</td>
+                                    <td scope="row">@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Transaccion)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Monto)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <div id="OpMesActual2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<br />*@
+    @*<div class="col-4 col-md-4">
+
+            <br />
+
+        </div>*@
+</div>
+
+<br />
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tableTopTen').DataTable({
+            scrollY: '150px',
+            scrollCollapse: false,
+            paging: false,
+            searching: false,
+        });
+        $('#tableInactivos').DataTable({
+            scrollY: '150px',
+            scrollCollapse: false,
+            paging: false,
+            searching: false,
+        });
+
+        google.charts.load('current', { packages: ['corechart', 'line'] });
+        google.charts.setOnLoadCallback(drawBackgroundColor);
+        google.charts.load('current', { 'packages': ['bar'] });
+        google.charts.setOnLoadCallback(drawChart);
+        google.charts.setOnLoadCallback(drawChart1);
+
+        function drawBackgroundColor() {
+            var data = new google.visualization.DataTable();
+            //var data = new google.visualization.DataTable(<%=obtenerDatos()%>);
+            data.addColumn('number', 'Dias');
+            data.addColumn('number', 'Fondos');
+
+            data.addRows([
+                [0, 0], [1, 10], [2, 23], [3, 17], [4, 18], [5, 9],
+                [6, 11], [7, 27], [8, 33], [9, 40], [10, 32], [11, 35],
+                [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 39],
+                [18, 39], [19, 39], [20, 29], [21, 26], [22, 20], [23, 19],
+                [24, 15], [25, 10], [26, 10], [27, 10], [28, 10], [29, 10],
+                [30, 10], [31, 9]
+            ]);
+
+            var options = {
+                legend: { position: 'none' },
+                hAxis: {
+                    title: 'Días del mes'
+                },
+                vAxis: {
+                    title: 'Fondos Adquiridos'
+                },
+                backgroundColor: '#fff'
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('OperacionDiaria'));
+            chart.draw(data, options);
+        }
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['', ''],
+                ['ENE', 980],
+                ['FEB', 400],
+                ['MAR', 760]
+            ]);
+
+            var options = {
+                chart: {
+                    title: '$ OP. MES ACTUAL',
+                },
+                legend: { position: 'none' },
+                bars: 'vertical',
+                vAxis: { format: 'decimal' },
+                height: 226,
+                colors: ['#d95f02']
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('OpMesActual1'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+
+        }
+
+        function drawChart1() {
+            var data = google.visualization.arrayToDataTable([
+                ['', ''],
+                ['ENE', 200],
+                ['FEB', 460],
+                ['MAR', 960]
+            ]);
+
+            var options = {
+                chart: {
+                    title: '$ OP. ULTIMOS 2 MESES',
+                },
+                legend: { position: 'none' },
+                bars: 'vertical',
+                vAxis: { format: 'decimal' },
+                height: 226,
+                colors: ['#1b9e77']
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('OpMesActual2'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+
+        }
+
+        $(window).resize(function () {
+            drawBackgroundColor();
+            drawChart();
+            drawChart1();
+        });
+    });
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
