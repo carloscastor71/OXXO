@@ -15,186 +15,313 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Dapper;
 
 namespace OXXO.Controllers
 {
     public class CargaDocumentosController : Controller
     {
-        //static List<Documento> documentosList = new List<Documento>();
+        string dbConn = "";
 
-        //public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
+        public CargaDocumentosController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            dbConn = Configuration["ConnectionStrings:ConexionString"];
 
-        //public CargaDocumentosController(IConfiguration configuration)
-        //{
-        //    Configuration = configuration;
-        //}
-
-        //private readonly ILogger<HomeController> _logger;
-
-        //private readonly AgmContext _context;
-        //public CargaDocumentosController(AgmContext context)
-        //{
-        //    _context = context;
-        //}
-        //public IConfiguration Configuration { get; }
-
-        //public CargaDocumentosController(IConfiguration configuration)
-        //{
-        //    Configuration = configuration;
-        //}
-        //public IActionResult Index()
-        //{
-        //    //documentosList = new List<Documento>();
-
-        //    return View();
-        //}
+        }
 
 
+        public ActionResult Index(string RFC, string? alert)
+        {
+            ViewBag.Alert = alert;
+            ListadoTipoDocumento();
+            Comercio clsComercio = new Comercio();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    if (String.IsNullOrEmpty(RFC))
+                    {
+                        RFC = HttpContext.Session.GetString("RFC");
+
+                    }
+                    HttpContext.Session.SetString("RFC", RFC);
+
+                    string consulta = $"SELECT * FROM Comercio WHERE RFC = '{RFC}'";
+                    SqlCommand command = new SqlCommand(consulta, connection);
+
+                    connection.Open();
+
+                    using (SqlDataReader dr = command.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            clsComercio.IdComercio = Convert.ToInt32(dr["IdComercio"]);
+                            clsComercio.NombreCompleto = Convert.ToString(dr["NombreCompleto"]);
+                            clsComercio.NombreComercial = Convert.ToString(dr["NombreComercial"]);
+                            clsComercio.RazonSocial = Convert.ToString(dr["RazonSocial"]);
+                            clsComercio.RFC = Convert.ToString(dr["RFC"]);
+                        }
+                    }
+                    connection.Close();
+                }
+                Cargar(RFC);
+
+                return View(clsComercio);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+
+        }
+        [HttpPost]
+        public JsonResult Cargar(string RFC)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    if (String.IsNullOrEmpty(RFC))
+                    {
+                        RFC = HttpContext.Session.GetString("RFC");
+
+                    }
+                    HttpContext.Session.SetString("RFC", RFC);
 
 
-        //[HttpPost]
-        //public async Task <IActionResult> Index(List<IFormFile> documentos)
-        //{
+                    List<Documento> ListaDocumento = new List<Documento>();
 
-        //    long size = documentos.Sum(f => f.Length);
+                    message res = new message();
 
+                    string consulta = string.Format("exec SP_ConsultaDocumentos {0}", RFC);
+                    //string consulta = "select * from Comercio";
 
-        //    foreach (var formFile in documentos)
-        //    {
-        //        if (documentos != null)
-        //        {
-        //            if (formFile.Length > 0)
-        //            {
-        //                //Getting FileName
+                    SqlCommand command = new SqlCommand(consulta, connection);
+                    connection.Open();
 
-        //                var fileName = Path.GetFileName(formFile.FileName);
-        //                //Getting file Extension
-        //                var fileExtension = Path.GetExtension(fileName);
-        //                // concatenating  FileName + FileExtension
-        //                var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
-        //                var objfiles = new Documento()
-        //                {
-        //                    Nombre = newFileName,
-        //                    Extension = fileExtension
+                    using (SqlDataReader dataReader = command.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            Documento documento = new Documento();
+                            documento.IdArchivo = Convert.ToInt32(dataReader["IdArchivo"]);
+                            documento.NombreDocumento = Convert.ToString(dataReader["NombreDocumento"]);
+                            documento.Descripcion = Convert.ToString(dataReader["Descripcion"]);
+                            ListaDocumento.Add(documento);
+                        }
 
-        //                };
+                        res.status = true;
+                        res.mensaje = "Success";
+                        res.datad = ListaDocumento;
+                        connection.Close();
+                        return Json(res);
 
-        //                using (var target = new MemoryStream())
-        //                {
-        //                    await formFile.CopyToAsync(target);
-        //                     objfiles.Archivo = target.ToArray();
-        //                }
+                    }
 
-        //                try
-        //                {
-        //                    string connectionString = Configuration["ConnectionStrings:ConexionString"];
-        //                    using SqlConnection connection = new SqlConnection(connectionString);
+                }
+            }
+            catch (Exception ex)
+            {
+                List<message> error = new List<message>() {
+                    new message {status = false, mensaje = ex.Message}
+                };
 
-        //                    connection.Open();
-        //                    Guid RFC = Guid.NewGuid();
+                return Json(error);
+            }
+        }
+        public object ListadoTipoDocumento()
+        {
+            List<TipoDocumento> TipoDocumentoList = new List<TipoDocumento>();
 
-        //                    using SqlCommand command = new SqlCommand("SP_cargaDocumentos", connection);
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
 
-        //                    command.CommandType = CommandType.StoredProcedure;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
 
-        //                    command.Parameters.AddWithValue("@IdComercio", 1);
-        //                    command.Parameters.AddWithValue("@nombre", objfiles.Nombre);
-        //                    command.Parameters.AddWithValue("@archivo", objfiles.Archivo);
-        //                    command.Parameters.AddWithValue("@extension", objfiles.Extension);
+                using (SqlCommand command = new SqlCommand("SP_ConsultaTipoDocumento", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dataReader = command.ExecuteReader()
+                        ;
+                    while (dataReader.Read())
+                    {
+                        TipoDocumento tipoDocumento = new TipoDocumento
+                        {
+                            IdTipoDocumento = Convert.ToInt32(dataReader["IdTipoDocumento"]),
+                            NombreDocumento = Convert.ToString(dataReader["NombreDocumento"])
+                        };
 
+                        TipoDocumentoList.Add(tipoDocumento);
+                    }
+                }
 
-        //                    command.ExecuteNonQuery();
-        //                    connection.Close();
+                ViewData["TipoDocumento"] = new SelectList(TipoDocumentoList.ToList(), "IdTipoDocumento", "NombreDocumento");
+                connection.Close();
 
-
-
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
-        //                    return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
-        //                }
-        //            }
-
-        //        }
-
-        //    }
-        //    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Documentos guardados correctamente.");
-
-        //    return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
-        //}
-
-        //    //private async Task<FileUploadViewModel> LoadAllFiles()
-        //    //{
-        //    //    var viewModel = new FileUploadViewModel();
-        //    //    viewModel.FilesOnDatabase = await context.
-
-        //    //        FilesOnDatabase.ToListAsync();
-
-        //    //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //    //public IActionResult Error()
-        //    //{
-        //    //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //    //}
-        //    //    return viewModel;
-        //    //}
-        //    //[HttpPost]
-        //    //public async Task<IActionResult> UploadToDatabase(List<IFormFile> files, string description)
-        //    //{
-        //    //    foreach (var file in files)
-        //    //    {
-        //    //        var fileName = Path.GetFileNameWithoutExtension(file.FileName);
-        //    //        var extension = Path.GetExtension(file.FileName);
-        //    //        var fileModel = new FileOnDatabaseModel
-        //    //        {
-        //    //            CreatedOn = DateTime.UtcNow,
-        //    //            FileType = file.ContentType,
-        //    //            Extension = extension,
-        //    //            Name = fileName,
-        //    //            Description = description
-        //    //        };
-        //    //        using (var dataStream = new MemoryStream())
-        //    //        {
-        //    //            await file.CopyToAsync(dataStream);
-        //    //            fileModel.Data = dataStream.ToArray();
-        //    //        }
-        //    //        context.FilesOnDatabase.Add(fileModel);
-        //    //        context.SaveChanges();
-        //    //    }
-        //    //    TempData["Message"] = "File successfully uploaded to Database";
-        //    //    return RedirectToAction("Index");
-        //    //}
-        //    //[HttpPost]
-        //    //public async Task<IActionResult> SubirDocumento(List<IFormFile> files, string description)
-        //    //{
-        //    //    foreach (var file in files)
-        //    //    {
-        //    //        var fileName = Path.GetFileNameWithoutExtension(file.FileName);
-        //    //        var extension = Path.GetExtension(file.FileName);
-        //    //        var fileModel = new FileOnDatabaseModel
-        //    //        {
-        //    //            CreatedOn = DateTime.UtcNow,
-        //    //            FileType = file.ContentType,
-        //    //            Extension = extension,
-        //    //            Name = fileName,
-        //    //            Description = description
-        //    //        };
-        //    //        using (var dataStream = new MemoryStream())
-        //    //        {
-        //    //            await file.CopyToAsync(dataStream);
-        //    //            fileModel.Data = dataStream.ToArray();
-        //    //        }
-        //    //        context.FilesOnDatabase.Add(fileModel);
-        //    //        context.SaveChanges();
-        //    //    }
-        //    //    TempData["Message"] = "File successfully uploaded to Database";
-        //    //    return RedirectToAction("Index");
-        //    //}
+                return ViewData["TipoDocumento"];
+            }
+        }
 
 
 
+        [HttpGet]
+        public ActionResult SubirDocumentos(string RFC, string? alert)
+        {
+            ViewBag.Alert = alert;
+
+            ListadoTipoDocumento();
+
+            return PartialView("_SubirDocumentos");
+        }
+
+
+        [HttpPost]
+        public ActionResult CargarDocumentos(IFormFile documentos, int TipoDocumento, string RFC, int IdTipoDocumento, string? alert)
+        {
+            ViewBag.Alert = alert;
+
+            ListadoTipoDocumento();
+
+            if (String.IsNullOrEmpty(RFC))
+            {
+                RFC = HttpContext.Session.GetString("RFC");
+            }
+
+            HttpContext.Session.SetString("RFC", RFC);
+
+
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+            using SqlConnection connection = new SqlConnection(connectionString);
+            ListadoTipoDocumento();
+
+            if (documentos != null)
+            {
+
+                var fileName = Path.GetFileNameWithoutExtension(documentos.FileName);
+                var fileExtension = Path.GetExtension(documentos.FileName);
+                var newFileName = String.Concat(fileName, fileExtension);
+
+                var objfiles = new Documento()
+                {
+                    nombre = newFileName,
+                    extension = fileExtension,
+
+                };
+
+                using (var target = new MemoryStream())
+                {
+                    documentos.CopyTo(target);
+                    objfiles.archivo = target.ToArray();
+                }
+
+                try
+                {
+                    connection.Open();
+                    using SqlCommand command3 = new SqlCommand("SP_cargaDocumentos", connection);
+
+                    command3.CommandType = CommandType.StoredProcedure;
+
+                    command3.Parameters.AddWithValue("@Comercio", RFC);
+                    command3.Parameters.AddWithValue("@nombre", objfiles.nombre);
+                    command3.Parameters.AddWithValue("@archivo", objfiles.archivo);
+                    command3.Parameters.AddWithValue("@extension", objfiles.extension);
+                    command3.Parameters.AddWithValue("@itd", IdTipoDocumento);
+
+
+                    command3.ExecuteNonQuery();
+                    connection.Close();
+
+                }
+                catch (SqlException ex)
+                {
+                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                    return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+                }
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Documento subidos correctamente");
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+
+            return PartialView("_SubirDocumentos");
+
+        }
+
+
+
+        [HttpGet]
+        public FileResult DescargarDocumento(int IdArchivo)
+        {
+
+
+            List<Documento> ObjFiles = GetFileList();
+
+            var FileById = (from FC in ObjFiles
+                            where FC.IdArchivo.Equals(IdArchivo)
+                            select new { FC.nombre, FC.archivo }).ToList().FirstOrDefault();
+
+            return File(FileById.archivo, "application/pdf", FileById.nombre);
+
+        }
+
+        public ActionResult EliminarDocumento(string RFC, int IdArchivo, string? alert)
+        {
+            ViewBag.Alert = alert;
+
+            ListadoTipoDocumento();
+
+            if (String.IsNullOrEmpty(RFC))
+            {
+                RFC = HttpContext.Session.GetString("RFC");
+            }
+
+            HttpContext.Session.SetString("RFC", RFC);
+
+
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+            using SqlConnection connection = new SqlConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+                using SqlCommand command3 = new SqlCommand("SP_EliminarDocumentos", connection);
+
+                command3.CommandType = CommandType.StoredProcedure;
+
+                command3.Parameters.AddWithValue("@RFC", RFC);
+                command3.Parameters.AddWithValue("@IdArchivo", IdArchivo);
+
+
+
+                command3.ExecuteNonQuery();
+                connection.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+
+            ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Documento eliminado correctamente");
+            return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+        }
+
+    
+    
+        private List<Documento> GetFileList()
+        {
+            List<Documento> DetList = new List<Documento>();
+
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+            using SqlConnection connection = new SqlConnection(connectionString);
+            connection.Open();
+            DetList = SqlMapper.Query<Documento>(connection, "GetFileDetails", commandType: CommandType.StoredProcedure).ToList();
+            connection.Close();
+            return DetList;
+        }
     }
 }
-
-
-

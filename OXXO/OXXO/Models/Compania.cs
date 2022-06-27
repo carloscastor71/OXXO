@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -14,7 +15,7 @@ namespace OXXO.Models
             Comercio = new HashSet<Comercio>();
             Usuario = new HashSet<Usuario>();
         }
-
+        [Key]
         public int IdCompania { get; set; }
         public string Companias { get; set; }
         public int? Activo { get; set; }

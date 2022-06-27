@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -8,7 +9,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OXXO.Models
 {
-    public partial class Comercio
+    [Table("Comercio")]
+    public  class Comercio
     {
         public Comercio  ()
         {
@@ -17,8 +19,8 @@ namespace OXXO.Models
 
         public int IdEmisor { get; set; }
         public int IdComercio { get; set; }
-
-        public string Rfc { get; set; }
+        [Key]
+        public string? RFC { get; set; }
         public string NombreCompleto { get; set; }
          
         public string Telefono { get; set; }
@@ -50,12 +52,34 @@ namespace OXXO.Models
         public string IdCompania { get; set; }
          
         public string IdTipoDeposito { get; set; }
+        public string tipoDeposito { get; set; }
+
 
         public virtual Estatus EstatusNavigation { get; set; }
         public virtual Banco IdBancoNavigation { get; set; }
         public virtual Compania IdCompaniaNavigation { get; set; }
         public virtual GiroComercio IdGiroComercioNavigation { get; set; }
         public virtual TipoDeposito IdTipoDepositoNavigation { get; set; }
+        public virtual ICollection<Documento> Documento { get; set; }
+        public IEnumerable<Comercio> Comercios { get; set; }
+    }
+
+    public  class TipoDocumento
+    {
+
+        [Key]
+        public int IdTipoDocumento { get; set; }
+        public string NombreDocumento { get; set; }
+        public string Descripcion { get; set; }
+        public string TipoArchivo { get; set; }
+        public int? PersonaFisica { get; set; }
+        public int? PersonaMoral { get; set; }
+        public int? Obligatorio { get; set; }
+
+        public TipoDocumento()
+        {
+            Documento = new HashSet<Documento>();
+        }
         public virtual ICollection<Documento> Documento { get; set; }
     }
 }

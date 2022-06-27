@@ -11,6 +11,7 @@ namespace OXXO.Models
         public string mensaje { get; set; }
 
         public List<Comercio> data { get; set; }
+        public List<Documento> datad { get; set; }
     }
 
 
