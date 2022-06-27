@@ -6,9 +6,9 @@
     <title>@ViewData["Title"] - OXXO</title>
 
     <!-- CSS only -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <script src="~/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" />
 
     <style>
@@ -16,9 +16,11 @@
             width: 100%;
             margin-left: initial;
         }
+
         .text-theme {
             color: #002550 !important;
         }
+
         body {
             font-size: .85rem;
             font-weight: 400;
@@ -28,7 +30,6 @@
         .form-control, .form-select {
             font-size: .73rem;
         }
-        
     </style>
 </head>
 <body>
@@ -38,13 +39,14 @@
         </div>
     </main>
     @*<footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - OXXO - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <div class="container">
+                &copy; 2022 - OXXO - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
+
     <!--JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
