@@ -58,7 +58,7 @@ namespace OXXO.Controllers
                     
                     message res = new message();
 
-                    string consulta = string.Format("exec SP_SelectComercios {0}, {1}, {2}, {3}, {4}, {5}", 1, persona, data.Rfc, data.NombreCompleto,data.RazonSocial, "NULL");
+                    string consulta = string.Format("exec SP_SelectComercios {0}, {1}, {2}, {3}, {4}, {5}", 1, persona, data.rfc, data.NombreCompleto,data.RazonSocial, "NULL");
                     //string consulta = "select * from Comercio";
 
                     SqlCommand command = new SqlCommand(consulta, connection);
@@ -71,7 +71,7 @@ namespace OXXO.Controllers
                             Comercio cmc = new Comercio();
                             cmc.IdComercio = Convert.ToInt32(dr["IdComercio"]);
                             cmc.IdEmisor =  dr.IsDBNull("IdEmisor")? 0 : Convert.ToInt32(dr["IdEmisor"]);
-                            cmc.Rfc = Convert.ToString(dr["RFC"]);
+                            cmc.RFC = Convert.ToString(dr["RFC"]);
                             cmc.NombreCompleto = Convert.ToString(dr["NombreCompleto"]);
                             cmc.Telefono = Convert.ToString(dr["Telefono"]);
                             cmc.Correo = Convert.ToString(dr["Correo"]);
@@ -173,5 +173,69 @@ namespace OXXO.Controllers
                 return View();
             }
         }
+        [HttpGet]
+        public ActionResult Verificacion(string RFC, string? alert)
+        {
+            ViewBag.Alert = alert;
+            Comercio clsComercio = new Comercio();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    if (String.IsNullOrEmpty(RFC))
+                    {
+                        RFC = HttpContext.Session.GetString("RFC");
+
+                    }
+                    HttpContext.Session.SetString("RFC", RFC);
+
+                    string consulta = string.Format("exec SP_SelectComercio {0}", RFC);
+
+                    SqlCommand command = new SqlCommand(consulta, connection);
+
+                    connection.Open();
+
+                    using (SqlDataReader dr = command.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+
+                            clsComercio.IdComercio = Convert.ToInt32(dr["IdComercio"]);
+                            clsComercio.IdEmisor = dr.IsDBNull("IdEmisor") ? 0 : Convert.ToInt32(dr["IdEmisor"]);
+                            clsComercio.RFC = Convert.ToString(dr["RFC"]);
+                            clsComercio.NombreCompleto = Convert.ToString(dr["NombreCompleto"]);
+                            clsComercio.Telefono = Convert.ToString(dr["Telefono"]);
+                            clsComercio.Correo = Convert.ToString(dr["Correo"]);
+                            clsComercio.Direccion = Convert.ToString(dr["Direccion"]);
+                            clsComercio.CuentaDeposito = Convert.ToString(dr["CuentaDeposito"]);
+                            clsComercio.Banco = Convert.ToString(dr["Banco"]);
+                            clsComercio.RazonSocial = Convert.ToString(dr["RazonSocial"]);
+                            clsComercio.NombreComercial = Convert.ToString(dr["NombreComercial"]);
+                            clsComercio.GiroComercio = Convert.ToString(dr["GiroComercial"]);
+                            clsComercio.Portal = Convert.ToString(dr["Portal"]);
+                            clsComercio.PersonaMoral = Convert.ToInt32(dr["PersonaMoral"]);
+                            clsComercio.PersonaFisica = Convert.ToInt32(dr["PersonaFisica"]);
+                            clsComercio.Estatus = Convert.ToString(dr["Estatus"]);
+                            clsComercio.Activo = Convert.ToInt32(dr["Activo"]);
+                            clsComercio.IdCompania = Convert.ToString(dr["Compania"]);
+                            clsComercio.IdTipoDeposito = Convert.ToString(dr["TipoDeposito"]);
+                      
+                        }
+                    }
+                    connection.Close();
+                }
+
+                return View(clsComercio);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+
+        }
+
+
+
     }
 }

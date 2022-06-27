@@ -20,6 +20,9 @@ namespace OXXO.Controllers
     public class AltaController : Controller
     {
 
+        
+        string dbConn = "";
+
 
         public IConfiguration Configuration { get; }
 
@@ -37,17 +40,18 @@ namespace OXXO.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(string Rfc, string NombreCompleto, string Telefono, string Correo, string Direccion, string CuentaDeposito, int IdBanco, string RazonSocial, string NombreComercial, int IdGiroComercio, string Portal, int Persona, int Usuario_FAl, int Usuario_FUM, int IdTipoDeposito, List<IFormFile> documentos)
+        public IActionResult Index(string Rfc, string NombreCompleto, string Telefono, string Correo, string Direccion, string CuentaDeposito, int IdBanco, string RazonSocial, string NombreComercial, int IdGiroComercio, string Portal, int Persona, int Usuario_FAl, int Usuario_FUM, int IdTipoDeposito)
         {
             //Id perfil asociado a la sesion abierta.
             int IdPerfil = Int32.Parse(HttpContext.Session.GetString("IdPerfil"));
 
+            HttpContext.Session.SetString("RFC", Rfc);
+            string RFC = HttpContext.Session.GetString("RFC");
 
             string connectionString = Configuration["ConnectionStrings:ConexionString"];
             using SqlConnection connection = new SqlConnection(connectionString);
 
             connection.Open();
-            Guid RFC = Guid.NewGuid();
 
             using SqlCommand command = new SqlCommand("SP_ComercioAlta", connection);
 
@@ -82,82 +86,7 @@ namespace OXXO.Controllers
                 ViewBag.Alert = CommonServices.ShowAlert(Alerts.Warning, mensaje);
                 return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
             }
-            else {
-                //Agregando los archivos
-                try
-                {
-                    int idc;
-
-
-                    connection.Open();
-                    SqlCommand command2 = new SqlCommand("EXEC SP_NumeroComercio @Usuario = " + IdPerfil, connection);
-                    idc = (int)command2.ExecuteScalar();
-                    connection.Close();
-
-                    int IdComercioFIinal = idc;
-
-                    long size = documentos.Sum(f => f.Length);
-
-                    foreach (var formFile in documentos)
-                    {
-                        if (documentos != null)
-                        {
-                            if (formFile.Length > 0)
-                            {
-                                //Getting FileName
-
-                                var fileName = Path.GetFileNameWithoutExtension(formFile.FileName);
-                                //Getting file Extension
-                                var fileExtension = Path.GetExtension(formFile.FileName);
-                                // concatenating  FileName + FileExtension
-                                var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
-                                var objfiles = new Documento()
-                                {
-                                    Nombre = newFileName,
-                                    Extension = fileExtension
-
-                                };
-
-                                using (var target = new MemoryStream())
-                                {
-                                    await formFile.CopyToAsync(target);
-                                    objfiles.Archivo = target.ToArray();
-                                }
-
-                                try
-                                {
-                                    connection.Open();
-                                    using SqlCommand command3 = new SqlCommand("SP_cargaDocumentos", connection);
-
-                                    command3.CommandType = CommandType.StoredProcedure;
-
-                                    command3.Parameters.AddWithValue("@IdComercio", IdComercioFIinal);
-                                    command3.Parameters.AddWithValue("@nombre", objfiles.Nombre);
-                                    command3.Parameters.AddWithValue("@archivo", objfiles.Archivo);
-                                    command3.Parameters.AddWithValue("@extension", objfiles.Extension);
-                                    command3.Parameters.AddWithValue("@itd", 1);
-
-
-                                    command3.ExecuteNonQuery();
-                                    connection.Close();
-
-                                }
-                                catch (SqlException ex)
-                                {
-                                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Warning, mensaje);
-                                    return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
-                                }
-                            }
-                        }
-                    }
-                }
-
-                catch (Exception ex)
-                {
-                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, mensaje);
-                    return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
-                }
-            }
+            
             ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, mensaje);
             return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
         }

@@ -1,14 +1,14 @@
 ﻿
 <div class="container">
-    <h1 id="titulo">Mesa de Control</h1>
+    <h1 id="titulo">Comercios</h1>
     <div class="accordion-bral">
         <div>
             <div class="row">
                 <div class="col">
-                    <button class="btn btn-primary float-start" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i>Filtrar</button>
+                    <button class="btn btn-primary float-start" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i> Filtrar</button>
                 </div>
                 <div class="col">
-                    <button class="btn btn-primary float-end" onclick="window.location.href='../Alta/index'" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i>Dar de alta</button>
+                    <button class="btn btn-success float-end" onclick="window.location.href='../Alta/index'" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 125px; border-radius: 0px; "><i class="bi bi-pencil-square"></i> Dar de alta</button>
                 </div>
             </div>
 
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="row p-2">
-                            <button class="btn btn-primary text-reset" type="button" id="filtrar" data-bs-dismiss="offcanvas" aria-label="Close" style="width: 120px; border-radius: 0px; ">Buscar</button>
+                            <button class="btn btn-primary" type="submit" id="filtrar" data-bs-dismiss="offcanvas" aria-label="Close" style="width: 120px; border-radius: 0px; "><i class="bi bi-search"></i> Buscar</button>
                         </div>
                     </form>
                 </div>
@@ -60,12 +60,15 @@
                 <thead>
                     <tr>
                         <th>ID Emisor</th>
+                        <th>RFC</th>
                         <th>nombre completo</th>
                         <th>nombre comercial</th>
-                        <th>RFC</th>
                         <th>Direccion</th>
                         <th>Banco</th>
                         <th>Estatus</th>
+                        <th>Carga de documentos</th>
+                        <th>Revisión</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -75,3 +78,4 @@
         </div>
     </div>
 </div>
+

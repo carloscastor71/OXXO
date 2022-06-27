@@ -47,15 +47,48 @@ $('#filtrar').click(function (e) {
                 searching: false,
                 columns: [
                     { data: 'idEmisor' },
+                    { data: 'rfc' },
                     { data: 'nombreCompleto' },
                     { data: 'nombreComercial' },
-                    { data: 'rfc' },
                     { data: 'direccion' },
                     { data: 'banco' },
                     { data: 'estatus' },
+                    {
+                        render: function (data, type, full, meta) {
+                            return '<a href="/CargaDocumentos/Index?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-folder-plus"></i></a>';
+                        }
+                    },
+                    {
+                        render: function (data, type, full, meta) {
+                            return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard2-check"></i></a>';
+                        }
+                    },
+
+                    
                 ],
             });
         }
     });
+    $('#CreateUser').click(function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        $.ajax({
+            url: '/Usuarios/Crear/',
+            type: 'GET',
+            success: function (res) {
+                $('#offcanvasRightCrear').html(res);
+                $('#createBodyCrear').modal('show');
+            },
+            error: function () {
+                alert("¡Hay un problema con el servicio, favor de reiniciar!")
+            }
+        });
+    });
+
+
+    
 
 });
+
+   
