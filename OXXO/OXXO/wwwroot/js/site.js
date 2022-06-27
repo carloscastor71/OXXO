@@ -60,7 +60,7 @@ $('#filtrar').click(function (e) {
                     },
                     {
                         render: function (data, type, full, meta) {
-                            return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard2-check"></i></a>';
+                            return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
                         }
                     },
 

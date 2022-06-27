@@ -64,22 +64,5 @@ namespace OXXO.Models
         public IEnumerable<Comercio> Comercios { get; set; }
     }
 
-    public  class TipoDocumento
-    {
-
-        [Key]
-        public int IdTipoDocumento { get; set; }
-        public string NombreDocumento { get; set; }
-        public string Descripcion { get; set; }
-        public string TipoArchivo { get; set; }
-        public int? PersonaFisica { get; set; }
-        public int? PersonaMoral { get; set; }
-        public int? Obligatorio { get; set; }
-
-        public TipoDocumento()
-        {
-            Documento = new HashSet<Documento>();
-        }
-        public virtual ICollection<Documento> Documento { get; set; }
-    }
+   
 }
