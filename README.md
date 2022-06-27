@@ -1,10 +1,9 @@
 # --------OXXO--------- #
-
-# Proyecto para AGM #
-# Desarrolladores:
-#       - Salvador Garcia
-#       - Carlos Castor
-#       - Miguel Salas
+Proyecto para AGM
+Desarrolladores:
+       - Salvador Garcia
+       - Carlos Castor
+       - Miguel Salas
 
 
 # Proceso GITHUB
@@ -25,6 +24,15 @@
             7. Cambiarse de rama a la personal y hacer un UPDATE FROM MAIN (Branch/Update From Main)
             8. En la rama personal PUSHORIGIN y listo.
             
+# Estándar para las vistas
+    Todo lo que escribas dentro de una nueva vista debe de estar dentro de un:
+        <div class="contenedor"></div> ----- Es un diseño especifico para que el contenido se muestre centrado.
+
+    Y siempre debe de llevar el título cómo:
+        <h1 class="titulo">NOMBRE VISTA</h1> -- Diseño especifico para fonts
+    
+    El filtrado o busqueda de contenido en una tabla se hará dependiendo de las especificaciones que se requieran para las tablas, pero siempre se desplegará la opción mediante un accordion lateral derecho, con un botón que tenga la leyenda (ya sea) "Buscar" o "Filtrar".
+
 
 # Proceso de Funcionamiento de Menu/Controlador/Acciones:
     Para poder visualizar un nuevo controlador en el apartado de MENUS:
