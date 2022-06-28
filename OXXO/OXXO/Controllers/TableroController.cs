@@ -34,22 +34,30 @@ namespace OXXO.Controllers
 
         #region "Consumo de una API"
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? alert)
         {
-           
+            ViewBag.Alert = alert;
             List<Tablero> tableroList= new List<Tablero>();
-
-            using (var httpClient = new HttpClient())
+            try
             {
-                using (var response = await httpClient.GetAsync("https://retoolapi.dev/j7UoBz/data"))
+                using (var httpClient = new HttpClient())
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    tableroList = JsonConvert.DeserializeObject<List<Tablero>>(apiResponse);
+                    using (var response = await httpClient.GetAsync("https://retoolapi.dev/j7UoBz/data"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        tableroList = JsonConvert.DeserializeObject<List<Tablero>>(apiResponse);
+                    }
                 }
-            }
-            
 
-            return View(tableroList);
+                return View(tableroList);
+            }
+            catch (Exception)
+            {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudo consultar la información.");
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+                
+            }
+        
             
         }
         #endregion
