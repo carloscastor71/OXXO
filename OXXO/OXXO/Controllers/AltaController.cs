@@ -26,11 +26,13 @@ namespace OXXO.Controllers
 
         public IConfiguration Configuration { get; }
 
+        //
         public AltaController(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        //
         public IActionResult Index(string? alert)
         {
             ViewBag.Alert = alert;
@@ -39,13 +41,18 @@ namespace OXXO.Controllers
             return View();
         }
 
+        //Este metodo es el encargado de dar de alta los registros de los comercios
         [HttpPost]
         public IActionResult Index(string Rfc, string NombreCompleto, string Telefono, string Correo, string Direccion, string CuentaDeposito, int IdBanco, string RazonSocial, string NombreComercial, int IdGiroComercio, string Portal, int Persona, int Usuario_FAl, int Usuario_FUM, int IdTipoDeposito)
         {
             //Id perfil asociado a la sesion abierta.
             int IdPerfil = Int32.Parse(HttpContext.Session.GetString("IdPerfil"));
 
-            HttpContext.Session.SetString("RFC", Rfc);
+            if (!String.IsNullOrEmpty(Rfc))
+            {
+                HttpContext.Session.SetString("RFC", Rfc);
+            }
+           
             string RFC = HttpContext.Session.GetString("RFC");
 
             string connectionString = Configuration["ConnectionStrings:ConexionString"];
@@ -57,7 +64,7 @@ namespace OXXO.Controllers
 
             command.CommandType = CommandType.StoredProcedure;
 
-            command.Parameters.AddWithValue("@RFC", Rfc);
+            command.Parameters.AddWithValue("@RFC", RFC);
             command.Parameters.AddWithValue("@NombreCompleto", NombreCompleto);
             command.Parameters.AddWithValue("@Telefono", Telefono);
             command.Parameters.AddWithValue("@Correo", Correo);
@@ -88,9 +95,10 @@ namespace OXXO.Controllers
             }
             
             ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, mensaje);
-            return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            return RedirectToAction("Index","CargaDocumentos", new { alert = ViewBag.Alert });
         }
 
+        //
         public object ListadoBancos()
         {
             List<Banco> BancoList = new List<Banco>();
@@ -124,7 +132,7 @@ namespace OXXO.Controllers
             }
         }
 
-
+        //
         public object ListadoGiroComercial()
         {
             List<GiroComercio> GiroComercioList = new List<GiroComercio>();
@@ -158,6 +166,7 @@ namespace OXXO.Controllers
             }
         }
 
+        //
         public object ListadoEstatus()
         {
             List<Estatus> EstatusList = new List<Estatus>();
