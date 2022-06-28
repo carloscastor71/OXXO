@@ -24,6 +24,7 @@ namespace OXXO.Controllers
         string dbConn = "";
 
         public IConfiguration Configuration { get; }
+
         public CargaDocumentosController(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,7 +32,7 @@ namespace OXXO.Controllers
 
         }
 
-
+        //Metodo principal que carga la vista con los datos asociados al RFC.
         public ActionResult Index(string RFC, string? alert)
         {
             ViewBag.Alert = alert;
@@ -77,6 +78,8 @@ namespace OXXO.Controllers
             }
 
         }
+
+        //Este metodo es el que se encarga de llenar y mostrar la tabla de los documentos asociados al Comercio(RFC).
         [HttpPost]
         public JsonResult Cargar(string RFC)
         {
@@ -132,6 +135,8 @@ namespace OXXO.Controllers
                 return Json(error);
             }
         }
+
+        //Este metodo se encarga de mostrar el tipo de documento que vas a subir en un tag <select/>.
         public object ListadoTipoDocumento()
         {
             List<TipoDocumento> TipoDocumentoList = new List<TipoDocumento>();
@@ -166,8 +171,7 @@ namespace OXXO.Controllers
             }
         }
 
-
-
+        //Este metodo solo es para cargar la vista parcial donde se suben los documentos.
         [HttpGet]
         public ActionResult SubirDocumentos(string RFC, string? alert)
         {
@@ -178,7 +182,7 @@ namespace OXXO.Controllers
             return PartialView("_SubirDocumentos");
         }
 
-
+        //Este metodo se encarga de subir los documentos 
         [HttpPost]
         public ActionResult CargarDocumentos(IFormFile documentos, int TipoDocumento, string RFC, int IdTipoDocumento, string? alert)
         {
@@ -243,15 +247,15 @@ namespace OXXO.Controllers
                 }
 
                 ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Documento subidos correctamente");
-                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+                return RedirectToAction("Index", "CargaDocumentos", new { alert = ViewBag.Alert });
+
             }
 
             return PartialView("_SubirDocumentos");
 
         }
 
-
-
+        //Este metodo se encarga de descargar los documentos.
         [HttpGet]
         public FileResult DescargarDocumento(int IdArchivo)
         {
@@ -267,6 +271,20 @@ namespace OXXO.Controllers
 
         }
 
+        //Metodo que nos devuleve en forma de lista los documentos(Usado en conjunto con el metodo "DescargarDocumento").
+        private List<Documento> GetFileList()
+        {
+            List<Documento> DetList = new List<Documento>();
+
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+            using SqlConnection connection = new SqlConnection(connectionString);
+            connection.Open();
+            DetList = SqlMapper.Query<Documento>(connection, "GetFileDetails", commandType: CommandType.StoredProcedure).ToList();
+            connection.Close();
+            return DetList;
+        }
+
+        //  //Este metodo se encarga de eliminar los documentos.
         public ActionResult EliminarDocumento(string RFC, int IdArchivo, string? alert)
         {
             ViewBag.Alert = alert;
@@ -310,18 +328,5 @@ namespace OXXO.Controllers
             return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
         }
 
-    
-    
-        private List<Documento> GetFileList()
-        {
-            List<Documento> DetList = new List<Documento>();
-
-            string connectionString = Configuration["ConnectionStrings:ConexionString"];
-            using SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-            DetList = SqlMapper.Query<Documento>(connection, "GetFileDetails", commandType: CommandType.StoredProcedure).ToList();
-            connection.Close();
-            return DetList;
-        }
     }
 }

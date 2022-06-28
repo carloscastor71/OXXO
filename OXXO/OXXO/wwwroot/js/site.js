@@ -63,32 +63,8 @@ $('#filtrar').click(function (e) {
                             return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
                         }
                     },
-
-                    
                 ],
             });
         }
     });
-    $('#CreateUser').click(function (event) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-
-        $.ajax({
-            url: '/Usuarios/Crear/',
-            type: 'GET',
-            success: function (res) {
-                $('#offcanvasRightCrear').html(res);
-                $('#createBodyCrear').modal('show');
-            },
-            error: function () {
-                alert("¡Hay un problema con el servicio, favor de reiniciar!")
-            }
-        });
-    });
-
-
-    
-
 });
-
-   

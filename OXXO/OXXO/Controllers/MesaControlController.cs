@@ -20,6 +20,7 @@ namespace OXXO.Controllers
         string dbConn = "";
 
         public IConfiguration Configuration { get; }
+
         public MesaControlController(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,12 +28,15 @@ namespace OXXO.Controllers
 
         }
 
-        public ActionResult Index()
+        //Metodo que devuelve la vista
+        public ActionResult Index(string? alert)
         {
+            ViewBag.Alert = alert;
+
             return View();
         }
 
-        // GET: CategorizacionController/Details/5
+        // Metodo encargado de llenar la tabla de comercion y filtrar la informacion
         public JsonResult Buscar(searchConceptos data)
         {
             //string currentUser = HttpContext.Session.GetString("IdUsuario").ToString();
@@ -45,7 +49,7 @@ namespace OXXO.Controllers
                     if (data.Persona == "Fisica") {
                         persona = "1";
                     }
-                    else if(data.Persona == "Moral")
+                    else if (data.Persona == "Moral")
                     {
                         persona = "0";
                     }
@@ -55,10 +59,10 @@ namespace OXXO.Controllers
                     }
 
                     List<Comercio> listComercio = new List<Comercio>();
-                    
+
                     message res = new message();
 
-                    string consulta = string.Format("exec SP_SelectComercios {0}, {1}, {2}, {3}, {4}, {5}", 1, persona, data.rfc, data.NombreCompleto,data.RazonSocial, "NULL");
+                    string consulta = string.Format("exec SP_SelectComercios {0}, {1}, {2}, {3}, {4}, {5}", 1, persona, data.rfc, data.NombreCompleto, data.RazonSocial, "NULL");
                     //string consulta = "select * from Comercio";
 
                     SqlCommand command = new SqlCommand(consulta, connection);
@@ -70,7 +74,7 @@ namespace OXXO.Controllers
                         {
                             Comercio cmc = new Comercio();
                             cmc.IdComercio = Convert.ToInt32(dr["IdComercio"]);
-                            cmc.IdEmisor =  dr.IsDBNull("IdEmisor")? 0 : Convert.ToInt32(dr["IdEmisor"]);
+                            cmc.IdEmisor = dr.IsDBNull("IdEmisor") ? 0 : Convert.ToInt32(dr["IdEmisor"]);
                             cmc.RFC = Convert.ToString(dr["RFC"]);
                             cmc.NombreCompleto = Convert.ToString(dr["NombreCompleto"]);
                             cmc.Telefono = Convert.ToString(dr["Telefono"]);
@@ -82,11 +86,11 @@ namespace OXXO.Controllers
                             cmc.NombreComercial = Convert.ToString(dr["NombreComercial"]);
                             cmc.GiroComercio = Convert.ToString(dr["GiroComercial"]);
                             cmc.Portal = Convert.ToString(dr["Portal"]);
-                            cmc.PersonaMoral =  Convert.ToInt32(dr["PersonaMoral"]);
+                            cmc.PersonaMoral = Convert.ToInt32(dr["PersonaMoral"]);
                             cmc.PersonaFisica = Convert.ToInt32(dr["PersonaFisica"]);
                             cmc.Estatus = Convert.ToString(dr["Estatus"]);
                             cmc.Activo = Convert.ToInt32(dr["Activo"]);
-                            cmc.IdCompania =  Convert.ToString(dr["Compania"]);
+                            cmc.IdCompania = Convert.ToString(dr["Compania"]);
                             cmc.IdTipoDeposito = Convert.ToString(dr["TipoDeposito"]);
                             listComercio.Add(cmc);
                         }
@@ -96,14 +100,14 @@ namespace OXXO.Controllers
                         res.data = listComercio;
                         connection.Close();
                         return Json(res);
-                       
+
                     }
-               
+
                 }
             }
             catch (Exception ex)
             {
-                List<message> error = new List<message>() { 
+                List<message> error = new List<message>() {
                     new message {status = false, mensaje = ex.Message}
                 };
 
@@ -111,68 +115,7 @@ namespace OXXO.Controllers
             }
         }
 
-        // GET: CategorizacionController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CategorizacionController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CategorizacionController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: CategorizacionController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CategorizacionController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: CategorizacionController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        // Metodo encargado de devolver la información asociada al RFC
         [HttpGet]
         public ActionResult Verificacion(string RFC, string? alert)
         {
@@ -219,7 +162,7 @@ namespace OXXO.Controllers
                             clsComercio.Activo = Convert.ToInt32(dr["Activo"]);
                             clsComercio.IdCompania = Convert.ToString(dr["Compania"]);
                             clsComercio.IdTipoDeposito = Convert.ToString(dr["TipoDeposito"]);
-                      
+
                         }
                     }
                     connection.Close();
@@ -235,7 +178,87 @@ namespace OXXO.Controllers
 
         }
 
+        // Metodo encargado de cambiar el estatus de un comercio a "Aprobado"
+        public ActionResult Aprobar(string RFC, int IdArchivo, string? alert)
+        {
+            ViewBag.Alert = alert;
 
 
+            if (String.IsNullOrEmpty(RFC))
+            {
+                RFC = HttpContext.Session.GetString("RFC");
+            }
+
+            HttpContext.Session.SetString("RFC", RFC);
+
+
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+            using SqlConnection connection = new SqlConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+                using SqlCommand command3 = new SqlCommand("SP_AprobarComercio", connection);
+
+                command3.CommandType = CommandType.StoredProcedure;
+
+                command3.Parameters.AddWithValue("@RFC", RFC);
+
+                command3.ExecuteNonQuery();
+                connection.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+
+            ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Comercio aprobado correctamente.");
+            return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+        }
+
+        // Metodo encargado de cambiar el estatus de un comercio a "Rechazado"
+        public ActionResult Rechazar(string RFC, int IdArchivo, string? alert)
+        {
+            ViewBag.Alert = alert;
+
+            if (String.IsNullOrEmpty(RFC))
+            {
+                RFC = HttpContext.Session.GetString("RFC");
+            }
+
+            HttpContext.Session.SetString("RFC", RFC);
+
+
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+            using SqlConnection connection = new SqlConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+                using SqlCommand command3 = new SqlCommand("SP_RechazarComercio", connection);
+
+                command3.CommandType = CommandType.StoredProcedure;
+
+                command3.Parameters.AddWithValue("@RFC", RFC);
+
+
+
+                command3.ExecuteNonQuery();
+                connection.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+
+            ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "El estatus del registro cambio a rechazado correctamente.");
+            return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+        }
     }
 }
+
+

@@ -1,4 +1,18 @@
-﻿
+﻿@if (ViewBag.Alert != null) //Agregado por Miguel
+{
+    <div id="alerta" class="container body-content">
+        @Html.Raw(@ViewBag.Alert)
+    </div>
+} @*/////*@
+
+
+<style>
+
+
+    .red {
+        background-color: red !important;
+    }
+</style>
 <div class="container">
     <h1 id="titulo">Comercios</h1>
     <div class="accordion-bral">
@@ -51,7 +65,7 @@
             </div>
         </div>
     </div>
-    <div class="content-chip row" >
+    <div class="content-chip row">
         <ul id="chips"></ul>
     </div>
     <div class="row">
@@ -68,14 +82,11 @@
                         <th>Estatus</th>
                         <th>Carga de documentos</th>
                         <th>Revisión</th>
-
                     </tr>
                 </thead>
                 <tbody>
-                    
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
