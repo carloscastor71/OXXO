@@ -1,0 +1,179 @@
+﻿@model IEnumerable<OXXO.Models.GiroComercio>
+
+<div class="container">
+    <div id="PlaceHolderHere"></div>
+    <style>
+
+        .input-validation-error {
+            border-color: red;
+        }
+    </style>
+    @if (ViewBag.Alert != null)
+    {
+        <div id="alerta" class="container body-content">
+            @Html.Raw(@ViewBag.Alert)
+        </div>
+    }
+
+    <h1 id="titulo">Giro Comercial</h1>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i> Filtrar</button>
+    @if (ViewBag.Crear)
+    {
+        <button id="CreateGiro" class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightCrear" aria-controls="offcanvasRightCrear" style="border-radius: 0px; "><i class="bi bi-person-plus-fill"></i> Dar de Alta un Nuevo Giro Comercial</button>
+    }
+    <div class="accordion-bral">
+        <div>
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5>Filtrar</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form name="myForm" asp-controller="GiroComercio" asp-action="Index" class="p-3">
+                        <div class="row">
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Nombre del Giro Comercial</label>
+                                <input type="text" name="NombreGiro" class="form-control form-control-sm">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Estatus del Giro Comercial</label>
+                                <select id="ddPerfiles" name="Activo" class="form-select">
+                                    <option value="">Selecciona una opción...</option>
+                                    <option value="1">Activo</option>
+                                    <option value="0">Inactivo</option>
+                                </select> <span name="Activo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <input type="submit" value="Buscar" class="btn btn-dark float-right" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <table id="tablegiro" class="table">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">Nombre del Giro Comercial</th>
+                <th scope="col">Estatus</th>
+                <th colspan="1"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr class="text-center">
+                <td style="display:none">@Html.DisplayFor(modelItem => item.IdGiroComercio)</td>
+                <td scope="row">@Html.DisplayFor(modelItem => item.GiroComercial)</td>
+                <td>
+                    @if (@item.Activo == 1)
+                    {
+                        <span>Activo</span>
+                    }
+                    else
+                    {
+                        <span>Inactivo</span>
+                    }
+
+                </td>
+                <td>
+                    @if (ViewBag.Editar)
+                    {
+                        <button id="editGiro" data-url="Editar" onclick="datos(@item.IdGiroComercio)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" aria-controls="offcanvasRightEdit" title="Editar Documento" class="btn btn-block popup btn-sm" type="button" style="border-radius: 0px;"><i class="bi bi-person-lines-fill"></i> Editar</button>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <div class="accordion-bral">
+        <div>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightEdit" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5>Editar Giro Comercial</h5>
+
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div id="createBodyEdit" class="offcanvas-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="accordion-bral">
+        <div>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightCrear" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5>Dar Alta Giro Comercial</h5>
+
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div id="createBodyCrear" class="offcanvas-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+
+    let idt;
+    function datos(id) {
+        idt = id;
+    }
+
+
+    $('#tablegiro tbody').on('click', '#editGiro', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        $.ajax({
+            url: '/GiroComercio/Editar/',
+            type: 'GET',
+            data: { Id: idt },
+            success: function (res) {
+                $('#offcanvasRightEdit').html(res);
+                $('#createBodyEdit').modal('show');
+            },
+            error: function () {
+                alert("¡Hay un problema con el servicio, favor de reiniciar!")
+            }
+        });
+
+    });
+
+
+    $('#CreateGiro').click(function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        $.ajax({
+            url: '/GiroComercio/Crear/',
+            type: 'GET',
+            success: function (data) {
+                $('#offcanvasRightCrear').html(data);
+                $('#createBodyCrear').modal('show');
+            },
+            error: function () {
+                console.log(error);
+                alert("¡Hay un problema con el servicio, favor de reiniciar!")
+            }
+        });
+    });
+    $(document).ready(function () {
+
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

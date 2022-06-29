@@ -18,5 +18,18 @@ namespace OXXO.Models
         public string Monto { get; set; }
 
     }
+
+    public class OpDiaria
+    {
+        public int id { get; set; }
+        //public int Dias { get; set; }
+        public int fondos { get; set; }
+    }
+    public class ActMeses
+    {
+        public int ENERO { get; set; }
+        public int FEBRERO { get; set; }
+        public int MARZO { get; set; }
+    }
 }
    

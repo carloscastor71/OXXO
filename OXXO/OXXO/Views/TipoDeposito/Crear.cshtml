@@ -1,0 +1,36 @@
+﻿@model OXXO.Models.TipoDeposito
+
+<style>
+    .input-validation-error {
+        border-color: red;
+    }
+</style>
+
+<div class="offcanvas-header">
+    <h5>Dar de Alta Tipo de Deposito</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <form id="FormCrear" asp-action="Crear" class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="mb-3">
+                <label asp-for="TipoDeposito1">Nombre del Tipo de Deposito</label>
+                <input asp-for="TipoDeposito1" class="form-control" autocomplete="off" /><span asp-validation-for="TipoDeposito1" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row p-2">
+            <input type="submit" value="Dar de Alta Nuevo Tipo de Deposito" class="btn btn-success" />
+        </div>
+    </form>
+</div>
+
+
+<script>
+    $('#FormCrear').on('submit', function () {
+        if (this.checkValidity() == false) {
+            return false;
+        }
+    });
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

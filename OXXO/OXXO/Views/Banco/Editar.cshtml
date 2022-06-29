@@ -1,0 +1,56 @@
+﻿@model OXXO.Models.Banco
+@using Microsoft.AspNetCore.Http
+<style>
+    .input-validation-error {
+        border-color: red;
+    }
+</style>
+
+<div class="offcanvas-header">
+    <h5>Editar el Banco</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <h6 class="card-subtitle mb-2 text-muted">Nombre del Banco: @Model.Bancos</h6>
+    <form id="FormEditar" asp-action="Editar" class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdBanco" />
+
+        <div class="row">
+            <div class="mb-3">
+                <label asp-for="Bancos">Nombre del Banco</label>
+                <input asp-for="Bancos" class="form-control" autocomplete="off" /><span asp-validation-for="Bancos" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+
+                <label asp-for="Activo">Estatus del Banco</label>
+                <select asp-for="Activo" id="ddPerfiles" name="Activo" class="form-select">
+
+                        <option value="1">Activo</option>
+  
+                        <option value="0">Inactivo</option>
+                
+
+                </select> <span asp-validation-for="Activo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row p-2">
+            <input type="submit" value="Guardar" class="btn btn-success" />
+        </div>
+
+    </form>
+</div>
+
+<script>
+    $('#FormEditar').on('submit', function () {
+        if (this.checkValidity() == false) {
+            return false;
+        }
+    });
+    $(function () {
+        $("#ddPerfiles").select();
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
