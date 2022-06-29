@@ -21,6 +21,7 @@ namespace OXXO.Models
         public DateTime? Fal { get; set; }
         public int? UsuarioFum { get; set; }
         public DateTime? Fum { get; set; }
+        public int Activo { get; set; }
 
         public virtual ICollection<Comercio> Comercio { get; set; }
     }

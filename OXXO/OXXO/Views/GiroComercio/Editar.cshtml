@@ -1,0 +1,56 @@
+﻿@model OXXO.Models.GiroComercio
+@using Microsoft.AspNetCore.Http
+<style>
+    .input-validation-error {
+        border-color: red;
+    }
+</style>
+
+<div class="offcanvas-header">
+    <h5>Editar Giro Comercial</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <h6 class="card-subtitle mb-2 text-muted">Giro Comercial: @Model.GiroComercial</h6>
+    <form id="FormEditar" asp-action="Editar" class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdGiroComercio" />
+
+        <div class="row">
+            <div class="mb-3">
+                <label asp-for="GiroComercial">Nombre del Giro Comercial</label>
+                <input asp-for="GiroComercial" class="form-control" autocomplete="off" /><span asp-validation-for="GiroComercial" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+
+                <label asp-for="Activo">Estatus del Giro Comercial</label>
+                <select asp-for="Activo" id="ddPerfiles" name="Activo" class="form-select">
+
+                        <option value="1">Activo</option>
+  
+                        <option value="0">Inactivo</option>
+                
+
+                </select> <span asp-validation-for="Activo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row p-2">
+            <input type="submit" value="Guardar" class="btn btn-success" />
+        </div>
+
+    </form>
+</div>
+
+<script>
+    $('#FormEditar').on('submit', function () {
+        if (this.checkValidity() == false) {
+            return false;
+        }
+    });
+    $(function () {
+        $("#ddPerfiles").select();
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
