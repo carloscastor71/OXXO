@@ -31,6 +31,7 @@ namespace OXXO.Models
         [MaxLength(32, ErrorMessage = "El número máximo de caracteres que se pueden ingresar es 32")]
         public string Contrasena { get; set; }
 
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         [DataType(DataType.Password)]
         [Compare("Contrasena", ErrorMessage = "La contraseña y la confirmación no son iguales.")]
         public string ConfirmarContrasena{ get; set; }

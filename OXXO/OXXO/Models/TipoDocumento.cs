@@ -13,9 +13,12 @@ namespace OXXO.Models
     public class TipoDocumento
     {
        public int IdTipoDocumento { get; set; }
-        public string NombreDocumento { get; set; }
-        public string Descripcion { get; set; }
 
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
+        public string NombreDocumento { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
+        public string Descripcion { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string TipoArchivo { get; set; }
         public bool PersonaFisica { get; set; }
         public bool PersonaMoral { get; set; }

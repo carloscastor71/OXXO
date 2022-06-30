@@ -1,0 +1,120 @@
+﻿@model OXXO.Models.Mantenimiento
+@using Microsoft.AspNetCore.Http
+<style>
+    .input-validation-error 
+    {
+        border-color: red;
+    }
+</style>
+
+<div class="offcanvas-header">
+    <h5>Modificar Información</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <h6 class="card-subtitle mb-2 text-muted">Nombre seleccionado: @Model.NombreComercial</h6>
+    <form id="FormEditar" asp-action="Editar" class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdComercio" />
+
+        <div class="row">
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-6 col-sm-3">
+                        <label asp-for="IdEmisor">IdEmisor</label>
+                        <input asp-for="IdEmisor" class="form-control" disabled /><span asp-validation-for="IdEmisor" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label asp-for="Activo">Estatus</label>
+                        <select asp-for="Activo" id="ddPerfiles" name="Activo" class="form-select">
+
+                            <option value="1">Activo</option>
+
+                            <option value="0">Inactivo</option>
+
+
+                        </select> <span asp-validation-for="Activo" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="RazonSocial">Razón Social</label>
+                <input asp-for="RazonSocial" class="form-control" required/><span asp-validation-for="RazonSocial" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="NombreComercial">Nombre Comercial</label>
+                <input asp-for="NombreComercial" class="form-control" required/><span asp-validation-for="NombreComercial" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Direccion">Dirección</label>
+                <input asp-for="Direccion" class="form-control" required/><span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Giro">Giro</label>
+                <select asp-for="Giro" id="ddPerfiles" name="Giro" class="form-select" asp-items="ViewBag.Giros">
+                    <option value="">Seleccione el Giro</option>
+                </select> <span asp-validation-for="Giro" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="RFC">RFC</label>
+                        <input asp-for="RFC" class="form-control" required /><span asp-validation-for="RFC" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label asp-for="Telefono">Teléfono</label>
+                        <input asp-for="Telefono" class="form-control" type="number" required/><span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Portal">Portal</label>
+                <input asp-for="Portal" class="form-control" required /><span asp-validation-for="Portal" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Correo">Correo</label>
+                <input asp-for="Correo"  type="email" class="form-control" required/><span asp-validation-for="Correo" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="Cuenta">Cuenta</label>
+                        <input asp-for="Cuenta" class="form-control" required /><span asp-validation-for="Cuenta" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label asp-for="Banco">Banco</label>
+                        <select asp-for="Banco" id="ddBancos" name="Banco" class="form-select" asp-items="ViewBag.Bancos">
+                            <option value="">Seleccione el Banco</option>
+                        </select> <span asp-validation-for="Banco" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row p-2">
+            <input type="button" value="Cancelar" class="btn btn-danger" data-bs-dismiss="offcanvas" aria-label="Close" />
+        </div>
+        <div class="row p-2">
+            <input type="submit" value="Guardar" class="btn btn-success" />
+        </div>
+
+
+    </form>
+</div>
+
+<script>
+    $('#FormEditar').on('submit', function () {
+        if (this.checkValidity() == false) {
+            return false;
+        }
+    });
+    $(function () {
+        $("#ddBancos").select();
+    });
+    $(function () {
+        $("#ddPerfiles").select();
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

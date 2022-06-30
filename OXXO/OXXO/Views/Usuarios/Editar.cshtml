@@ -22,21 +22,21 @@
         <div class="row">
             <div class="mb-3">
                 <label asp-for="Nombre">Nombre(s)</label>
-                <input asp-for="Nombre" class="form-control" autocomplete="off" /><span asp-validation-for="Nombre" class="text-danger"></span>
+                <input asp-for="Nombre" class="form-control" autocomplete="off" required/><span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Apellido">Apellido(s)</label>
-                <input asp-for="Apellido" class="form-control" autocomplete="off" /><span asp-validation-for="Apellido" class="text-danger"></span>
+                <input asp-for="Apellido" class="form-control" autocomplete="off" required/><span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="UserName">Nombre de Usuario</label>
                 @if (Context.Session.GetString("IdPerfil") == "1")
                 {
-                    <input asp-for="UserName" class="form-control" autocomplete="off" /><span asp-validation-for="UserName" class="text-danger"></span>
+                    <input asp-for="UserName" class="form-control" autocomplete="off" required/><span asp-validation-for="UserName" class="text-danger"></span>
                 }
                 else
                 {
-                    <input asp-for="UserName" class="form-control" autocomplete="off" disabled /><span asp-validation-for="UserName" class="text-danger"></span>
+                    <input asp-for="UserName" class="form-control" autocomplete="off" disabled/><span asp-validation-for="UserName" class="text-danger"></span>
                 }
 
 
@@ -63,28 +63,28 @@
                 <label asp-for="Activo" class="form-check-label"></label>
                 @if (Context.Session.GetString("IdPerfil") == "1")
                 {
-                    <input asp-for="Activo" class="form-check-input" type="checkbox" /><span asp-validation-for="Activo" class="text-danger"></span>
+                    <input asp-for="Activo" class="form-check-input" type="checkbox" required/><span asp-validation-for="Activo" class="text-danger"></span>
                 }
                 else
                 {
-                    <input asp-for="Activo" class="form-check-input" type="checkbox" disabled /><span asp-validation-for="Activo" class="text-danger"></span>
+                    <input asp-for="Activo" class="form-check-input" type="checkbox" disabled/><span asp-validation-for="Activo" class="text-danger"></span>
                 }
 
 
             </div>
             <div class="mb-3">
                 <label asp-for="Correo">Correo</label>
-                <input asp-for="Correo" class="form-control" type="email" /><span asp-validation-for="Correo" class="text-danger"></span>
+                <input asp-for="Correo" class="form-control" type="email" required/><span asp-validation-for="Correo" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Puesto">Puesto</label>
                 @if (Context.Session.GetString("IdPerfil") == "1")
                 {
-                    <input asp-for="Puesto" class="form-control" /><span asp-validation-for="Puesto" class="text-danger"></span>
+                    <input asp-for="Puesto" class="form-control" required/><span asp-validation-for="Puesto" class="text-danger"></span>
                 }
                 else
                 {
-                    <input asp-for="Puesto" class="form-control" disabled /><span asp-validation-for="Puesto" class="text-danger"></span>
+                    <input asp-for="Puesto" class="form-control" disabled><span asp-validation-for="Puesto" class="text-danger"></span>
                 }
 
 
@@ -93,11 +93,11 @@
                 <label asp-for="Vigencia">Vigencia</label>
                 @if (Context.Session.GetString("IdPerfil") == "1")
                 {
-                    <input asp-for="Vigencia" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" autocomplete="off" /><span asp-validation-for="Vigencia" class="text-danger"></span>
+                    <input asp-for="Vigencia" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" autocomplete="off" required/><span asp-validation-for="Vigencia" class="text-danger"></span>
                 }
                 else
                 {
-                    <input asp-for="Vigencia" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" autocomplete="off" disabled /><span asp-validation-for="Vigencia" class="text-danger"></span>
+                    <input asp-for="Vigencia" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" autocomplete="off" disabled/><span asp-validation-for="Vigencia" class="text-danger"></span>
 
                 }
             </div>

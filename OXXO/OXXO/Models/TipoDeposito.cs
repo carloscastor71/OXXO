@@ -16,6 +16,7 @@ namespace OXXO.Models
         }
         [Key]
         public int IdTipoDeposito { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string TipoDeposito1 { get; set; }
         public int? UsuarioFal { get; set; }
         public DateTime? Fal { get; set; }

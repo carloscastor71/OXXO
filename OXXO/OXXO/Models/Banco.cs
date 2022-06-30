@@ -16,8 +16,9 @@ namespace OXXO.Models
         }
         [Key]
         public int IdBanco { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Bancos { get; set; }
-        public int? Activo { get; set; }
+        public int Activo { get; set; }
         public int? UsuarioFal { get; set; }
         public DateTime? Fal { get; set; }
         public int? UsuarioFum { get; set; }
