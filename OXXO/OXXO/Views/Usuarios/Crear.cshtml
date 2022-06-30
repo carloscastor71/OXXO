@@ -16,15 +16,15 @@
         <div class="row">
             <div class="mb-3">
                 <label asp-for="Nombre">Nombre(s)</label>
-                <input asp-for="Nombre" class="form-control" autocomplete="off" /><span asp-validation-for="Nombre" class="text-danger"></span>
+                <input asp-for="Nombre" class="form-control" autocomplete="off" required /><span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Apellido">Apellido(s)</label>
-                <input asp-for="Apellido" class="form-control" autocomplete="off" /><span asp-validation-for="Apellido" class="text-danger"></span>
+                <input asp-for="Apellido" class="form-control" autocomplete="off" required/><span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="UserName">Nombre de Usuario</label>
-                <input asp-for="UserName" class="form-control" autocomplete="off" /><span asp-validation-for="UserName" class="text-danger"></span>
+                <input asp-for="UserName" class="form-control" autocomplete="off" required/><span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="IdPerfil">Perfil</label>
@@ -34,25 +34,25 @@
             </div>
             <div class="mb-3">
                 <label asp-for="Contrasena">Contraseña</label>
-                <input asp-for="Contrasena" class="form-control" type="password" autocomplete="off" /><span asp-validation-for="Contrasena" class="text-danger"></span>
+                <input asp-for="Contrasena" class="form-control" type="password" autocomplete="off" required/><span asp-validation-for="Contrasena" class="text-danger"></span>
 
             </div>
             <div class="mb-3">
                 <label asp-for="ConfirmarContrasena">Confirmar Contraseña</label>
-                <input asp-for="ConfirmarContrasena" class="form-control" type="password" autocomplete="off" /><span asp-validation-for="ConfirmarContrasena" class="text-danger"></span>
+                <input asp-for="ConfirmarContrasena" class="form-control" type="password" autocomplete="off" required/><span asp-validation-for="ConfirmarContrasena" class="text-danger"></span>
 
             </div>
             <div class="mb-3">
                 <label asp-for="Correo">Correo</label>
-                <input asp-for="Correo" class="form-control" type="email" /><span asp-validation-for="Correo" class="text-danger"></span>
+                <input asp-for="Correo" class="form-control" type="email" /><span asp-validation-for="Correo" class="text-danger" required></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Puesto">Puesto</label>
-                <input asp-for="Puesto" class="form-control" /><span asp-validation-for="Puesto" class="text-danger"></span>
+                <input asp-for="Puesto" class="form-control" /><span asp-validation-for="Puesto" class="text-danger" required></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Vigencia">Vigencia</label>
-                <input asp-for="Vigencia" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" autocomplete="off" /><span asp-validation-for="Vigencia" class="text-danger"></span>
+                <input asp-for="Vigencia" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" autocomplete="off" required/><span asp-validation-for="Vigencia" class="text-danger"></span>
             </div>
         </div>
         <div class="row p-2">

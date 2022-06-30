@@ -3,6 +3,7 @@
 <style>
     .input-validation-error {
         border-color: red;
+        
     }
 </style>
 
@@ -16,15 +17,15 @@
         <div class="row">
             <div class="mb-3">
             <label asp-for="NombreDocumento">Nombre</label>
-            <input asp-for="NombreDocumento" class="form-control" autocomplete="off" /><span asp-validation-for="NombreDocumento" class="text-danger"></span>
+            <input asp-for="NombreDocumento" class="form-control" autocomplete="off" required/><span asp-validation-for="NombreDocumento" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Descripcion">Descripción</label>
-            <input asp-for="Descripcion" class="form-control" autocomplete="off" /><span asp-validation-for="Descripcion" class="text-danger"></span>
+            <input asp-for="Descripcion" class="form-control" autocomplete="off" required/><span asp-validation-for="Descripcion" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label asp-for="TipoArchivo">Tipo de Archivo</label>
-            <input asp-for="TipoArchivo" class="form-control" autocomplete="off" /><span asp-validation-for="TipoArchivo" class="text-danger"></span>
+            <input asp-for="TipoArchivo" class="form-control" autocomplete="off" required/><span asp-validation-for="TipoArchivo" class="text-danger"></span>
         </div>
         <div class="mb-3">
 

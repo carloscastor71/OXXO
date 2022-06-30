@@ -14,6 +14,7 @@ namespace OXXO.Models
     {
         public int IdComercio { get; set; }
        public int IdEmisor { get; set; }
+
         public string RFC { get; set; }
         public string Giro { get; set; }
         public string RazonSocial { get; set; }
@@ -21,6 +22,7 @@ namespace OXXO.Models
         public string Cuenta { get; set; }
         public string Banco { get; set; }
         public string Estatus { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Cluster { get; set; }
         public string Comision { get; set; }
     }

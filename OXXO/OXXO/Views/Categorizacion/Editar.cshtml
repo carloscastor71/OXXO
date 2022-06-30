@@ -58,7 +58,7 @@
                 <div class="row">
                     <div class="col">
                         <label asp-for="Cluster">Cluster (Grupo)</label>
-                        <select asp-for="Cluster" id="ddClusters" name="IdCluster" class="form-select" asp-items="ViewBag.Clusters">
+                        <select asp-for="Cluster" id="ddClusters" name="IdCluster" class="form-select" asp-items="ViewBag.Clusters" required>
                             <option value="">Seleccione el grupo...</option>
                         </select> <span asp-validation-for="Cluster" class="text-danger"></span>
                     </div>

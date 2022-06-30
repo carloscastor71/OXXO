@@ -16,6 +16,7 @@ namespace OXXO.Models
         }
         [Key]
         public int IdGiroComercio { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string GiroComercial { get; set; }
         public int? UsuarioFal { get; set; }
         public DateTime? Fal { get; set; }

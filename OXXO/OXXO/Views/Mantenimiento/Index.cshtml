@@ -1,0 +1,119 @@
+﻿@model IEnumerable<OXXO.Models.Mantenimiento>
+
+<div class="container">
+    <div id="PlaceHolderHere"></div>
+    <style>
+
+        .input-validation-error {
+            border-color: red;
+        }
+    </style>
+    @if (ViewBag.Alert != null)
+    {
+        <div id="alerta" class="container body-content">
+            @Html.Raw(@ViewBag.Alert)
+        </div>
+    }
+
+    <h1 id="titulo">Mantenimiento</h1>
+    <div class="row">
+
+        <h6>Id Emisor: </h6>
+        <div class="row">
+            <div class="col-4">
+                <form asp-controller="Mantenimiento" asp-action="Index" method="get" class="input-group mb-3">
+                    <input id="IdEmisor" type="text" class="form-control" placeholder="Buscar por ID Emisor" aria-label="Buscar por ID Emisor" name="IdEmisor" />
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search" ></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <table id="tableman" class="table">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">ID Emisor</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Estatus</th>
+                <th colspan="1"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr class="text-center">
+                <td style="display:none">@Html.DisplayFor(modelItem => item.IdComercio)</td>
+                <td scope="row">@Html.DisplayFor(modelItem => item.IdEmisor)</td>
+                <td>@Html.DisplayFor(modelItem => item.NombreComercial)</td>
+                <td>
+                    @if (@item.Activo == 1)
+                    {
+                        <span>Activo</span>
+                    }
+                    else
+                    {
+                        <span>Inactivo</span>
+                    }
+
+                </td>
+                <td>
+                    @if (ViewBag.Editar)
+                    {
+                        <button id="editman" data-url="Editar" onclick="datos(@item.IdComercio)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" aria-controls="offcanvasRightEdit" title="Editar Documento" class="btn btn-block popup btn-sm" type="button" style="border-radius: 0px;"><i class="bi bi-person-lines-fill"></i> Editar</button>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <div class="accordion-bral">
+        <div>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightEdit" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5>Categorizar Información</h5>
+
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div id="createBodyEdit" class="offcanvas-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+
+    let idt;
+    function datos(id) {
+        idt = id;
+    }
+   
+
+    $('#tableman tbody').on('click', '#editman', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        $.ajax({
+            url: '/Mantenimiento/Editar/',
+            type: 'GET',
+            data: { Id: idt },
+            success: function (res) {
+                $('#offcanvasRightEdit').html(res);
+                $('#createBodyEdit').modal('show');
+            },
+            error: function () {
+                alert("¡Hay un problema con el servicio, favor de reiniciar!")
+            }
+        });
+
+    });
+    $(document).ready(function () {
+
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
