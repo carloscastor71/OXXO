@@ -13,6 +13,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace OXXO.Controllers
 {
@@ -26,103 +27,14 @@ namespace OXXO.Controllers
             Configuration = configuration;
             dbConn = Configuration["ConnectionStrings:ConexionString"];
         }
-        //public IActionResult Index()
-        //{
-
-        //    return View();
-        //}
-
         #region "Consumo de una API"
 
-        public async Task<IActionResult> Index(string? alert)
+        public IActionResult Index(string? alert)
         {
             ViewBag.Alert = alert;
-            List<Tablero> tableroList= new List<Tablero>();
-            try
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    using (var response = await httpClient.GetAsync("https://retoolapi.dev/j7UoBz/data"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        tableroList = JsonConvert.DeserializeObject<List<Tablero>>(apiResponse);
-                    }
-                }
-
-                return View(tableroList);
-            }
-            catch (Exception)
-            {
-                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudo consultar la información.");
-                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
-                
-            }
-        
-            
+            return View();
         }
         #endregion
-
-
-        public async Task<JsonResult> GetDiario()
-        {
-            List<OpDiaria> OpDiariaList = new List<OpDiaria>();
-            try
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    using (var response = await httpClient.GetAsync("https://retoolapi.dev/OkaT7u/opdiaria"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        OpDiariaList = JsonConvert.DeserializeObject<List<OpDiaria>>(apiResponse);
-                       
-                    }
-                }
-
-                return Json(OpDiariaList);
-            }
-            catch (Exception)
-            {
-                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudo consultar la información.");
-                return Json(OpDiariaList);
-
-            }
-           
-        }
-
-        public async Task<JsonResult> GetActMeses()
-        {
-            List<ActMeses> ActMesesList = new List<ActMeses>();
-            try
-            {
-                string apiResponse;
-                using (var httpClient = new HttpClient())
-                {
-                    using (var response = await httpClient.GetAsync("https://retoolapi.dev/1OOV0F/pormes"))
-                    {
-                        apiResponse = await response.Content.ReadAsStringAsync();
-                        ActMesesList = JsonConvert.DeserializeObject<List<ActMeses>>(apiResponse);
-                        
-                    }
-                }
-                var jsonlista = JsonConvert.SerializeObject(ActMesesList);
-                jsonlista = jsonlista.Replace("[", "");
-                jsonlista = jsonlista.Replace("]", "");
-                jsonlista = jsonlista.Replace("{", "[");
-                jsonlista = jsonlista.Replace("}", "]");
-                //jsonlista = jsonlista.Replace("\"", "'");
-                jsonlista = jsonlista.Replace(",", "],[");
-                jsonlista = jsonlista.Replace(":", ",");
-                jsonlista = jsonlista.Replace(" ", "");
-                return Json(jsonlista);
-            }
-            catch (Exception)
-            {
-                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "No se pudo consultar la información.");
-                return Json(ActMesesList);
-
-            }
-
-        }
 
         //método para obtener los datos de SQL
         protected string obtenerDatos(string consulta)
