@@ -32,7 +32,6 @@ namespace OXXO.Controllers
         public ActionResult Index(string? alert)
         {
             ViewBag.Alert = alert;
-
             return View();
         }
 
@@ -56,6 +55,18 @@ namespace OXXO.Controllers
                     else
                     {
                         persona = "NULL";
+                    }
+                    if (data.rfc == null)
+                    {
+                        data.rfc = "NULL";
+                    }
+                    if (data.NombreCompleto == null)
+                    {
+                        data.NombreCompleto = "NULL";
+                    }
+                    if (data.RazonSocial == null)
+                    {
+                        data.RazonSocial = "NULL";
                     }
 
                     List<Comercio> listComercio = new List<Comercio>();
