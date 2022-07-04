@@ -7,15 +7,13 @@
 
 
 <style>
-
-
     .red {
         background-color: red !important;
     }
 </style>
 <div class="container">
     <h1 id="titulo">Mesa de Control</h1>
-   
+
     <div class="accordion-bral">
         <div>
             <div class="row">
@@ -59,7 +57,7 @@
                             </div>
                         </div>
                         <div class="row p-2">
-                            <button class="btn btn-primary" type="submit" id="filtrar" data-bs-dismiss="offcanvas" aria-label="Close" style="width: 120px; border-radius: 0px; "><i class="bi bi-search"></i> Buscar</button>
+                            <button class="btn btn-primary" type="submit" id="filtrar" data-bs-dismiss="offcanvas" aria-label="Close" style="width: 120px; border-radius: 0px; " onclick="cargar()"><i class="bi bi-search"></i> Buscar</button>
                         </div>
                     </form>
                 </div>
@@ -71,20 +69,19 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <table id="categorizacion" class="table" style="width:100%">
+            <table id="categorizacion" class="display table-striped" style="width:100%">
                 <thead>
                     <tr>
                         <th>ID Emisor</th>
                         <th>RFC</th>
-                        <th>nombre completo</th>
-                        <th>nombre comercial</th>
-                        <th>Direccion</th>
+                        <th>Nombre Completo</th>
+                        <th>Nombre Comercial</th>
+                        <th>Dirección</th>
                         <th>Banco</th>
                         <th>Estatus</th>
                         <th>Editar</th>
                         <th>Carga de documentos</th>
                         <th>Revisión</th>
-                        <th colspan="2"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,4 +89,78 @@
             </table>
         </div>
     </div>
+    <br />
 </div>
+
+<script>
+    var data = [];
+    var search = [];
+    const $elemento = document.querySelector("#chips");
+    $elemento.innerHTML = "";
+
+    var frm = $('#dataForm');
+    data = frm.serializeArray();
+
+    for (var i = 0; i < data.length; i++) {
+
+        if (data[i].value != '') {
+            $("#chips").append("<li>" + data[i].name + ": " + data[i].value + "</li>");
+            search[i] = { "name": data[i].name, "value": data[i].value };
+        } else {
+            search[i] = { "name": data[i].name, "value": "NULL" }
+        }
+    }
+
+    $.ajax({
+        url: '/MesaControl/Buscar',
+        data: search,
+        type: 'POST',
+        bFilter: false,
+        success: function (json) {
+            console.log(json);
+            $('#categorizacion').DataTable({
+                data: json.data,
+                paging: false,
+                destroy: true,
+                searching: false,
+                columns: [
+                    { data: 'idEmisor' },
+                    { data: 'rfc' },
+                    { data: 'nombreCompleto' },
+                    { data: 'nombreComercial' },
+                    { data: 'direccion' },
+                    { data: 'banco' },
+                    { data: 'estatus' },
+                    {
+                        render: function (data, type, full, meta) {
+                            return '<a href="/MesaControl/Editar?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-pencil-square"></i></a>';
+                        }
+                    },
+                    {
+                        render: function (data, type, full, meta) {
+                            return '<a href="/CargaDocumentos/Index?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-folder-plus"></i></a>';
+                        }
+                    },
+                    {
+                        render: function (data, type, full, meta) {
+                            return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
+                        }
+                    },
+
+                ],
+                "createdRow": function (row, data, dataIndex) {
+
+                    if (data["estatus"] == "Pendiente") {
+                        $(row).css('background-color', '#FFED89');
+                    }
+                    if (data["estatus"] == "Aprobado") {
+                        $(row).css('background-color', '#96FF71');
+                    }
+                    if (data["estatus"] == "Rechazado") {
+                        $(row).css('background-color', '#FF6767');
+                    }
+                }
+            });
+        }
+    });
+</script>
