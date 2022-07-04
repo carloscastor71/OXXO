@@ -59,6 +59,11 @@ $('#filtrar').click(function (e) {
                     { data: 'estatus' },
                     {
                         render: function (data, type, full, meta) {
+                            return '<a href="/MesaControl/Editar?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-pencil-square"></i></a>';
+                        }
+                    },
+                    {
+                        render: function (data, type, full, meta) {
                             return '<a href="/CargaDocumentos/Index?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-folder-plus"></i></a>';
                         }
                     },

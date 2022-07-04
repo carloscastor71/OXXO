@@ -37,6 +37,7 @@ namespace OXXO.Controllers
         {
             ViewBag.Alert = alert;
             ListadoTipoDocumento();
+            Cargar(RFC);
             Comercio clsComercio = new Comercio();
             try
             {
@@ -67,9 +68,9 @@ namespace OXXO.Controllers
                     }
                     connection.Close();
                 }
-                Cargar(RFC);
+               
 
-                return View(clsComercio);
+                return RedirectToAction("Cargar","MesaControl",clsComercio);
             }
             catch (Exception ex)
             {
@@ -184,7 +185,7 @@ namespace OXXO.Controllers
 
         //Este metodo se encarga de subir los documentos 
         [HttpPost]
-        public ActionResult CargarDocumentos(IFormFile documentos, int TipoDocumento, string RFC, int IdTipoDocumento, string? alert)
+        public ActionResult CargarDocumentos(IFormFile documentos, string RFC, int IdTipoDocumento, string? alert)
         {
             ViewBag.Alert = alert;
 
@@ -230,10 +231,10 @@ namespace OXXO.Controllers
                     command3.CommandType = CommandType.StoredProcedure;
 
                     command3.Parameters.AddWithValue("@Comercio", RFC);
-                    command3.Parameters.AddWithValue("@nombre", objfiles.nombre);
-                    command3.Parameters.AddWithValue("@archivo", objfiles.archivo);
-                    command3.Parameters.AddWithValue("@extension", objfiles.extension);
-                    command3.Parameters.AddWithValue("@itd", IdTipoDocumento);
+                    command3.Parameters.AddWithValue("@Nombre", objfiles.nombre);
+                    command3.Parameters.AddWithValue("@Archivo", objfiles.archivo);
+                    command3.Parameters.AddWithValue("@Extension", objfiles.extension);
+                    command3.Parameters.AddWithValue("@Itd", IdTipoDocumento);
 
 
                     command3.ExecuteNonQuery();
