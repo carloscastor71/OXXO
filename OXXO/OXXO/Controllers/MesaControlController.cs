@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using OXXO.Enums;
 using OXXO.Models;
@@ -177,6 +178,68 @@ namespace OXXO.Controllers
             }
 
         }
+        public ActionResult Editar(string RFC, string? alert)
+        {
+            ListadoBancos();
+            ListadoGiroComercial();
+            ViewBag.Alert = alert;
+            Comercio clsComercio = new Comercio();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    if (String.IsNullOrEmpty(RFC))
+                    {
+                        RFC = HttpContext.Session.GetString("RFC");
+
+                    }
+                    HttpContext.Session.SetString("RFC", RFC);
+
+                    string consulta = string.Format("exec SP_SelectComercio {0}", RFC);
+
+                    SqlCommand command = new SqlCommand(consulta, connection);
+
+                    connection.Open();
+
+                    using (SqlDataReader dr = command.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+
+                            clsComercio.IdComercio = Convert.ToInt32(dr["IdComercio"]);
+                            clsComercio.IdEmisor = dr.IsDBNull("IdEmisor") ? 0 : Convert.ToInt32(dr["IdEmisor"]);
+                            clsComercio.RFC = Convert.ToString(dr["RFC"]);
+                            clsComercio.NombreCompleto = Convert.ToString(dr["NombreCompleto"]);
+                            clsComercio.Telefono = Convert.ToString(dr["Telefono"]);
+                            clsComercio.Correo = Convert.ToString(dr["Correo"]);
+                            clsComercio.Direccion = Convert.ToString(dr["Direccion"]);
+                            clsComercio.CuentaDeposito = Convert.ToString(dr["CuentaDeposito"]);
+                            clsComercio.Banco = Convert.ToString(dr["Banco"]);
+                            clsComercio.RazonSocial = Convert.ToString(dr["RazonSocial"]);
+                            clsComercio.NombreComercial = Convert.ToString(dr["NombreComercial"]);
+                            clsComercio.GiroComercio = Convert.ToString(dr["GiroComercial"]);
+                            clsComercio.Portal = Convert.ToString(dr["Portal"]);
+                            clsComercio.PersonaMoral = Convert.ToInt32(dr["PersonaMoral"]);
+                            clsComercio.PersonaFisica = Convert.ToInt32(dr["PersonaFisica"]);
+                            clsComercio.Estatus = Convert.ToString(dr["Estatus"]);
+                            clsComercio.Activo = Convert.ToInt32(dr["Activo"]);
+                            clsComercio.IdCompania = Convert.ToString(dr["Compania"]);
+                            clsComercio.IdTipoDeposito = Convert.ToString(dr["TipoDeposito"]);
+
+                        }
+                    }
+                    connection.Close();
+                }
+
+                return View(clsComercio);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+
+        }
 
         // Metodo encargado de cambiar el estatus de un comercio a "Aprobado"
         public ActionResult Aprobar(string RFC, int IdArchivo, string? alert)
@@ -257,6 +320,73 @@ namespace OXXO.Controllers
 
             ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "El estatus del registro cambio a rechazado correctamente.");
             return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+        }
+
+        public object ListadoBancos()
+        {
+            List<Banco> BancoList = new List<Banco>();
+
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("SP_ConsultaBanco", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    while (dataReader.Read())
+                    {
+                        Banco banco = new Banco
+                        {
+                            IdBanco = Convert.ToInt32(dataReader["IdBanco"]),
+                            Bancos = Convert.ToString(dataReader["Bancos"])
+                        };
+
+                        BancoList.Add(banco);
+                    }
+                }
+
+                ViewData["Bancos"] = new SelectList(BancoList.ToList(), "IdBanco", "Bancos");
+                connection.Close();
+
+                return ViewData["Bancos"];
+            }
+        }
+
+        //
+        public object ListadoGiroComercial()
+        {
+            List<GiroComercio> GiroComercioList = new List<GiroComercio>();
+
+            string connectionString = Configuration["ConnectionStrings:ConexionString"];
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("SP_ConsultaGiroComercio", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    while (dataReader.Read())
+                    {
+                        GiroComercio giroComercio = new GiroComercio
+                        {
+                            IdGiroComercio = Convert.ToInt32(dataReader["IdGiroComercio"]),
+                            GiroComercial = Convert.ToString(dataReader["GiroComercial"])
+                        };
+
+                        GiroComercioList.Add(giroComercio);
+                    }
+                }
+
+                ViewData["GiroComercio"] = new SelectList(GiroComercioList.ToList(), "IdGiroComercio", "GiroComercial");
+                connection.Close();
+
+                return ViewData["GiroComercio"];
+            }
         }
     }
 }
