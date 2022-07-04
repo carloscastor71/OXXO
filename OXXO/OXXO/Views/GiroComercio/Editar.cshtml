@@ -19,18 +19,21 @@
         <div class="row">
             <div class="mb-3">
                 <label asp-for="GiroComercial">Nombre del Giro Comercial</label>
-                <input asp-for="GiroComercial" class="form-control" autocomplete="off" required/><span asp-validation-for="GiroComercial" class="text-danger"></span>
+                <input asp-for="GiroComercial" class="form-control" autocomplete="off" required /><span asp-validation-for="GiroComercial" class="text-danger"></span>
             </div>
-
+            <div class="mb-3">
+                <label asp-for="Tasa">Tasa/Comisión por Giro</label>
+                <input asp-for="Tasa" class="form-control" autocomplete="off" type="number" min="0" max="100" step="0.01" required /><span asp-validation-for="Tasa" class="text-danger"></span>
+            </div>
             <div class="mb-3">
 
                 <label asp-for="Activo">Estatus del Giro Comercial</label>
                 <select asp-for="Activo" id="ddPerfiles" name="Activo" class="form-select">
 
-                        <option value="1">Activo</option>
-  
-                        <option value="0">Inactivo</option>
-                
+                    <option value="1">Activo</option>
+
+                    <option value="0">Inactivo</option>
+
 
                 </select> <span asp-validation-for="Activo" class="text-danger"></span>
             </div>

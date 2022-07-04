@@ -35,6 +35,7 @@
             <tr class="text-center">
                 <th scope="col">ID Emisor</th>
                 <th scope="col">Nombre</th>
+                <th scope="col">Tasa/Comisión</th>
                 <th scope="col">Estatus</th>
                 <th colspan="1"></th>
             </tr>
@@ -46,6 +47,7 @@
                 <td style="display:none">@Html.DisplayFor(modelItem => item.IdComercio)</td>
                 <td scope="row">@Html.DisplayFor(modelItem => item.IdEmisor)</td>
                 <td>@Html.DisplayFor(modelItem => item.NombreComercial)</td>
+                <td>@Html.DisplayFor(modelItem => item.Comision)%</td>
                 <td>@Html.DisplayFor(modelItem => item.Estatus)</td>
                 <td>
                     @if (ViewBag.Editar)

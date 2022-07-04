@@ -60,6 +60,7 @@
         <thead>
             <tr class="text-center">
                 <th scope="col">Nombre del Giro Comercial</th>
+                <th scope="col">Tasa/Comisión</th>
                 <th scope="col">Estatus</th>
                 <th colspan="1"></th>
             </tr>
@@ -70,6 +71,7 @@
             <tr class="text-center">
                 <td style="display:none">@Html.DisplayFor(modelItem => item.IdGiroComercio)</td>
                 <td scope="row">@Html.DisplayFor(modelItem => item.GiroComercial)</td>
+                <td scope="row">@Html.DisplayFor(modelItem => item.Tasa)%</td>
                 <td>
                     @if (@item.Activo == 1)
                     {

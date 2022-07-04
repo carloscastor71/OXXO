@@ -8,24 +8,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OXXO.Models
 {
-    public partial class GiroComercio
+    public partial class Cluster
     {
-        public GiroComercio()
-        {
-            Comercio = new HashSet<Comercio>();
-        }
+        //public Cluster()
+        //{
+        //    Comercio = new HashSet<Comercio>();
+        //}
         [Key]
-        public int IdGiroComercio { get; set; }
+        public int IdCluster{ get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
-        public string GiroComercial { get; set; }
-        public int? UsuarioFal { get; set; }
-        public DateTime? Fal { get; set; }
-        public int? UsuarioFum { get; set; }
+        public string NombreCluster { get; set; }
+        public int? UsuarioFAI { get; set; }
+        public DateTime? FAI { get; set; }
+        public int? Usuario_FUM { get; set; }
         [Required(ErrorMessage = "Debe asignar una tasa o comisión en %.")]
-        public double Tasa { get; set; }
-        public DateTime? Fum { get; set; }
+        public DateTime? FUM { get; set; }
         public int Activo { get; set; }
 
-        public virtual ICollection<Comercio> Comercio { get; set; }
+        //public virtual ICollection<Comercio> Comercio { get; set; }
     }
 }

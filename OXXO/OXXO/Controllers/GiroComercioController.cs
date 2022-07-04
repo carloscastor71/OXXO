@@ -68,6 +68,7 @@ namespace OXXO.Controllers
 
                                 clsGiro.IdGiroComercio = Convert.ToInt32(dr["IdGiroComercio"]);
                                 clsGiro.GiroComercial = Convert.ToString(dr["GiroComercial"]);
+                                clsGiro.Tasa = Convert.ToDouble(dr["Tasa"]);
                                 clsGiro.Activo = Convert.ToInt32(dr["Activo"]);
 
 
@@ -127,6 +128,7 @@ namespace OXXO.Controllers
                                 command.CommandType = CommandType.StoredProcedure;
 
                                 command.Parameters.AddWithValue("@GiroComercial", clsGiro.GiroComercial);
+                                command.Parameters.AddWithValue("@Tasa", Convert.ToDecimal(string.Format("{0:.##}", clsGiro.Tasa)));
                                 //command.Parameters.AddWithValue("@Activo", clsGiro.Activo);
                                 command.Parameters.AddWithValue("@Usuario_FAI", currentUser);
 
@@ -177,7 +179,10 @@ namespace OXXO.Controllers
                 return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
             }
         }
-
+        public static float ToSingle(double value)
+        {
+            return (float)value;
+        }
         [HttpGet]
         public IActionResult Editar( int Id) 
         {
@@ -196,6 +201,7 @@ namespace OXXO.Controllers
                         {
                             clsGiro.IdGiroComercio = Convert.ToInt32(dr["IdGiroComercio"]);
                             clsGiro.GiroComercial = Convert.ToString(dr["GiroComercial"]);
+                            clsGiro.Tasa = Convert.ToDouble(dr["Tasa"]);
                             clsGiro.Activo = Convert.ToInt32(dr["Activo"]);
                         }
                     }
@@ -229,6 +235,7 @@ namespace OXXO.Controllers
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.AddWithValue("@IdGiroComercio", clsGiro.IdGiroComercio);
                             command.Parameters.AddWithValue("@GiroComercial", clsGiro.GiroComercial);
+                            command.Parameters.AddWithValue("@Tasa", Convert.ToDecimal(string.Format("{0:.##}",clsGiro.Tasa)));
                             command.Parameters.AddWithValue("@Activo", clsGiro.Activo);
                             command.Parameters.AddWithValue("@Usuario_FUM", Convert.ToInt32(currentUser));
                             command.ExecuteNonQuery();
