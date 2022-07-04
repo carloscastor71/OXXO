@@ -78,7 +78,7 @@ namespace OXXO.Controllers
                                     HttpContext.Session.SetString("Puesto", sdr.GetString(6));
                                     HttpContext.Session.SetString("IdPerfil", sdr.GetInt32(9).ToString());
                                     sqlCon.Close();
-                                    return RedirectToAction("Home", "Home");
+                                    return RedirectToAction("Index", "MesaControl");
                                 }
                             }
                             else

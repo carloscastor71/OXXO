@@ -17,7 +17,7 @@ for (let CheckBox of document.getElementsByClassName('only-one')) {
 
 $('#filtrar').click(function (e) {
     var data = [];
-    var search = []; 
+    var search = [];
     const $elemento = document.querySelector("#chips");
     $elemento.innerHTML = "";
 
@@ -29,13 +29,11 @@ $('#filtrar').click(function (e) {
 
         if (data[i].value != '') {
             $("#chips").append("<li>" + data[i].name + ": " + data[i].value + "</li>");
-            search[i] = { "name" : data[i].name, "value": data[i].value }; 
-        }else{
-            search[i] = { "name": data[i].name , "value" : "NULL" }
+            search[i] = { "name": data[i].name, "value": data[i].value };
+        } else {
+            search[i] = { "name": data[i].name, "value": "NULL" }
         }
     }
-
-
 
     $.ajax({
         url: '/MesaControl/Buscar',
@@ -72,10 +70,10 @@ $('#filtrar').click(function (e) {
                             return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
                         }
                     },
-                    
+
                 ],
                 "createdRow": function (row, data, dataIndex) {
-                   
+
                     if (data["estatus"] == "Pendiente") {
                         $(row).css('background-color', '#FFED89');
                     }
