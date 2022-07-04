@@ -2,6 +2,7 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 
+
 let Checked = null;
 //The class name can vary
 for (let CheckBox of document.getElementsByClassName('only-one')) {
@@ -34,6 +35,8 @@ $('#filtrar').click(function (e) {
         }
     }
 
+
+
     $.ajax({
         url: '/MesaControl/Buscar',
         data: search,
@@ -41,6 +44,17 @@ $('#filtrar').click(function (e) {
         bFilter: false,
         success: function (json) {
             $('#categorizacion').DataTable({
+                "createdRow": function (row, data, dataIndex) {
+                    if (data[6] == "Pendiente") {
+                        $(row).addClass('yellow');
+                    }
+                    else if (data[6] == "Aprobado") {
+                        $(row).addClass('green');
+                    }
+                    else if (data[6] == "Rechazado") {
+                        $(row).addClass('red');
+                    }
+                },
                 data: json.data,
                 paging: false,
                 destroy: true,

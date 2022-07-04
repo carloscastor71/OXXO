@@ -44,6 +44,14 @@
                                 <label for="exampleFormControlInput1" class="form-label">Tipo de Archivo</label>
                                 <input type="text" name="TipoArchivo" class="form-control form-control-sm">
                             </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Estatus del Tipo de Documento</label>
+                                <select id="ddPerfiles" name="Activo" class="form-select">
+                                    <option value="">Selecciona una opción...</option>
+                                    <option value="1">Activo</option>
+                                    <option value="0">Inactivo</option>
+                                </select> <span name="Activo" class="text-danger"></span>
+                            </div>
                         </div>
                         <div class="row p-2">
                             <input type="submit" value="Buscar" class="btn btn-dark float-right" />
@@ -62,6 +70,7 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Descripción</th>
                 <th scope="col">Tipo de Archivo</th>
+                <th scope="col">Estatus</th>
                 <th scope="col">Persona Física</th>
                 <th scope="col">Persona Moral</th>
                 <th scope="col">¿Documento Obligatorio?</th>
@@ -71,49 +80,60 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr class="text-center">
-                    <td style="display:none">@Html.DisplayFor(modelItem => item.IdTipoDocumento)</td>
-                    <td scope="row">@Html.DisplayFor(modelItem => item.NombreDocumento)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                    <td>@Html.DisplayFor(modelItem => item.TipoArchivo)</td>
-                    <td>
-                        @if (@item.PersonaFisica == true)
-                        {
-                            <span>Requerido</span>
-                        }
-                        else
-                        {
-                            <span>No Requerido</span>
-                        }
+            <tr class="text-center">
+                <td style="display:none">@Html.DisplayFor(modelItem => item.IdTipoDocumento)</td>
+                <td scope="row">@Html.DisplayFor(modelItem => item.NombreDocumento)</td>
+                <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                <td>@Html.DisplayFor(modelItem => item.TipoArchivo)</td>
+                <td>
+                    @if (@item.Activo == 1)
+                    {
+                        <span>Activo</span>
+                    }
+                    else
+                    {
+                        <span>Inactivo</span>
+                    }
 
-                    </td>
-                    <td>
-                        @if (@item.PersonaMoral == true)
-                        {
-                            <span>Requerido</span>
-                        }
-                        else
-                        {
-                            <span>No Requerido</span>
-                        }
-                    </td>
-                    <td>
-                        @if (@item.Obligatorio == true)
-                        {
-                            <span>SI</span>
-                        }
-                        else
-                        {
-                            <span>NO</span>
-                        }
-                    </td>
-                    <td>
-                        @if (ViewBag.Editar)
-                        {
-                            <button id="editDoc" data-url="Editar" onclick="datos(@item.IdTipoDocumento)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" aria-controls="offcanvasRightEdit" title="Editar Documento" class="btn btn-block popup btn-sm" type="button" style="border-radius: 0px;"><i class="bi bi-person-lines-fill"></i> Editar</button>
-                        }
-                    </td>
-                </tr>
+                </td>
+                <td>
+                    @if (@item.PersonaFisica == true)
+                    {
+                        <span>Requerido</span>
+                    }
+                    else
+                    {
+                        <span>No Requerido</span>
+                    }
+
+                </td>
+                <td>
+                    @if (@item.PersonaMoral == true)
+                    {
+                        <span>Requerido</span>
+                    }
+                    else
+                    {
+                        <span>No Requerido</span>
+                    }
+                </td>
+                <td>
+                    @if (@item.Obligatorio == true)
+                    {
+                        <span>SI</span>
+                    }
+                    else
+                    {
+                        <span>NO</span>
+                    }
+                </td>
+                <td>
+                    @if (ViewBag.Editar)
+                    {
+                        <button id="editDoc" data-url="Editar" onclick="datos(@item.IdTipoDocumento)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" aria-controls="offcanvasRightEdit" title="Editar Documento" class="btn btn-block popup btn-sm" type="button" style="border-radius: 0px;"><i class="bi bi-person-lines-fill"></i> Editar</button>
+                    }
+                </td>
+            </tr>
             }
         </tbody>
     </table>

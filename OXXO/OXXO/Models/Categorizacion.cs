@@ -21,9 +21,10 @@ namespace OXXO.Models
         public string NombreComercial { get; set; }
         public string Cuenta { get; set; }
         public string Banco { get; set; }
+        //public double Tasa { get; set; }
         public string Estatus { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
-        public string Cluster { get; set; }
+        public int Cluster { get; set; }
         public string Comision { get; set; }
     }
 }

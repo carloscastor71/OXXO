@@ -24,7 +24,7 @@ namespace OXXO.Controllers
             Configuration = configuration;
             dbConn = Configuration["ConnectionStrings:ConexionString"];
         }
-        public IActionResult Index(string? alert, string NombreDocumento, string Descripcion, string TipoArchivo)
+        public IActionResult Index(string? alert, string NombreDocumento, string Descripcion, string TipoArchivo, string Activo)
         {
             ViewBag.Alert = alert;
             string puestoUser = HttpContext.Session.GetString("IdPerfil");
@@ -34,21 +34,45 @@ namespace OXXO.Controllers
             try
             {
                 Permisos permisos = new Permisos();
-                if (!String.IsNullOrEmpty(NombreDocumento) && !String.IsNullOrEmpty(Descripcion) && !String.IsNullOrEmpty(TipoArchivo))
+                if (!String.IsNullOrEmpty(NombreDocumento) && !String.IsNullOrEmpty(Descripcion) && !String.IsNullOrEmpty(TipoArchivo) && !String.IsNullOrEmpty(Activo))
                 {
-                    consulta = "Select * From TipoDocumento WHERE NombreDocumento LIKE '%" + NombreDocumento + "%' AND Descripcion LIKE '%" + Descripcion + "%' AND Descripcion LIKE '%" + TipoArchivo + "%'";
+                    consulta = "Select * From TipoDocumento WHERE NombreDocumento LIKE '%" + NombreDocumento + "%' AND Descripcion LIKE '%" + Descripcion + "%' AND TipoArchivo LIKE '%" + TipoArchivo + "%' AND Activo = "+Activo;
                 }
-                else if (!String.IsNullOrEmpty(NombreDocumento) && !String.IsNullOrEmpty(Descripcion))
+                else if (!String.IsNullOrEmpty(NombreDocumento) && !String.IsNullOrEmpty(Descripcion) && !String.IsNullOrEmpty(TipoArchivo) )
                 {
-                    consulta = "Select * From TipoDocumento WHERE NombreDocumento LIKE '%" + NombreDocumento + "%' AND Descripcion LIKE '%" + Descripcion + "%'";
+                    consulta = "Select * From TipoDocumento WHERE NombreDocumento LIKE '%" + NombreDocumento + "%' AND Descripcion LIKE '%" + Descripcion + "%' AND TipoArchivo LIKE '%" + TipoArchivo + "%'";
+                }
+                else if (!String.IsNullOrEmpty(NombreDocumento) && !String.IsNullOrEmpty(TipoArchivo) && !String.IsNullOrEmpty(Activo))
+                {
+                    consulta = "Select * From TipoDocumento WHERE NombreDocumento LIKE '%" + NombreDocumento + "%' AND TipoArchivo LIKE '%" + TipoArchivo + "%' AND Activo = " + Activo;
+                }
+                else if (!String.IsNullOrEmpty(Descripcion) && !String.IsNullOrEmpty(TipoArchivo) && !String.IsNullOrEmpty(Activo))
+                {
+                    consulta = "Select * From TipoDocumento WHERE Descripcion LIKE '%" + Descripcion + "%' AND TipoArchivo LIKE '%" + TipoArchivo + "%' AND Activo = " + Activo;
                 }
                 else if (!String.IsNullOrEmpty(NombreDocumento) && !String.IsNullOrEmpty(TipoArchivo))
                 {
                     consulta = "Select * From TipoDocumento WHERE NombreDocumento LIKE '%" + NombreDocumento + "%' AND TipoArchivo LIKE '%" + TipoArchivo + "%'";
                 }
-                if (!String.IsNullOrEmpty(Descripcion) && !String.IsNullOrEmpty(TipoArchivo))
+                else if (!String.IsNullOrEmpty(NombreDocumento) && !String.IsNullOrEmpty(Descripcion))
+                {
+                    consulta = "Select * From TipoDocumento WHERE NombreDocumento LIKE '%" + NombreDocumento + "%' AND Descripcion LIKE '%" + Descripcion + "%'";
+                }
+                else if (!String.IsNullOrEmpty(NombreDocumento) && !String.IsNullOrEmpty(Activo))
+                {
+                    consulta = "Select * From TipoDocumento WHERE NombreDocumento LIKE '%" + NombreDocumento + "%' AND Activo = " + Activo;
+                }
+                else if (!String.IsNullOrEmpty(Descripcion) && !String.IsNullOrEmpty(TipoArchivo))
                 {
                     consulta = "Select * From TipoDocumento WHERE Descripcion LIKE '%" + Descripcion + "%' AND TipoArchivo LIKE '%" + TipoArchivo + "%'";
+                }
+                else if (!String.IsNullOrEmpty(Descripcion) && !String.IsNullOrEmpty(Activo))
+                {
+                    consulta = "Select * From TipoDocumento WHERE Descripcion LIKE '%" + Descripcion + "%' AND Activo = " + Activo;
+                }
+                else if (!String.IsNullOrEmpty(TipoArchivo) && !String.IsNullOrEmpty(Activo))
+                {
+                    consulta = "Select * From TipoDocumento WHERE TipoArchivo LIKE '%" + TipoArchivo + "%' AND Activo = " + Activo;
                 }
                 else if (!String.IsNullOrEmpty(NombreDocumento))
                 {
@@ -61,6 +85,10 @@ namespace OXXO.Controllers
                 else if (!String.IsNullOrEmpty(TipoArchivo))
                 {
                     consulta = "Select * From TipoDocumento WHERE TipoArchivo LIKE '%" + TipoArchivo + "%'";
+                }
+                else if (!String.IsNullOrEmpty(Activo))
+                {
+                    consulta = "Select * From TipoDocumento WHERE Activo = " + Activo;
                 }
                 else
                 {
@@ -85,6 +113,7 @@ namespace OXXO.Controllers
                                 clsTipoDoc.NombreDocumento = Convert.ToString(dr["NombreDocumento"]);
                                 clsTipoDoc.Descripcion = Convert.ToString(dr["Descripcion"]);
                                 clsTipoDoc.TipoArchivo = Convert.ToString(dr["TipoArchivo"]);
+                                clsTipoDoc.Activo = Convert.ToInt32(dr["Activo"]);
                                 clsTipoDoc.PersonaFisica = Convert.ToBoolean(dr["PersonaFisica"]);
                                 clsTipoDoc.PersonaMoral = Convert.ToBoolean(dr["PersonaMoral"]);
                                 clsTipoDoc.Obligatorio = Convert.ToBoolean(dr["Obligatorio"]);
@@ -140,23 +169,16 @@ namespace OXXO.Controllers
                         connection.Open();
                         try
                         {
-                            using (SqlCommand command = new SqlCommand("SP_CrearTipoDocumento", connection)) ////aún no está listo el SP
+                            using (SqlCommand command = new SqlCommand("SP_CrearTipoDocumento", connection)) 
                             {
                                 command.CommandType = CommandType.StoredProcedure;
-
-                                //SqlParameter Mensaje = new SqlParameter("@Mensaje", SqlDbType.NVarChar,100);
-                                //Mensaje.Direction = ParameterDirection.Output;
-
                                 command.Parameters.AddWithValue("@NombreDocumento", clsTipoDoc.NombreDocumento);
                                 command.Parameters.AddWithValue("@Descripcion", clsTipoDoc.Descripcion);
                                 command.Parameters.AddWithValue("@TipoArchivo", clsTipoDoc.TipoArchivo);
                                 command.Parameters.AddWithValue("@PersonaFisica", Convert.ToInt32(clsTipoDoc.PersonaFisica));
                                 command.Parameters.AddWithValue("@PersonaMoral", Convert.ToInt32(clsTipoDoc.PersonaMoral));
                                 command.Parameters.AddWithValue("@Obligatorio", Convert.ToInt32(clsTipoDoc.Obligatorio));
-                                //command.Parameters.Add(Mensaje);
-                                //command.Parameters["@Mensaje"].Direction = ParameterDirection.Output;
 
-                                //
                                 command.Parameters.Add("@Mensaje", SqlDbType.NVarChar, 100);
                                 command.Parameters["@Mensaje"].Direction = ParameterDirection.Output;
 
@@ -225,6 +247,7 @@ namespace OXXO.Controllers
                             clsTipoDocumento.NombreDocumento = Convert.ToString(dr["NombreDocumento"]);
                             clsTipoDocumento.Descripcion = Convert.ToString(dr["Descripcion"]);
                             clsTipoDocumento.TipoArchivo = Convert.ToString(dr["TipoArchivo"]);
+                            clsTipoDocumento.Activo = Convert.ToInt32(dr["Activo"]);
                             clsTipoDocumento.PersonaFisica = dr.IsDBNull("PersonaFisica") ? false : Convert.ToBoolean(dr["PersonaFisica"]);
                             clsTipoDocumento.PersonaMoral = dr.IsDBNull("PersonaMoral") ? false : Convert.ToBoolean(dr["PersonaMoral"]);
                             clsTipoDocumento.Obligatorio = dr.IsDBNull("Obligatorio") ? false : Convert.ToBoolean(dr["Obligatorio"]);
@@ -262,6 +285,7 @@ namespace OXXO.Controllers
                             command.Parameters.AddWithValue("@NombreDocumento", clsTipoDocumento.NombreDocumento);
                             command.Parameters.AddWithValue("@Descripcion", clsTipoDocumento.Descripcion);
                             command.Parameters.AddWithValue("@TipoArchivo", clsTipoDocumento.TipoArchivo);
+                            command.Parameters.AddWithValue("@Activo", clsTipoDocumento.Activo);
                             command.Parameters.AddWithValue("@PersonaFisica", Convert.ToInt32(clsTipoDocumento.PersonaFisica));
                             command.Parameters.AddWithValue("@PersonaMoral", Convert.ToInt32(clsTipoDocumento.PersonaMoral));
                             command.Parameters.AddWithValue("@Obligatorio", Convert.ToInt32(clsTipoDocumento.Obligatorio));

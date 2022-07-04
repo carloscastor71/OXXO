@@ -60,7 +60,7 @@
                 <div class="row">
                     <div class="col">
                         <label asp-for="RFC">RFC</label>
-                        <input asp-for="RFC" class="form-control" required /><span asp-validation-for="RFC" class="text-danger"></span>
+                        <input asp-for="RFC" class="form-control" maxlength="13" style="text-transform:uppercase" required /><span asp-validation-for="RFC" class="text-danger"></span>
                     </div>
                     <div class="col">
                         <label asp-for="Telefono">Teléfono</label>
@@ -70,7 +70,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="Portal">Portal</label>
-                <input asp-for="Portal" class="form-control" required /><span asp-validation-for="Portal" class="text-danger"></span>
+                <input asp-for="Portal" class="form-control" type="url" required /><span asp-validation-for="Portal" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Correo">Correo</label>

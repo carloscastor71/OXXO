@@ -19,6 +19,7 @@ namespace OXXO.Models
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Descripcion { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
+        public int Activo { get; set; }
         public string TipoArchivo { get; set; }
         public bool PersonaFisica { get; set; }
         public bool PersonaMoral { get; set; }

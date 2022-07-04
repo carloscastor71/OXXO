@@ -37,11 +37,11 @@ namespace OXXO.Controllers
                 
                 if (!String.IsNullOrEmpty(IdEmisor))
                 {
-                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, IdBanco, E.Estatus FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Estatus as E ON C.Estatus = E.IdEstatus WHERE IdEmisor LIKE '%" + IdEmisor + "%'";
+                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, IdBanco, E.Estatus, GC.Tasa FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Estatus as E ON C.Estatus = E.IdEstatus WHERE IdEmisor LIKE '%" + IdEmisor + "%'";
                 }
                 else
                 {
-                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, IdBanco, E.Estatus FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Estatus as E ON C.Estatus = E.IdEstatus";
+                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, IdBanco, E.Estatus, GC.Tasa FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Estatus as E ON C.Estatus = E.IdEstatus";
                 }
 
                 List<Categorizacion> ListaCategorizacion = new List<Categorizacion>();
@@ -61,6 +61,7 @@ namespace OXXO.Controllers
                                 clsCategorizacion.IdComercio = Convert.ToInt32(dr["IdComercio"]);
                                 clsCategorizacion.IdEmisor = dr.IsDBNull("IdEmisor") ? 0 : Convert.ToInt32(dr["IdEmisor"]);
                                 clsCategorizacion.NombreComercial = Convert.ToString(dr["NombreComercial"]);
+                                clsCategorizacion.Comision = Convert.ToString(dr["Tasa"]);
                                 clsCategorizacion.Estatus = Convert.ToString(dr["Estatus"]);
 
                                 ListaCategorizacion.Add(clsCategorizacion);
@@ -107,10 +108,10 @@ namespace OXXO.Controllers
             Categorizacion clsCategorizacion = new Categorizacion();
             try
             {
-                //ListadoDeClusters();
+                ListadoDeClusters();
                 using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    string consulta = $"SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, B.Banco, E.Estatus FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Estatus as E ON C.Estatus = E.IdEstatus INNER JOIN Banco as B ON C.IdBanco = B.IdBanco WHERE C.IdComercio = '{Id}'";
+                    string consulta = $"SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, B.Banco, E.Estatus, GC.Tasa, C.IdCluster FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Estatus as E ON C.Estatus = E.IdEstatus INNER JOIN Banco as B ON C.IdBanco = B.IdBanco WHERE C.IdComercio = '{Id}'";
                     SqlCommand command = new SqlCommand(consulta, connection);
 
                     connection.Open();
@@ -127,7 +128,8 @@ namespace OXXO.Controllers
                             clsCategorizacion.Cuenta = Convert.ToString(dr["CuentaDeposito"]);
                             clsCategorizacion.Banco = Convert.ToString(dr["Banco"]);
                             clsCategorizacion.Estatus = Convert.ToString(dr["Estatus"]);
-                            clsCategorizacion.NombreComercial = Convert.ToString(dr["NombreComercial"]);
+                            clsCategorizacion.Comision = Convert.ToString(dr["Tasa"]);
+                            clsCategorizacion.Cluster = dr.IsDBNull("IdCluster") ? 0 : Convert.ToInt32(dr["IdCluster"]);
 
                         }
                     }
@@ -135,7 +137,7 @@ namespace OXXO.Controllers
                 }
                 return PartialView("Editar",clsCategorizacion);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "Favor de verificar su conexión.");
@@ -153,14 +155,17 @@ namespace OXXO.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //ListadoDeClusters();
+                    ListadoDeClusters();
                     using (SqlConnection connection = new SqlConnection(dbConn))
                     {
                         connection.Open();
-                        using (SqlCommand command = new SqlCommand("SP_AprobarCategorizacion", connection))
+                        using (SqlCommand command = new SqlCommand("SP_Categorizar", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.AddWithValue("@IdComercio", clsCategorizacion.IdComercio);
+                            command.Parameters.AddWithValue("@Cluster", Convert.ToInt32(clsCategorizacion.Cluster));
+                            command.Parameters.AddWithValue("@Usuario_FUM", Convert.ToInt32(currentUser));
+
                             command.ExecuteNonQuery();
                             connection.Close();
                         }
@@ -183,38 +188,38 @@ namespace OXXO.Controllers
 
         public object ListadoDeClusters()
         {
-            //try
-            //{
-            //    List<Cluster> ListaClusters = new List<Cluster>();
-            //    using (SqlConnection connection = new SqlConnection(dbConn))
-            //    {
-            //        connection.Open();
+            try
+            {
+                List<Cluster> ListaClusters = new List<Cluster>();
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    connection.Open();
 
-            //        string consulta = "SELECT * FROM Cluster WHERE Activo = 1";
-            //        SqlCommand command = new SqlCommand(consulta, connection);
-            //        using (SqlDataReader dr = command.ExecuteReader())
-            //        {
-            //            while (dr.Read())
-            //            {
-            //                Cluster clsCluster = new Cluster();
-            //                clsCluster.IdPerfil = Convert.ToString(dr["IdPerfil"]);
-            //                clsCluster.Nombre = Convert.ToString(dr["Nombre"]);
+                    string consulta = "SELECT * FROM Cluster WHERE Activo = 1";
+                    SqlCommand command = new SqlCommand(consulta, connection);
+                    using (SqlDataReader dr = command.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            Cluster clsCluster = new Cluster();
+                            clsCluster.IdCluster = Convert.ToInt32(dr["IdCluster"]);
+                            clsCluster.NombreCluster = Convert.ToString(dr["NombreCluster"]);
 
-            //                ListaClusters.Add(clsCluster);
-            //            }
-            //        }
-            //        ViewData["Clusters"] = new SelectList(ListaClusers.ToList(), "IdPerfil", "Nombre");
-            //        connection.Close();
+                            ListaClusters.Add(clsCluster);
+                        }
+                    }
+                    ViewData["Clusters"] = new SelectList(ListaClusters.ToList(), "IdCluster", "NombreCluster");
+                    connection.Close();
 
-            //        return ViewData["Clusters"];
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
+                    return ViewData["Clusters"];
+                }
+            }
+            catch (Exception ex)
+            {
 
-            //    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
-            //    return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
-            //}
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
             return View();
         }
 
