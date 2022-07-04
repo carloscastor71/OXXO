@@ -43,18 +43,8 @@ $('#filtrar').click(function (e) {
         type: 'POST',
         bFilter: false,
         success: function (json) {
+            console.log(json);
             $('#categorizacion').DataTable({
-                "createdRow": function (row, data, dataIndex) {
-                    if (data[6] == "Pendiente") {
-                        $(row).addClass('yellow');
-                    }
-                    else if (data[6] == "Aprobado") {
-                        $(row).addClass('green');
-                    }
-                    else if (data[6] == "Rechazado") {
-                        $(row).addClass('red');
-                    }
-                },
                 data: json.data,
                 paging: false,
                 destroy: true,
@@ -77,7 +67,20 @@ $('#filtrar').click(function (e) {
                             return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
                         }
                     },
+                    
                 ],
+                "createdRow": function (row, data, dataIndex) {
+                   
+                    if (data["estatus"] == "Pendiente") {
+                        $(row).css('background-color', '#FFED89');
+                    }
+                    if (data["estatus"] == "Aprobado") {
+                        $(row).css('background-color', '#96FF71');
+                    }
+                    if (data["estatus"] == "Rechazado") {
+                        $(row).css('background-color', '#FF6767');
+                    }
+                }
             });
         }
     });
