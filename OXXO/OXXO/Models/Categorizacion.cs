@@ -25,6 +25,7 @@ namespace OXXO.Models
         public string Estatus { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public int Cluster { get; set; }
+        public string NombreCluster { get; set; }
         public string Comision { get; set; }
     }
 }

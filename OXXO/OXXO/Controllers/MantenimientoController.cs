@@ -37,17 +37,18 @@ namespace OXXO.Controllers
                 
                 if (!String.IsNullOrEmpty(IdEmisor))
                 {
-                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, C.IdBanco, C.Activo FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio WHERE IdEmisor LIKE '%" + IdEmisor + "%'";
+                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, B.Banco, C.Activo FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Banco as B ON C.IdBanco = B.IdBanco WHERE IdEmisor LIKE '%" + IdEmisor + "%'";
                 }
                 else
                 {
-                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, C.IdBanco, C.Activo FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio";
+                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, B.Banco, C.Activo FROM Comercio as C INNER JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Banco as B ON C.IdBanco = B.IdBanco";
                 }
 
                 List<Mantenimiento> ListaMantenimiento = new List<Mantenimiento>();
-
+                
                 if (!String.IsNullOrEmpty(consulta))
                 {
+                    ListadoDeBancos();
                     using (SqlConnection connection = new SqlConnection(dbConn))
                     {
                         connection.Open();
@@ -61,6 +62,11 @@ namespace OXXO.Controllers
                                 clsMantenimiento.IdComercio = Convert.ToInt32(dr["IdComercio"]);
                                 clsMantenimiento.IdEmisor = dr.IsDBNull("IdEmisor") ? 0 : Convert.ToInt32(dr["IdEmisor"]);
                                 clsMantenimiento.NombreComercial = Convert.ToString(dr["NombreComercial"]);
+                                clsMantenimiento.RFC = Convert.ToString(dr["RFC"]);
+                                clsMantenimiento.Giro = Convert.ToString(dr["GiroComercial"]);
+                                clsMantenimiento.RazonSocial = Convert.ToString(dr["RazonSocial"]);
+                                clsMantenimiento.Banco = Convert.ToString(dr["Banco"]);
+                                clsMantenimiento.Cuenta = Convert.ToString(dr["CuentaDeposito"]);
                                 clsMantenimiento.Activo = Convert.ToInt32(dr["Activo"]);
 
                                 ListaMantenimiento.Add(clsMantenimiento);
