@@ -36,8 +36,6 @@ namespace OXXO.Controllers
         public ActionResult Index(string RFC, string? alert)
         {
             ViewBag.Alert = alert;
-            ListadoTipoDocumento();
-            Cargar(RFC);
             Comercio clsComercio = new Comercio();
             try
             {
@@ -69,8 +67,8 @@ namespace OXXO.Controllers
                     connection.Close();
                 }
                
-
-                return RedirectToAction("Cargar","MesaControl",clsComercio);
+                 
+                return View(clsComercio);
             }
             catch (Exception ex)
             {

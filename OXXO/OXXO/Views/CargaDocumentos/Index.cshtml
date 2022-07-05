@@ -2,21 +2,16 @@
 @model OXXO.Models.Comercio
 
 
-@{
-    ViewData["Title"] = "Carga documentos";
-}
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@{ ViewData["Title"] = "Carga documentos"; }
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
 <h1>Carga de documentos</h1>
 <hr />
 <section class="container-fluid">
     @if (ViewBag.Alert != null) //Agregado por Miguel
     {
-        <div id="alerta" class="container body-content">
-            @Html.Raw(@ViewBag.Alert)
-        </div>
-    } @*/////*@
+<div id="alerta" class="container body-content">
+    @Html.Raw(@ViewBag.Alert)
+</div> } @*/////*@
     <div class="container-fluid">
 
         <div class="row">
@@ -148,43 +143,44 @@
 
         });
 
-        $('#Cargar').click(function (event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
+        //$('#Cargar').click(function (event) {
+        //    event.preventDefault();
+        //    event.stopImmediatePropagation();
 
 
-            $.ajax({
-                url: '/CargaDocumentos/Cargar/',
-                type: 'POST',
+        $.ajax({
+            url: '/CargaDocumentos/Cargar/',
+            type: 'POST',
+            bFilter: false,
 
-                success: function (json) {
-                    $('#Documentos').DataTable({
-                        data: json.datad,
-                        paging: false,
-                        destroy: true,
-                        searching: false,
-                        columns: [
-                            { data: 'idArchivo' },
-                            { data: 'nombreDocumento' },
-                            { data: 'descripcion' },
-                            {
-                                render: function (data, type, full, meta) {
-                                    return '<a href="/CargaDocumentos/DescargarDocumento?IdArchivo=' + full.idArchivo + '" class="btn btn-outline-secundary" style="width: 135px; border-radius: 0px; "><i class="bi bi-download"></i> Descargar</a>';
-                                }
-                            },
-                            {
-                                render: function (data, type, full, meta) {
-                                    return '<a href="/CargaDocumentos/EliminarDocumento?IdArchivo=' + full.idArchivo + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-folder-x"></i> Eliminar</a>';
-                                }
-                            },
+            success: function (json) {
+                $('#Documentos').DataTable({
+                    data: json.datad,
+                    paging: false,
+                    destroy: true,
+                    searching: false,
+                    columns: [
+                        { data: 'idArchivo' },
+                        { data: 'nombreDocumento' },
+                        { data: 'descripcion' },
+                        {
+                            render: function (data, type, full, meta) {
+                                return '<a href="/CargaDocumentos/DescargarDocumento?IdArchivo=' + full.idArchivo + '" class="btn btn-outline-secundary" style="width: 135px; border-radius: 0px; "><i class="bi bi-download"></i> Descargar</a>';
+                            }
+                        },
+                        {
+                            render: function (data, type, full, meta) {
+                                return '<a href="/CargaDocumentos/EliminarDocumento?IdArchivo=' + full.idArchivo + '" class="btn btn-outline-secundary" style="width: 120px; border-radius: 0px; "><i class="bi bi-folder-x"></i> Eliminar</a>';
+                            }
+                        },
 
-                        ],
-                    });
-                }
-
-            });
+                    ],
+                });
+            }
 
         });
+
+            //});
 
 
 
