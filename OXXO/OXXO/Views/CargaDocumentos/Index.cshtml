@@ -62,50 +62,53 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-xl-12">
-                <button id="SubirDocumentos" data-url="SubirDocumentos" onclick="datos(@Html.DisplayFor(modelItem => Model.RFC))" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightContrasena" aria-controls="offcanvasRightContrasena" title="Cambiar contraseña" class="btn btn-success popup  float-end" type="button" style="border-radius: 0px; width: 190px;"><i class="bi bi-folder-plus"></i> Subir Documentos</button>
-            </div>
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-sm-12">
-                <table id="Documentos" class="table" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Id archivo</th>
-                            <th>Documento</th>
-                            <th>Descripcion</th>
-                            <th>Descargar</th>
-                            <th>Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-sm-6 col-md-6 col-xl-6">
-                <button class="btn btn-danger float-start" onclick="window.location.href='../MesaControl/Index'" style="width: 120px; border-radius: 0px; "><i class="bi bi-x-circle"></i> Cancelar</button>
-            </div>
-        </div>
-        <div class="accordion-bral">
-            <div>
+            <div class="form-group">
+                <div class="mb-3">
+                    <button id="SubirDocumentos" data-url="SubirDocumentos" onclick="datos(@Html.DisplayFor(modelItem => Model.RFC))" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightContrasena" aria-controls="offcanvasRightContrasena" title="Cambiar contraseña" class="btn btn-success popup  float-end" type="button" style="border-radius: 0px; width: 190px;"><i class="bi bi-folder-plus"></i> Subir Documentos</button>
 
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightContrasena" aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5>Cambiar Contraseña</h5>
+                    <button class="btn btn-primary float-end" onclick="window.location.href='../MesaControl/Verificacion'" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard-check"></i> Verificar</button>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="Documentos" class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Id archivo</th>
+                                <th>Documento</th>
+                                <th>Descripcion</th>
+                                <th>Descargar</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-xl-6">
+                    <button class="btn btn-danger float-start" onclick="window.location.href='../MesaControl/Index'" style="width: 120px; border-radius: 0px; "><i class="bi bi-x-circle"></i> Cancelar</button>
+                </div>
+            </div>
+            <div class="accordion-bral">
+                <div>
 
-                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div id="createBody" class="offcanvas-body">
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightContrasena" aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <h5>Cambiar Contraseña</h5>
 
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div id="createBody" class="offcanvas-body">
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </section>
 @section Scripts {
     <script type="text/javascript">
