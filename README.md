@@ -26,10 +26,10 @@ Desarrolladores:
             
 # Estándar para las vistas
     Todo lo que escribas dentro de una nueva vista debe de estar dentro de un:
-        <div class="contenedor"></div> ----- Es un diseño especifico para que el contenido se muestre centrado.
+        <div class="container"></div> ----- Es un diseño especifico para que el contenido se muestre centrado.
 
     Y siempre debe de llevar el título cómo:
-        <h1 class="titulo">NOMBRE VISTA</h1> -- Diseño especifico para fonts
+        <h1 id="titulo">NOMBRE VISTA</h1> -- Diseño especifico para fonts
     
     El filtrado o busqueda de contenido en una tabla se hará dependiendo de las especificaciones que se requieran para las tablas, pero siempre se desplegará la opción mediante un accordion lateral derecho, con un botón que tenga la leyenda (ya sea) "Buscar" o "Filtrar".
 
@@ -42,6 +42,15 @@ Desarrolladores:
             3. En la tabla ACCIONCONTROLADOR: INSERT NOMBREACCION = 'Index', ENCABEZADO = 'Indice', ITEM = 1, IDCONTROLADOR = [Al que acabamos de insertar en el PUNTO 2]
             4. En tabla ROLCONTROLADOR: INSERT IdPerfil(El que quieras que tenga acceso a ese SUBMENÚ), IdControlador y IdAccion del submenú que insertamos en los PUNTOS anteriores, y las actividades que puede hacer (LEER,CREAR,EDITAR, poner todas en 1 si se requieren todas)
     
+    Tambien existe un SP llamado SP_CrearSubmenuDefault, este sirve para hacer todo el proceso de arriba en una sola línea de código, lo unico que pide es:
+
+        EXEC SP_CrearSubmenDefault @Nombre,@MenuPadre
+            @Nombre, va a ser el nombre que le vas a asignar a ese submenu
+            @MenuPadre es el ID del MENU al que va a estar asignado el submenu: 1=Registros, 2 = Transaccionalidad, 3 = Administración y 4 = Mantenimiento General
+
+        Entonces sí mi nuevo submenú se llamara "Trabajos" y quisiera que fuera una subsección de "Administración", la ejecución del SP sería la siguiente:
+            
+         -----   EXEC SP_CrearSubmenuDefault 'Trabajos', 3  -----
 
 # Comportamiento de Ventanas cómo Laterales Derechas (Para Editar, Crear o Cambiar Contraseña)
     El flujo de estas es mediante un accordion.
