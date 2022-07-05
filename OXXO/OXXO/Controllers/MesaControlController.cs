@@ -35,6 +35,8 @@ namespace OXXO.Controllers
             ViewBag.Alert = alert;
             return View();
         }
+
+
         public ActionResult Editar(string RFC, string? alert)
         {
             ListadoBancos();
@@ -97,6 +99,64 @@ namespace OXXO.Controllers
             }
 
         }
+
+        [HttpPost]
+        public ActionResult Editar(string alert, string RFC, string NombreCompleto, string Telefono, string Correo, string Direccion, string CuentaDeposito, int IdBanco, string RazonSocial, string NombreComercial, int IdGiroComercio, string Portal, int Persona, int Usuario_FAl, int Usuario_FUM, int IdTipoDeposito)
+        {
+            int IdPerfil = Int32.Parse(HttpContext.Session.GetString("IdPerfil"));
+
+            ViewBag.Alert = alert;
+            Comercio clsComercio = new Comercio();
+           
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    if (String.IsNullOrEmpty(RFC))
+                    {
+                        RFC = HttpContext.Session.GetString("RFC");
+
+                    }
+                    HttpContext.Session.SetString("RFC", RFC);
+
+                    string connectionString = Configuration["ConnectionStrings:ConexionString"];
+
+                    connection.Open();
+
+                    using SqlCommand command = new SqlCommand("SP_EditarComercio", connection);
+
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@RFC", RFC);
+                    command.Parameters.AddWithValue("@NombreCompleto", NombreCompleto);
+                    command.Parameters.AddWithValue("@Telefono", Telefono);
+                    command.Parameters.AddWithValue("@Correo", Correo);
+                    command.Parameters.AddWithValue("@Direccion", Direccion);
+                    command.Parameters.AddWithValue("@CuentaDeposito", CuentaDeposito);
+                    command.Parameters.AddWithValue("@IdBanco", IdBanco);
+                    command.Parameters.AddWithValue("@RazonSocial", RazonSocial);
+                    command.Parameters.AddWithValue("@NombreComercial", NombreComercial);
+                    command.Parameters.AddWithValue("@IdGiroComercio", IdGiroComercio);
+                    command.Parameters.AddWithValue("@Portal", Portal);
+                    command.Parameters.AddWithValue("@Persona", Persona);
+                    command.Parameters.AddWithValue("@Usuario_FAl", IdPerfil);
+                    command.Parameters.AddWithValue("@Usuario_FUM", IdPerfil);
+                    command.Parameters.AddWithValue("@IdTipoDeposito", IdTipoDeposito);
+
+                    command.Parameters.Add("@Mensaje", SqlDbType.NVarChar, 100);
+                    command.Parameters["@Mensaje"].Direction = ParameterDirection.Output;
+
+                    int i = command.ExecuteNonQuery();
+
+                    string mensaje = Convert.ToString(command.Parameters["@Mensaje"].Value);
+
+                    connection.Close();
+
+                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, mensaje);
+                    return RedirectToAction("Index", "MesaControl", new { alert = ViewBag.Alert });
+                }
+            }
+            
+
+        //Listado de bancos
         public object ListadoBancos()
         {
             List<Banco> BancoList = new List<Banco>();
@@ -130,7 +190,7 @@ namespace OXXO.Controllers
             }
         }
 
-        //
+        //Listado de giros comerciales
         public object ListadoGiroComercial()
         {
             List<GiroComercio> GiroComercioList = new List<GiroComercio>();

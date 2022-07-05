@@ -32,7 +32,7 @@ namespace OXXO.Controllers
             Configuration = configuration;
         }
 
-        //
+        //Metodo que devuelve la vista principal de las altas para los comercios
         public IActionResult Index(string? alert)
         {
             ViewBag.Alert = alert;
@@ -98,7 +98,7 @@ namespace OXXO.Controllers
             return RedirectToAction("Index","CargaDocumentos", new { alert = ViewBag.Alert });
         }
 
-        //
+        //Metodo que genera una lista de los bancos disponibles en la base de datos
         public object ListadoBancos()
         {
             List<Banco> BancoList = new List<Banco>();
@@ -132,7 +132,7 @@ namespace OXXO.Controllers
             }
         }
 
-        //
+        //Metodo que genera una lista de los giros comerciales existentes en el base de datos
         public object ListadoGiroComercial()
         {
             List<GiroComercio> GiroComercioList = new List<GiroComercio>();
@@ -163,39 +163,6 @@ namespace OXXO.Controllers
                 connection.Close();
 
                 return ViewData["GiroComercio"];
-            }
-        }
-
-        //
-        public object ListadoEstatus()
-        {
-            List<Estatus> EstatusList = new List<Estatus>();
-
-            string connectionString = Configuration["ConnectionStrings:ConexionString"];
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand("SP_Estatus", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    SqlDataReader dataReader = command.ExecuteReader();
-                    while (dataReader.Read())
-                    {
-                        Estatus estatus = new Estatus
-                        {
-                            IdEstatus = Convert.ToInt32(dataReader["IdEstatus"]),
-                            Estatus1 = Convert.ToString(dataReader["Estatus"])
-                        };
-                        EstatusList.Add(estatus);
-                    }
-                }
-
-                ViewData["Estatus"] = new SelectList(EstatusList.ToList(), "IdEstatus", "Estatus");
-                connection.Close();
-
-                return ViewData["Estatus"];
             }
         }
 
