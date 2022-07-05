@@ -34,7 +34,12 @@
         <thead>
             <tr class="text-center">
                 <th scope="col">ID Emisor</th>
-                <th scope="col">Nombre</th>
+                <th scope="col">Nombre Comercial</th>
+                <th>RFC</th>
+                <th scope="col">Giro Comercial</th>
+                <th scope="col">Razón Social</th>
+                <th scope="col">Banco</th>
+                <th scope="col">Cuenta</th>
                 <th scope="col">Estatus</th>
                 <th colspan="1"></th>
             </tr>
@@ -46,6 +51,11 @@
                 <td style="display:none">@Html.DisplayFor(modelItem => item.IdComercio)</td>
                 <td scope="row">@Html.DisplayFor(modelItem => item.IdEmisor)</td>
                 <td>@Html.DisplayFor(modelItem => item.NombreComercial)</td>
+                <td>@Html.DisplayFor(modelItem => item.RFC)</td>
+                <td>@Html.DisplayFor(modelItem => item.Giro)</td>
+                <td>@Html.DisplayFor(modelItem => item.RazonSocial)</td>
+                <td>@Html.DisplayFor(modelItem => item.Banco)</td>
+                <td>@Html.DisplayFor(modelItem => item.Cuenta)</td>
                 <td>
                     @if (@item.Activo == 1)
                     {
