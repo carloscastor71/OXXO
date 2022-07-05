@@ -32,8 +32,10 @@ namespace OXXO.Models
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public int Activo { get; set; }
         public int Estatus { get; set; }
+        [Url(ErrorMessage = "¡Portal no válido!")]
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Portal { get; set; }
+        [EmailAddress(ErrorMessage = "¡Correo no válido!")]
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Correo { get; set; }
         public string IdBanco { get; set; }

@@ -24,9 +24,9 @@ namespace OXXO.Models
         public string NombreCompleto { get; set; }
          
         public string Telefono { get; set; }
-         
-       
 
+
+        [EmailAddress(ErrorMessage = "¡Correo no válido!")]
         public string Correo { get; set; }
          
         public string Direccion { get; set; }
@@ -39,6 +39,7 @@ namespace OXXO.Models
         public string NombreComercial { get; set; }
         public int? IdGiroComercio { get; set; }
         public string GiroComercio { get; set; }
+        [Url(ErrorMessage = "¡Portal no válido!")]
         public string Portal { get; set; }
         public int PersonaMoral { get; set; }
         public int PersonaFisica { get; set; }
