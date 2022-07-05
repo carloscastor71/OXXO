@@ -148,16 +148,22 @@
                     },
 
                 ],
-                "createdRow": function (row, data, dataIndex) {
+                "rowCallback": function (row, data, dataIndex) {
 
                     if (data["estatus"] == "Pendiente") {
-                        $(row).css('background-color', '#FFED89');
+                        /*$(row).find('td:eq(6)').css('color', '#FFC900');*/
+                        $(row).find('td:eq(6)').css('padding', '10px');
+                        $(row).find('td:eq(6)').css('background-color', '#FFD500');
                     }
                     if (data["estatus"] == "Aprobado") {
-                        $(row).css('background-color', '#96FF71');
+                        /*      $(row).find('td:eq(6)').css('color', 'green');*/
+                        $(row).find('td:eq(6)').css('padding', '10px');
+                        $(row).find('td:eq(6)').css('background-color', '#96FF71');
                     }
                     if (data["estatus"] == "Rechazado") {
-                        $(row).css('background-color', '#FF6767');
+                        /* $(row).find('td:eq(6)').css('color', 'red');*/
+                        $(row).find('td:eq(6)').css('padding', '10px');
+                        $(row).find('td:eq(6)').css('background-color', '#FF6767');
                     }
                 }
             });
