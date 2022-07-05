@@ -1,33 +1,18 @@
 ﻿@model OXXO.Models.MenuUser
 
-    @foreach (var item in Model.Menus)
-     {
-            <a @*href="#@item.MenuMain.NombreMenu"*@ data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                <i class="bi bi-chevron-down" style="font-size: 12px; color: orange;"></i> @item.MenuMain.NombreMenu
-            </a>
-            <ul class="collapce-nav collapse nav flex-column ms-3 ml-2 mt-2 show" id="@item.MenuMain.NombreMenu" data-bs-parent="#menu">
-                @foreach (var subMenu in item.SubMenus)
-                {
-                    <li class="mt-1">
-                        <a href="@Url.Action(subMenu.ActionName, subMenu.ControllerName)">@subMenu.Encabezado</a>
-                    </li>
-                }
-            </ul>
-     }
-    <script>
-        var dropdown = document.getElementsByClassName("dropdown-btn");
-        var i;
 
-        for (i = 0; i < dropdown.length; i++) {
-            dropdown[i].addEventListener("click", function () {
-                this.classList.toggle("active");
-                var dropdownContent = this.nextElementSibling;
-                if (dropdownContent.style.display === "block") {
-                    dropdownContent.style.display = "none";
-                } else {
-                    dropdownContent.style.display = "block";
-                }
-            });
+@foreach (var item in Model.Menus)
+{
+    <a href="#@item.MenuMain.NombreMenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle" aria-expanded="true">
+        <i class="bi bi-chevron-down" style="font-size: 12px; color: orange;"></i> @item.MenuMain.NombreMenu
+    </a>
+    <ul class="collapce-nav collapse nav flex-column ms-3 ml-2 mt-2 show" id="@item.MenuMain.NombreMenu" data-bs-parent="#menu">
+        @foreach (var subMenu in item.SubMenus)
+        {
+            <li class="mt-1">
+                <a href="@Url.Action(subMenu.ActionName, subMenu.ControllerName)">@subMenu.Encabezado</a>
+            </li>
         }
+    </ul>
+}
 
-    </script>
