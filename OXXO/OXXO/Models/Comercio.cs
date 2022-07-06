@@ -20,26 +20,34 @@ namespace OXXO.Models
         public int IdEmisor { get; set; }
         public int IdComercio { get; set; }
         [Key]
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string? RFC { get; set; }
+
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string NombreCompleto { get; set; }
-         
+
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Telefono { get; set; }
 
-
         [EmailAddress(ErrorMessage = "¡Correo no válido!")]
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Correo { get; set; }
-         
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Direccion { get; set; }
-         
+
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string CuentaDeposito { get; set; }
          
         public int? IdBanco { get; set; }
         public string Banco { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string RazonSocial { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string NombreComercial { get; set; }
         public int? IdGiroComercio { get; set; }
         public string GiroComercio { get; set; }
         [Url(ErrorMessage = "¡Portal no válido!")]
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Portal { get; set; }
         public int PersonaMoral { get; set; }
         public int PersonaFisica { get; set; }
@@ -53,7 +61,9 @@ namespace OXXO.Models
         public string IdCompania { get; set; }
          
         public string IdTipoDeposito { get; set; }
+
         public string tipoDeposito { get; set; }
+        public string EmailConfirmado { get; set; }
 
 
         public virtual Estatus EstatusNavigation { get; set; }
