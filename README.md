@@ -23,7 +23,23 @@ Desarrolladores:
         6. En el GitDesktop en la rama MAIN, hacer UN PULL (Repository/Pull)
             7. Cambiarse de rama a la personal y hacer un UPDATE FROM MAIN (Branch/Update From Main)
             8. En la rama personal PUSHORIGIN y listo.
-            
+
+# Para el envíar correo
+    La información para establecer el emisor de los correos se encuentra en el appsettings.json:
+        "Smtp-Server": "smtp.host.com",
+        "Smtp-Port": 587,
+        "Smtp-Password": "password",
+        "Smtp-FromAddress": "ejemplo@mail.com",
+
+    Y se establece en la configuración del controlador que se va a usar con:
+    
+            string  host="",port = "",fromAddress ="",passwordmail="";
+
+            host = Configuration["Smtp-Server"];
+            port = Configuration["Smtp-Port"];
+            fromAddress = Configuration["Smtp-FromAddress"];
+            passwordmail = Configuration["Smtp-Password"];
+
 # Estándar para las vistas
     Todo lo que escribas dentro de una nueva vista debe de estar dentro de un:
         <div class="container"></div> ----- Es un diseño especifico para que el contenido se muestre centrado.

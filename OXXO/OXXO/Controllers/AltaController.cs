@@ -34,7 +34,7 @@ namespace OXXO.Controllers
             Configuration = configuration;
             dbConn = Configuration["ConnectionStrings:ConexionString"];
 
-            host = this.Configuration["Smtp-Server"];
+            host = Configuration["Smtp-Server"];
             port = Configuration["Smtp-Port"];
             fromAddress = Configuration["Smtp-FromAddress"];
             passwordmail = Configuration["Smtp-Password"];
