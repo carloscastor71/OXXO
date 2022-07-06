@@ -55,6 +55,7 @@ $('#filtrar').click(function (e) {
                     { data: 'direccion' },
                     { data: 'banco' },
                     { data: 'estatus' },
+                    { data: 'emailConfirmado' },
                     {
                         render: function (data, type, full, meta) {
                             return '<a href="/MesaControl/Editar?RFC=' + full.rfc + '" class="btn btn-outline-secundary btn-sm" style=" border-radius: 0px; "><i class="bi bi-pencil-square"></i></a>';
@@ -75,19 +76,31 @@ $('#filtrar').click(function (e) {
                 "rowCallback": function (row, data, dataIndex) {
 
                     if (data["estatus"] == "Pendiente") {
-                        /*$(row).find('td:eq(6)').css('color', '#FFC900');*/
                         $(row).find('td:eq(6)').css('padding', '10px');
                         $(row).find('td:eq(6)').css('background-color', '#FFD500');
                     }
                     if (data["estatus"] == "Aprobado") {
-                        /*      $(row).find('td:eq(6)').css('color', 'green');*/
                         $(row).find('td:eq(6)').css('padding', '10px');
                         $(row).find('td:eq(6)').css('background-color', '#96FF71');
                     }
                     if (data["estatus"] == "Rechazado") {
-                        /* $(row).find('td:eq(6)').css('color', 'red');*/
                         $(row).find('td:eq(6)').css('padding', '10px');
                         $(row).find('td:eq(6)').css('background-color', '#FF6767');
+                    }
+                    if (data["emailConfirmado"] == "1") {
+                        $(row).find('td:eq(7)').css('padding', '10px');
+                        $(row).find('td:eq(7)').css('background-color', '#FFD500');
+                        $(row).find('td:eq(7)').text('Pendiente');
+                    }
+                    if (data["emailConfirmado"] == "2") {
+                        $(row).find('td:eq(7)').css('padding', '10px');
+                        $(row).find('td:eq(7)').css('background-color', '#96FF71');
+                        $(row).find('td:eq(7)').text('Aprobado');
+                    }
+                    if (data["emailConfirmado"] == "3") {
+                        $(row).find('td:eq(7)').css('padding', '10px');
+                        $(row).find('td:eq(7)').css('background-color', '#FF6767');
+                        $(row).find('td:eq(7)').text('Rechazado');
                     }
                 }
             });

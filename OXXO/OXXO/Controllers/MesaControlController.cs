@@ -292,6 +292,7 @@ namespace OXXO.Controllers
                             cmc.Activo = Convert.ToInt32(dr["Activo"]);
                             cmc.IdCompania = Convert.ToString(dr["Compania"]);
                             cmc.IdTipoDeposito = Convert.ToString(dr["TipoDeposito"]);
+                            cmc.EmailConfirmado = dr.IsDBNull("EmailConfirmado") ? "1" : Convert.ToString(dr["EmailConfirmado"]);
                             listComercio.Add(cmc);
                         }
 
