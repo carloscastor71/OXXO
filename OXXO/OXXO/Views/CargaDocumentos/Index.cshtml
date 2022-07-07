@@ -4,112 +4,120 @@
 
 @{ ViewData["Title"] = "Carga documentos"; }
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
-<h1>Carga de documentos</h1>
-<hr />
-<section class="container-fluid">
-    @if (ViewBag.Alert != null) //Agregado por Miguel
-    {
-<div id="alerta" class="container body-content">
-    @Html.Raw(@ViewBag.Alert)
-</div> } @*/////*@
-    <div class="container-fluid">
+<div class="container">
+    <h1 id="titulo">Carga de documentos</h1>
+    <hr />
+    <section class="container-fluid">
+        @if (ViewBag.Alert != null) //Agregado por Miguel
+        {
+            <div id="alerta" class="container body-content">
+                @Html.Raw(@ViewBag.Alert)
+            </div> } @*/////*@
+        <div class="container-fluid">
 
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-xl-12">
-                <div class="form-group">
-                    <h4>Datos generales del cliente</h4>
-                </div>
-            </div>
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-sm-2 col-md-2 col-xl-2">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">RFC</label>
-                        <input asp-for="RFC" id="Rfc" name="Rfc" class="form-control" disabled />
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-xl-12">
+                    <div class="form-group">
+                        <h4>Datos generales del cliente</h4>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            @*NOMBRE COMPLETO *@
-            <div class="col-sm-4 col-md-4 col-xl-4">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Nombre completo</label>
-                        <input asp-for="NombreCompleto" id="NombreCompleto" name="NombreCompleto" class="form-control" disabled="disabled" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4 col-md-4 col-xl-4">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Nombre comercial</label>
-                        <input asp-for="NombreComercial" id="NombreComercial" name="NombreComercial" class="form-control" disabled />
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 col-md-4 col-xl-4">
-                <div class="form-group">
-                    <div class="mb-3">
-                        <label class="control-label">Razon social</label>
-                        <input asp-for="RazonSocial" id="RazonSocial" name="RazonSocial" class="form-control  " disabled />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <div class="mb-3">
-                    <button id="SubirDocumentos" data-url="SubirDocumentos" onclick="datos(@Html.DisplayFor(modelItem => Model.RFC))" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightContrasena" aria-controls="offcanvasRightContrasena" title="Cambiar contraseña" class="btn btn-success popup  float-end" type="button" style="border-radius: 0px; width: 190px;"><i class="bi bi-folder-plus"></i> Subir Documentos</button>
-
-                    <button class="btn btn-primary float-end" onclick="window.location.href='../MesaControl/Verificacion'" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard-check"></i> Verificar</button>
                 </div>
             </div>
             <hr />
             <div class="row">
-                <div class="col-sm-12">
-                    <table id="Documentos" class="table" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Id archivo</th>
-                                <th>Documento</th>
-                                <th>Descripcion</th>
-                                <th>Descargar</th>
-                                <th>Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <hr />
-            <div class="row">
-                <div class="col-sm-6 col-md-6 col-xl-6">
-                    <button class="btn btn-danger float-start" onclick="window.location.href='../MesaControl/Index'" style="width: 120px; border-radius: 0px; "><i class="bi bi-x-circle"></i> Cancelar</button>
-                </div>
-            </div>
-            <div class="accordion-bral">
-                <div>
-
-                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightContrasena" aria-labelledby="offcanvasRightLabel">
-                        <div class="offcanvas-header">
-                            <h5>Cambiar Contraseña</h5>
-
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <div class="col-sm-2 col-md-2 col-xl-2">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">RFC</label>
+                            <input asp-for="RFC" id="Rfc" name="Rfc" class="form-control" disabled />
                         </div>
-                        <div id="createBody" class="offcanvas-body">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @*NOMBRE COMPLETO *@
+                <div class="col-sm-4 col-md-4 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Nombre completo</label>
+                            <input asp-for="NombreCompleto" id="NombreCompleto" name="NombreCompleto" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Nombre comercial</label>
+                            <input asp-for="NombreComercial" id="NombreComercial" name="NombreComercial" class="form-control" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="control-label">Razon social</label>
+                            <input asp-for="RazonSocial" id="RazonSocial" name="RazonSocial" class="form-control  " disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <div class="form-group">
+                    <div class="d-flex flex-row-reverse">
+                        <div class="p-2">
+                            <button id="SubirDocumentos" data-url="SubirDocumentos" onclick="datos(@Html.DisplayFor(modelItem => Model.RFC))" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightContrasena" aria-controls="offcanvasRightContrasena" title="Cambiar contraseña" class="btn btn-success popup" type="button" style="border-radius: 0px; width: 190px;"><i class="bi bi-folder-plus"></i> Subir Documentos</button>
+                            <button class="btn btn-primary" onclick="window.location.href='../MesaControl/Verificacion'" style="width: 120px; border-radius: 0px; "><i class="bi bi-clipboard-check"></i> Verificar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"><br /></div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="Documentos" class="table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Id archivo</th>
+                                    <th>Documento</th>
+                                    <th>Descripcion</th>
+                                    <th>Descargar</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row"><br /></div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6">
+                        <button class="btn btn-danger float-start" onclick="window.location.href='../MesaControl/Index'" style="width: 120px; border-radius: 0px; "><i class="bi bi-x-circle"></i> Cancelar</button>
+                    </div>
+                </div>
+                <div class="accordion-bral">
+                    <div>
 
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightContrasena" aria-labelledby="offcanvasRightLabel">
+                            <div class="offcanvas-header">
+                                <h5>Cambiar Contraseña</h5>
+
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div id="createBody" class="offcanvas-body">
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-</section>
+    </section>
+<br />
+</div>
+
 @section Scripts {
     <script type="text/javascript">
 
@@ -157,6 +165,15 @@
                     paging: false,
                     destroy: true,
                     searching: false,
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ registros",
+                        "zeroRecords": "No se encontró ningun registro",
+                        "info": "Mostrando _PAGE_ página(s) de _PAGES_",
+                        "infoEmpty": "No hay registros encontrados",
+                        "infoFiltered": "(filtrado de _MAX_ registros)",
+                        "search": "Buscar",
+                        "serchPlaceholder": "Buscar",
+                        },
                     columns: [
                         { data: 'idArchivo' },
                         { data: 'nombreDocumento' },
@@ -178,7 +195,7 @@
 
         });
 
-            //});
+                //});
 
 
 

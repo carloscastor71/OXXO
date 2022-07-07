@@ -52,6 +52,7 @@ $('#filtrar').click(function (e) {
                     "zeroRecords": "No se encontró ningun registro",
                     "info": "Mostrando _PAGE_ página(s) de _PAGES_",
                     "infoEmpty": "No hay registros encontrados",
+                    "infoFiltered": "(filtrado de _MAX_ registros)",
                     "search": "Buscar",
                     "serchPlaceholder": "Buscar",
                     "paginate": {
