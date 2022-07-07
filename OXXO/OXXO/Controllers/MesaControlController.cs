@@ -11,6 +11,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
+using System.IO;
 
 namespace OXXO.Controllers
 {
@@ -18,7 +21,7 @@ namespace OXXO.Controllers
     {
         // GET: CategorizacionController
 
-        string dbConn = "";
+        string dbConn = "", host = "", port = "", fromAddress = "", passwordmail = "";
 
         public IConfiguration Configuration { get; }
 
@@ -26,7 +29,10 @@ namespace OXXO.Controllers
         {
             Configuration = configuration;
             dbConn = Configuration["ConnectionStrings:ConexionString"];
-
+            host = Configuration["Smtp-Server"];
+            port = Configuration["Smtp-Port"];
+            fromAddress = Configuration["Smtp-FromAddress"];
+            passwordmail = Configuration["Smtp-Password"];
         }
 
         //Metodo que devuelve la vista
@@ -107,54 +113,299 @@ namespace OXXO.Controllers
 
             ViewBag.Alert = alert;
             Comercio clsComercio = new Comercio();
-           
+            string mensaje = "";
+            using (SqlConnection connection = new SqlConnection(dbConn))
+            {
+                if (String.IsNullOrEmpty(RFC))
+                {
+                    RFC = HttpContext.Session.GetString("RFC");
+
+                }
+                HttpContext.Session.SetString("RFC", RFC);
+
+                string connectionString = Configuration["ConnectionStrings:ConexionString"];
+
+                connection.Open();
+
+                using SqlCommand command = new SqlCommand("SP_EditarComercio", connection);
+
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@RFC", RFC);
+                command.Parameters.AddWithValue("@NombreCompleto", NombreCompleto);
+                command.Parameters.AddWithValue("@Telefono", Telefono);
+                command.Parameters.AddWithValue("@Correo", Correo);
+                command.Parameters.AddWithValue("@Direccion", Direccion);
+                command.Parameters.AddWithValue("@CuentaDeposito", CuentaDeposito);
+                command.Parameters.AddWithValue("@IdBanco", IdBanco);
+                command.Parameters.AddWithValue("@RazonSocial", RazonSocial);
+                command.Parameters.AddWithValue("@NombreComercial", NombreComercial);
+                command.Parameters.AddWithValue("@IdGiroComercio", IdGiroComercio);
+                command.Parameters.AddWithValue("@Portal", Portal);
+                command.Parameters.AddWithValue("@Persona", Persona);
+                command.Parameters.AddWithValue("@Usuario_FAl", IdPerfil);
+                command.Parameters.AddWithValue("@Usuario_FUM", IdPerfil);
+                command.Parameters.AddWithValue("@IdTipoDeposito", IdTipoDeposito);
+
+                command.Parameters.Add("@Mensaje", SqlDbType.NVarChar, 100);
+                command.Parameters["@Mensaje"].Direction = ParameterDirection.Output;
+
+                int i = command.ExecuteNonQuery();
+
+                 mensaje = Convert.ToString(command.Parameters["@Mensaje"].Value);
+
+                connection.Close();
+
+            }
+
+            try
+            {
+
+                SendMail(RFC);
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, mensaje);
+                return RedirectToAction("Index", "MesaControl", new { alert = ViewBag.Alert });
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction("Index", "MesaControl", new { alert = ViewBag.Alert });
+            }
+
+        }
+
+        [Route("[Controller]/[Action]/{id}/{name}")]
+        public ActionResult Activacion()
+        {
+            if (RouteData.Values["id"] != null)
+            {
+
                 using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    if (String.IsNullOrEmpty(RFC))
-                    {
-                        RFC = HttpContext.Session.GetString("RFC");
-
-                    }
-                    HttpContext.Session.SetString("RFC", RFC);
-
-                    string connectionString = Configuration["ConnectionStrings:ConexionString"];
-
                     connection.Open();
-
-                    using SqlCommand command = new SqlCommand("SP_EditarComercio", connection);
-
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    command.Parameters.AddWithValue("@RFC", RFC);
-                    command.Parameters.AddWithValue("@NombreCompleto", NombreCompleto);
-                    command.Parameters.AddWithValue("@Telefono", Telefono);
-                    command.Parameters.AddWithValue("@Correo", Correo);
-                    command.Parameters.AddWithValue("@Direccion", Direccion);
-                    command.Parameters.AddWithValue("@CuentaDeposito", CuentaDeposito);
-                    command.Parameters.AddWithValue("@IdBanco", IdBanco);
-                    command.Parameters.AddWithValue("@RazonSocial", RazonSocial);
-                    command.Parameters.AddWithValue("@NombreComercial", NombreComercial);
-                    command.Parameters.AddWithValue("@IdGiroComercio", IdGiroComercio);
-                    command.Parameters.AddWithValue("@Portal", Portal);
-                    command.Parameters.AddWithValue("@Persona", Persona);
-                    command.Parameters.AddWithValue("@Usuario_FAl", IdPerfil);
-                    command.Parameters.AddWithValue("@Usuario_FUM", IdPerfil);
-                    command.Parameters.AddWithValue("@IdTipoDeposito", IdTipoDeposito);
-
-                    command.Parameters.Add("@Mensaje", SqlDbType.NVarChar, 100);
-                    command.Parameters["@Mensaje"].Direction = ParameterDirection.Output;
-
-                    int i = command.ExecuteNonQuery();
-
-                    string mensaje = Convert.ToString(command.Parameters["@Mensaje"].Value);
-
-                    connection.Close();
-
-                    ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, mensaje);
-                    return RedirectToAction("Index", "MesaControl", new { alert = ViewBag.Alert });
+                    using (SqlCommand command = new SqlCommand("SP_ConfirmarByEmail", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@RFC", RouteData.Values["id"].ToString());
+                        command.Parameters.AddWithValue("@EmailConfirmado", Convert.ToInt32(RouteData.Values["name"]));
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    return PartialView("Activacion");
                 }
             }
+            return View();
+        }
+
+        //Metodo para enviar documentos por Email
+        [HttpPost]
+        public async Task<IActionResult> SendDocMail(string RFC,string Correo, IList<IFormFile> Files)
+        {
+            try
+            {
+                string consulta = "Select RFC, NombreCompleto, NombreComercial, Correo from Comercio WHERE RFC = '" + RFC + "'";
+                string NombreCompleto = "", NombreComercial = "";
+                if (!String.IsNullOrEmpty(consulta))
+                {
+                    using (SqlConnection connection = new SqlConnection(dbConn))
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand(consulta, connection);
+                        using (SqlDataReader dr = command.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                NombreComercial = dr.IsDBNull("NombreComercial") ? "" : Convert.ToString(dr["NombreComercial"]);
+                                Correo = dr.IsDBNull("Correo") ? "" : Convert.ToString(dr["Correo"]);
+                                NombreCompleto = dr.IsDBNull("NombreCompleto") ? "" : Convert.ToString(dr["NombreCompleto"]);
+                            }
+                        }
+                        connection.Close();
+                    }
+
+                    using (MailMessage mm = new MailMessage(fromAddress, Correo))
+                    {
+                        mm.Subject = "Grupo AGM: Documento(s) Generado(s) para el comercio";
+                        string body = "<h1 id='titulo'>Este correo fue enviado por parte de Grupo Empresarial AGM.</h1>";
+                        body += "<br/>";
+                        body += "<p style = 'vertical - align: middle; color: #FF8B00' > El documento adjunto está dirigido para el siguiente comercio:</ p >";
+                        body += "<br/> ";
+
+
+                        if (!String.IsNullOrEmpty(NombreCompleto))
+                        {
+                            body += "<p> Nombre completo:      <b>" + NombreCompleto + "</b></p>";
+                        }
+                        else if (!String.IsNullOrEmpty(NombreComercial))
+                        {
+
+                            body += "<p> Nombre comercial:      <b>" + NombreComercial + "</b></p>";
+
+                        }
+
+                        body += "<p> RFC:      <b>" + RFC + "</b></p>";
+
+
+                        body += "<p> Correo:      <b>" + Correo + "</b></p>";
+
+
+
+                        body += "<br /><br />Puedes descargar el siguiente documento o documentos adjunto:";
+
+                        body += "<br/>";
+                        body += "<br/>";
+                        body += "</div>";
+                        foreach (var file in Files)
+                        {
+                            if (file.Length > 0)
+                            {
+                                using (var ms = new MemoryStream())
+                                {
+                                    file.CopyTo(ms);
+                                    var fileBytes = ms.ToArray();
+                                    Attachment att = new Attachment(new MemoryStream(fileBytes), file.FileName);
+                                    mm.Attachments.Add(att);
+                                }
+                            }
+                        }
+
+
+
+                        mm.Body = body;
+                        mm.IsBodyHtml = true;
+                        SmtpClient smtp = new SmtpClient();
+
+                        smtp.Host = host;
+                        smtp.EnableSsl = true;
+                        NetworkCredential networkCred = new NetworkCredential(fromAddress, passwordmail);
+                        smtp.UseDefaultCredentials = true;
+                        smtp.Credentials = networkCred;
+                        smtp.Port = Convert.ToInt32(port);
+
+                        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtp.Send(mm);
+                    }
+                }
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Documento enviado Correctamente");
+                return RedirectToAction("Index", "MesaControl", new { alert = ViewBag.Alert });
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction("Index", "MesaControl", new { alert = ViewBag.Alert });
+            }
             
+        }
+
+        private void SendMail(string RFC)
+        {
+            string consulta = "Select RFC, NombreCompleto, NombreComercial,RazonSocial, GiroComercial, Telefono, PersonaFisica, PersonaMoral, Portal, Correo, Direccion,CuentaDeposito, Banco  from Comercio as C LEFT JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio INNER JOIN Banco as B ON C.IdBanco = B.IdBanco WHERE RFC = '" + RFC + "'";
+            string Correo = "", NombreCompleto = "", NombreComercial = "", RazonSocial = "", GiroComercial = "", Telefono = "", Portal = "", Direccion = "", CuentaDeposito = "", Banco = "", PersonaFisica = "", PersonaMoral = "";
+            if (!String.IsNullOrEmpty(consulta))
+            {
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(consulta, connection);
+                    using (SqlDataReader dr = command.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            NombreComercial = dr.IsDBNull("NombreComercial") ? "" : Convert.ToString(dr["NombreComercial"]);
+                            Correo = dr.IsDBNull("Correo") ? "" : Convert.ToString(dr["Correo"]);
+                            NombreCompleto = dr.IsDBNull("NombreCompleto") ? "" : Convert.ToString(dr["NombreCompleto"]);
+                            RazonSocial = dr.IsDBNull("RazonSocial") ? "" : Convert.ToString(dr["RazonSocial"]);
+                            GiroComercial = dr.IsDBNull("GiroComercial") ? "" : Convert.ToString(dr["GiroComercial"]);
+                            Telefono = dr.IsDBNull("Telefono") ? "" : Convert.ToString(dr["Telefono"]);
+                            Portal = dr.IsDBNull("Portal") ? "" : Convert.ToString(dr["Portal"]);
+                            Direccion = dr.IsDBNull("Direccion") ? "" : Convert.ToString(dr["Direccion"]);
+                            CuentaDeposito = dr.IsDBNull("CuentaDeposito") ? "" : Convert.ToString(dr["CuentaDeposito"]);
+                            Banco = dr.IsDBNull("Banco") ? "" : Convert.ToString(dr["Banco"]);
+                            PersonaFisica = dr.IsDBNull("PersonaFisica") ? "" : Convert.ToString(dr["PersonaFisica"]);
+                            PersonaMoral = dr.IsDBNull("PersonaMoral") ? "" : Convert.ToString(dr["PersonaMoral"]);
+                        }
+                    }
+                    connection.Close();
+                }
+
+                using (MailMessage mm = new MailMessage(fromAddress, Correo))
+                {
+                    mm.Subject = "Grupo AGM: Información Actualizada";
+                    string body = "<h1 id='titulo'>Reconfirmación de Información</h1>";
+                    body += "<br/>";
+                    body += "<p style = 'vertical - align: middle; color: #FF8B00' > Se actualizó la información que rechazaste, favor de verificar esta nueva información </ p >";
+                    body += "<p></p> ";
+                    if (PersonaFisica == "1" && PersonaMoral == "1")
+                    {
+                        body += "<p> Usted está registrada cómo: <b>Persona Física y Persona Moral</b></p>";
+                    }
+                    else if (PersonaFisica == "1")
+                    {
+                        body += "<p> Usted está registrada cómo: <b>Persona Física</b></p>";
+                    }
+
+                    else if (PersonaMoral == "1")
+                    {
+                        body += "<p> Usted está registrada cómo: <b>Persona Moral</b></p>";
+                    }
+
+                    if (!String.IsNullOrEmpty(NombreCompleto))
+                    {
+                        body += "<p> Nombre Completo registrado:      <b>" + NombreCompleto + "</b></p>";
+                    }
+                    else if (!String.IsNullOrEmpty(RazonSocial) || !String.IsNullOrEmpty(NombreComercial))
+                    {
+                        body += "<p> Razón Social registrada:      <b>" + RazonSocial + "</b></p>";
+                        body += "<p> Nombre Comercial registrado:      <b>" + NombreComercial + "</b></p>";
+                        body += "<p> Giro Comercial registrado:      <b>" + GiroComercial + "</b></p>";
+                    }
+
+                    body += "<p> RFC registrado:      <b>" + RFC + "</b></p>";
+
+                    if (!String.IsNullOrEmpty(Portal))
+                    {
+                        body += "<p> Portal registrado:      <b>" + Portal + "</b></p>";
+                    }
+
+                    body += "<p> Teléfono registrado:      <b>" + Telefono + "</b></p>";
+                    body += "<p> Correo registrado:      <b>" + Correo + "</b></p>";
+                    body += "<p> Dirección registrada:     <b> " + Direccion + "</b></p>";
+                    body += "<p> Cuenta de deposito registrada:      <b>" + CuentaDeposito + "</b></p>";
+                    body += "<p> Banco registrado:      <b>" + Banco + "</b></p>";
+
+
+                    body += "<br /><br />Haga clic en el siguiente enlace para CONFIRMAR que su información está correcta:";
+                    body += "<br /><a href = '" + string.Format("{0}://{1}/Alta/Activacion/{2}/{3}", HttpContext.Request.Scheme, HttpContext.Request.Host, RFC, "2") + "'>Clic aquí para CONFIRMAR tus datos.</a>";
+
+
+                    body += "<br /><br />O clic en el siguiente enlace para RECHAZAR esta información:";
+                    body += "<br /><a href = '" + string.Format("{0}://{1}/Alta/Activacion/{2}/{3}", HttpContext.Request.Scheme, HttpContext.Request.Host, RFC, "3") + "'>Clic aquí para RECHAZAR estos datos.</a>";
+
+
+                    body += "<br/>";
+                    body += "<br/>";
+                    body += "</div>";
+
+
+
+                    mm.Body = body;
+                    mm.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient();
+
+                    smtp.Host = host;
+                    smtp.EnableSsl = true;
+                    NetworkCredential networkCred = new NetworkCredential(fromAddress, passwordmail);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = networkCred;
+                    smtp.Port = Convert.ToInt32(port);
+
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.Send(mm);
+                }
+            }
+        }
 
         //Listado de bancos
         public object ListadoBancos()
@@ -245,18 +496,6 @@ namespace OXXO.Controllers
                     {
                         persona = "NULL";
                     }
-                    //if (data.rfc == null)
-                    //{
-                    //    data.rfc = "NULL";
-                    //}
-                    //if (data.NombreCompleto == null)
-                    //{
-                    //    data.NombreCompleto = "NULL";
-                    //}
-                    //if (data.RazonSocial == null)
-                    //{
-                    //    data.RazonSocial = "NULL";
-                    //}
 
                     List<Comercio> listComercio = new List<Comercio>();
 

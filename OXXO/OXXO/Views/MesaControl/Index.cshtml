@@ -1,9 +1,12 @@
-﻿@if (ViewBag.Alert != null) //Agregado por Miguel
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (ViewBag.Alert != null) //Agregado por Miguel
 {
     <div id="alerta" class="container body-content">
         @Html.Raw(@ViewBag.Alert)
     </div>
-} @*/////*@
+}
 
 
 <style>
@@ -69,7 +72,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <table id="categorizacion" class="display table-striped" style="width:100%">
+            <table id="categorizacion" class="table-responsive table-striped" style="width:100%">
                 <thead>
                     <tr>
                         <th>ID Emisor</th>
@@ -81,8 +84,9 @@
                         <th>Estatus</th>
                         <th>Correo Confirmado</th>
                         <th>Editar</th>
-                        <th>Carga de documentos</th>
+                        <th>Carga de Documentos</th>
                         <th>Revisión</th>
+                        <th>Enviar Documento por Email</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,10 +94,39 @@
             </table>
         </div>
     </div>
+    <div class="modal fade" id="sendDoc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enviar documento a: </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" asp-controller="MesaControl" asp-action="SendDocMail" enctype="multipart/form-data">
+                    <input class="modal-label" id="RFC" name="RFC" hidden>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="Correo" class="col-form-label">Correo:</label>
+                                <input type="text" class="form-control" id="Correo" name="Correo" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="Files" id="Files" multiple="multiple" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <input id="btnEnviar" type="submit" value="Enviar correo" class="btn btn-success" disabled />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <br />
 </div>
 
 <script>
+   
     var data = [];
     var search = [];
     const $elemento = document.querySelector("#chips");
@@ -112,18 +145,50 @@
         }
     }
 
+    $(function () {
+
+        $('input[type=file]').change(function () {
+            if ($('input[type=file]').val() == '') {
+                $('#btnEnviar').attr('disabled', true)
+
+            }
+            else {
+                $('#btnEnviar').attr('disabled', false);
+
+            }
+        })
+
+    });
+
+    $(window).resize(function () {
+        $('#categorizacion').DataTable();
+    });
+
     $.ajax({
         url: '/MesaControl/Buscar',
         data: search,
         type: 'POST',
         bFilter: false,
         success: function (json) {
-            console.log(json);
             $('#categorizacion').DataTable({
                 data: json.data,
                 paging: true,
                 destroy: true,
-                searching: false,
+                scrollX: true,
+                searching: true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "No se encontró ningun registro",
+                    "info": "Mostrando _PAGE_ página(s) de _PAGES_",
+                    "infoEmpty": "No hay registros encontrados",
+                    "search": "Buscar",
+                    "serchPlaceholder": "Buscar",
+                    "paginate": {
+                        "previous": "Anterior",
+                        "next": "Siguiente"
+                    },
+               
+                },
                 columns: [
                     { data: 'idEmisor' },
                     { data: 'rfc' },
@@ -148,9 +213,14 @@
                             return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
                         }
                     },
-
+                    {
+                        render: function (data, type, full, meta) {
+                            return '<a class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="modal" data-bs-target="#sendDoc" data-bs-whatever=' + full.rfc + ' data-bs-whatever2=' + full.correo + '><i class="bi bi-envelope-plus"></i></a>';
+                        }
+                    },
                 ],
                 "rowCallback": function (row, data, dataIndex) {
+
 
                     if (data["estatus"] == "Pendiente") {
                         $(row).find('td:eq(6)').css('padding', '10px');
@@ -164,7 +234,7 @@
                         $(row).find('td:eq(6)').css('padding', '10px');
                         $(row).find('td:eq(6)').css('background-color', '#FF6767');
                     }
-                    if(data["emailConfirmado"] == "1") {
+                    if (data["emailConfirmado"] == "1") {
                         $(row).find('td:eq(7)').css('padding', '10px');
                         $(row).find('td:eq(7)').css('background-color', '#FFD500');
                         $(row).find('td:eq(7)').text('Pendiente');
@@ -181,6 +251,23 @@
                     }
                 }
             });
+            var exampleModal = document.getElementById('sendDoc')
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+
+                var button = event.relatedTarget
+
+                var recipient = button.getAttribute('data-bs-whatever')
+                var fullcorreo = button.getAttribute('data-bs-whatever2')
+
+                var modalTitle = exampleModal.querySelector('.modal-title')
+                var modalBodyInput = exampleModal.querySelector('.modal-body input')
+                var modalLabel = exampleModal.querySelector('.modal-label')
+
+                modalTitle.textContent = 'Enviar documento a: ' + recipient
+                modalBodyInput.value = fullcorreo
+                modalLabel.value = recipient
+                modalLabel.textContent = recipient
+            })
         }
     });
 </script>

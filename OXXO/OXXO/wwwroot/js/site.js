@@ -41,12 +41,25 @@ $('#filtrar').click(function (e) {
         type: 'POST',
         bFilter: false,
         success: function (json) {
-            console.log(json);
             $('#categorizacion').DataTable({
                 data: json.data,
-                paging: false,
+                paging: true,
                 destroy: true,
-                searching: false,
+                scrollX: true,
+                searching: true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "No se encontró ningun registro",
+                    "info": "Mostrando _PAGE_ página(s) de _PAGES_",
+                    "infoEmpty": "No hay registros encontrados",
+                    "search": "Buscar",
+                    "serchPlaceholder": "Buscar",
+                    "paginate": {
+                        "previous": "Anterior",
+                        "next": "Siguiente"
+                    },
+
+                },
                 columns: [
                     { data: 'idEmisor' },
                     { data: 'rfc' },
@@ -58,7 +71,7 @@ $('#filtrar').click(function (e) {
                     { data: 'emailConfirmado' },
                     {
                         render: function (data, type, full, meta) {
-                            return '<a href="/MesaControl/Editar?RFC=' + full.rfc + '" class="btn btn-outline-secundary btn-sm" style=" border-radius: 0px; "><i class="bi bi-pencil-square"></i></a>';
+                            return '<a href="/MesaControl/Editar?RFC=' + full.rfc + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-pencil-square"></i></a>';
                         }
                     },
                     {
@@ -71,9 +84,14 @@ $('#filtrar').click(function (e) {
                             return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
                         }
                     },
-
+                    {
+                        render: function (data, type, full, meta) {
+                            return '<a class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="modal" data-bs-target="#sendDoc" data-bs-whatever=' + full.rfc + ' data-bs-whatever2=' + full.correo + '><i class="bi bi-envelope-plus"></i></a>';
+                        }
+                    },
                 ],
                 "rowCallback": function (row, data, dataIndex) {
+
 
                     if (data["estatus"] == "Pendiente") {
                         $(row).find('td:eq(6)').css('padding', '10px');
@@ -104,6 +122,23 @@ $('#filtrar').click(function (e) {
                     }
                 }
             });
+            var exampleModal = document.getElementById('sendDoc')
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+
+                var button = event.relatedTarget
+
+                var recipient = button.getAttribute('data-bs-whatever')
+                var fullcorreo = button.getAttribute('data-bs-whatever2')
+
+                var modalTitle = exampleModal.querySelector('.modal-title')
+                var modalBodyInput = exampleModal.querySelector('.modal-body input')
+                var modalLabel = exampleModal.querySelector('.modal-label')
+
+                modalTitle.textContent = 'Enviar documento a: ' + recipient
+                modalBodyInput.value = fullcorreo
+                modalLabel.value = recipient
+                modalLabel.textContent = recipient
+            })
         }
     });
 });
