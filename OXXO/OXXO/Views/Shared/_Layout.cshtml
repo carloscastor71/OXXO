@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -51,6 +52,7 @@
         .form-control, .form-select {
             font-size: .73rem;
         }
+
     </style>
 </head>
 <body>
@@ -61,8 +63,9 @@
     <div class="container-fluid">
         @if (Context.Session.Get("IdPerfil") != null)
         {
-            <div class="row flex-nowrap">
-                <div id="sidebar" class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 collapse collapse-horizontal border-end show" style="background-color: #FFFFFF;">
+
+            <div class="row flex-nowrap d-flex align-items-stretch">
+                <div id="sidebar" class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 collapse collapse-horizontal border-end" style="background-color: #FFFFFF;">
                     <div class="d-flex flex-column align-items-center align-items-sm-start pt-2 min-vh-100">
                         <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-decoration-none">
                             <img class="pt-4" src="~/img/logo.png" alt="Alternate Text" style="width: 150px; padding-left: 2rem;" />
@@ -70,11 +73,12 @@
                         <div id="foo-view" data-url="@Url.Action(action:"MostrarMenu", controller:"Menu")"></div>
                     </div>
                 </div>
-                <div class="col p-0 content">
+
+                <div class="col p-0 content border-end">
                     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid lightgray;">
+                    <div class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid lightgray;">
                         <div class="container-fluid">
-                            <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="menuu p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1"></i> Menu</a>
+                            <a id="menubtn" href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="menuu p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1"></i> Menu</a>
                             <div class="justify-content-end" style="margin-right: 3rem;" id="navbarNavAltMarkup">
                                 <div class="navbar-nav pr-3">
                                     <div class="dropdown">
@@ -89,13 +93,14 @@
                                         </ul>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-                    </nav>
+                    </div>
                     <script src="~/lib/jquery/dist/jquery.min.js"></script>
                     @RenderBody()
+
                 </div>
+                
             </div>
         }
     </div>
