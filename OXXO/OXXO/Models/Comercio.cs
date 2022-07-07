@@ -19,8 +19,8 @@ namespace OXXO.Models
 
         public int IdEmisor { get; set; }
         public int IdComercio { get; set; }
-        [Key]
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
+        [Key]
         public string? RFC { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
@@ -37,13 +37,15 @@ namespace OXXO.Models
 
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string CuentaDeposito { get; set; }
-         
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public int? IdBanco { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string Banco { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string RazonSocial { get; set; }
         [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string NombreComercial { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public int? IdGiroComercio { get; set; }
         public string GiroComercio { get; set; }
         [Url(ErrorMessage = "¡Portal no válido!")]
@@ -59,9 +61,9 @@ namespace OXXO.Models
         public DateTime? Fum { get; set; }
          
         public string IdCompania { get; set; }
-         
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string IdTipoDeposito { get; set; }
-
+        [Required(ErrorMessage = "Este campo no puede estar vacío.")]
         public string tipoDeposito { get; set; }
         public string EmailConfirmado { get; set; }
 

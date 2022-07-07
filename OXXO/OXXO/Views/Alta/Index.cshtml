@@ -52,7 +52,7 @@
                         <div class="form-group">
                             <div class="mb-3">
                                 <label class="control-label">RFC</label>
-                                <input id="Rfc" name="Rfc" class="form-control" maxlength="13" style="text-transform:uppercase" required /><span asp-validation-for="RFC" class="text-danger"></span>
+                                <input asp-for="RFC" id="Rfc" name="RFC" class="form-control" maxlength="13" style="text-transform:uppercase" required /><span asp-validation-for="RFC" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -102,6 +102,7 @@
                                 <select asp-for="IdGiroComercio" id="IdGiroComercio" name="IdGiroComercio" class="form-select" asp-items="ViewBag.GiroComercio" required>
                                     <option value="">Selecciona el giro comercial</option>
                                 </select>
+                                <span asp-validation-for="IdGiroComercio" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -111,7 +112,7 @@
                         <div class="form-group">
                             <div class="mb-3">
                                 <label class="control-label">Telefono</label>
-                                <input id="Telefono" name="Telefono" class="form-control" type="number" required /><span asp-validation-for="Telefono" class="text-danger"></span>
+                                <input asp-for="Telefono"id="Telefono" name="Telefono" class="form-control" type="number" required /><span asp-validation-for="Telefono" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -119,7 +120,7 @@
                         <div class="form-group">
                             <div class="mb-3">
                                 <label class="control-label">Direccion</label>
-                                <input id="Direccion" name="Direccion" class="form-control" required /><span asp-validation-for="Direccion" class="text-danger"></span>
+                                <input asp-for="Direccion" id="Direccion" name="Direccion" class="form-control" required /><span asp-validation-for="Direccion" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -127,7 +128,7 @@
                         <div class="form-group">
                             <div class=" mb-3">
                                 <label class="control-label">Portal</label>
-                                <input id="Portal" name="Portal" class="form-control" type="url" required placeholder="https://ejemplo.com" /><span asp-validation-for="Portal" class="text-danger"></span>
+                                <input asp-for="Portal" id="Portal" name="Portal" class="form-control" type="url" required placeholder="https://ejemplo.com" /><span asp-validation-for="Portal" class="text-danger"></span>
                                 
                             </div>
                         </div>
@@ -139,7 +140,7 @@
                         <div class="form-group">
                             <div class="mb-3">
                                 <label class="control-label">Cuenta</label>
-                                <input id="CuentaDeposito" name="CuentaDeposito" class="form-control" required /><span asp-validation-for="CuentaDeposito" class="text-danger"></span>
+                                <input asp-for="CuentaDeposito" id="CuentaDeposito" name="CuentaDeposito" class="form-control" required /><span asp-validation-for="CuentaDeposito" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -150,6 +151,7 @@
                                 <select asp-for="IdBanco" id="IdBanco" name="IdBanco" class="form-select" asp-items="ViewBag.Bancos" required>
                                     <option value="">Selecciona un banco</option>
                                 </select>
+                                <span asp-validation-for="IdBanco" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -157,11 +159,12 @@
                         <div class="form-group">
                             <div class="mb-3">
                                 <label class="control-label">Tipo deposito</label>
-                                <select id="IdTipoDeposito" name="IdTipoDeposito" class="form-select" required>
+                                <select asp-for="IdTipoDeposito" id="IdTipoDeposito" name="IdTipoDeposito" class="form-select" required>
                                     <option value="">Selecciona el tipo de deposito</option>
                                     <option value="1">Por transaccion</option>
                                     <option value="2">Diario</option>
                                 </select>
+                                <span asp-validation-for="IdTipoDeposito" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
