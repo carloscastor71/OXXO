@@ -333,7 +333,7 @@ namespace OXXO.Controllers
                 using (MailMessage mm = new MailMessage(fromAddress, Correo))
                 {
                     mm.Subject = "Grupo AGM: Información Actualizada";
-                    string body = "<h1 id='titulo'>Reconfirmación de Información</h1>";
+                    string body = "<h1 id='titulo'>Confirma la nueva Información</h1>";
                     body += "<br/>";
                     body += "<p style = 'vertical - align: middle; color: #FF8B00' > Se actualizó la información que rechazaste, favor de verificar esta nueva información </ p >";
                     body += "<p></p> ";
@@ -405,6 +405,130 @@ namespace OXXO.Controllers
                     smtp.Send(mm);
                 }
             }
+        }
+
+        [HttpGet]
+        public IActionResult Categorizar(string Id)
+        {
+            Categorizacion clsCategorizacion = new Categorizacion();
+            try
+            {
+                ListadoDeClusters();
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    
+                    string consulta = $"SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, B.Banco, E.Estatus, GC.Tasa, C.IdCluster FROM Comercio as C LEFT JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio LEFT JOIN Estatus as E ON C.Estatus = E.IdEstatus LEFT JOIN Banco as B ON C.IdBanco = B.IdBanco WHERE C.RFC = '{Id}'";
+                    SqlCommand command = new SqlCommand(consulta, connection);
+
+                    connection.Open();
+                    using (SqlDataReader dr = command.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            clsCategorizacion.IdComercio = Convert.ToInt32(dr["IdComercio"]);
+                            clsCategorizacion.IdEmisor = dr.IsDBNull("IdEmisor") ? 0 : Convert.ToInt32(dr["IdEmisor"]);
+                            clsCategorizacion.RFC = dr.IsDBNull("RFC") ? "N/A" : Convert.ToString(dr["RFC"]);
+                            clsCategorizacion.Giro = dr.IsDBNull("GiroComercial") ? "N/A" : Convert.ToString(dr["GiroComercial"]);
+                            clsCategorizacion.RazonSocial = dr.IsDBNull("RazonSocial") ? "N/A" : Convert.ToString(dr["RazonSocial"]);
+                            clsCategorizacion.NombreComercial = dr.IsDBNull("NombreComercial") ? "N/A" : Convert.ToString(dr["NombreComercial"]);
+                            clsCategorizacion.Cuenta = dr.IsDBNull("CuentaDeposito") ? "N/A" : Convert.ToString(dr["CuentaDeposito"]);
+                            clsCategorizacion.Banco = dr.IsDBNull("Banco") ? "N/A" : Convert.ToString(dr["Banco"]);
+                            clsCategorizacion.Estatus = dr.IsDBNull("Estatus") ? "N/A" : Convert.ToString(dr["Estatus"]);
+                            clsCategorizacion.Comision = dr.IsDBNull("Tasa") ? "N/A" : Convert.ToString(dr["Tasa"]);
+                            clsCategorizacion.Cluster = dr.IsDBNull("IdCluster") ? 0 : Convert.ToInt32(dr["IdCluster"]);
+
+                        }
+                    }
+                    connection.Close();
+                }
+                return PartialView("Categorizar", clsCategorizacion);
+                
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+
+        }
+
+        [HttpPost]
+        [ActionName("Categorizar")]
+        public IActionResult Categorizar(Categorizacion clsCategorizacion)
+        {
+            string currentUser = HttpContext.Session.GetString("IdUsuario").ToString();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    ListadoDeClusters();
+                    using (SqlConnection connection = new SqlConnection(dbConn))
+                    {
+                        connection.Open();
+                        using (SqlCommand command = new SqlCommand("SP_Categorizar", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.AddWithValue("@IdComercio", clsCategorizacion.IdComercio);
+                            command.Parameters.AddWithValue("@Cluster", Convert.ToInt32(clsCategorizacion.Cluster));
+                            command.Parameters.AddWithValue("@Usuario_FUM", Convert.ToInt32(currentUser));
+
+                            command.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                        ViewBag.Alert = CommonServices.ShowAlert(Alerts.Success, "Categorización Aprobada.");
+                        return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+                    }
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            catch (Exception)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, "Favor de revisar su conexión al Categorizar.");
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+        }
+
+        //Listado Clusters
+        public object ListadoDeClusters()
+        {
+            try
+            {
+                List<Cluster> ListaClusters = new List<Cluster>();
+                using (SqlConnection connection = new SqlConnection(dbConn))
+                {
+                    connection.Open();
+
+                    string consulta = "SELECT * FROM Cluster WHERE Activo = 1";
+                    SqlCommand command = new SqlCommand(consulta, connection);
+                    using (SqlDataReader dr = command.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            Cluster clsCluster = new Cluster();
+                            clsCluster.IdCluster = Convert.ToInt32(dr["IdCluster"]);
+                            clsCluster.NombreCluster = Convert.ToString(dr["NombreCluster"]);
+
+                            ListaClusters.Add(clsCluster);
+                        }
+                    }
+                    ViewData["Clusters"] = new SelectList(ListaClusters.ToList(), "IdCluster", "NombreCluster");
+                    connection.Close();
+
+                    return ViewData["Clusters"];
+                }
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
+                return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
+            }
+            //return View();
         }
 
         //Listado de bancos

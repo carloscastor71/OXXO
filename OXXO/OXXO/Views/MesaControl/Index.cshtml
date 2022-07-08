@@ -1,6 +1,8 @@
-﻿@{
+﻿
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @if (ViewBag.Alert != null) //Agregado por Miguel
 {
     <div id="alerta" class="container body-content">
@@ -87,6 +89,7 @@
                         <th>Carga de Documentos</th>
                         <th>Revisión</th>
                         <th>Enviar Documento por Email</th>
+                        <th>Categorizar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,8 +128,23 @@
     <br />
 </div>
 
+<div class="accordion-bral">
+    <div>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRightEdit" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5>Categorizar Información</h5>
+
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div id="createBodyEdit" class="offcanvas-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script>
-   
+
     var data = [];
     var search = [];
     const $elemento = document.querySelector("#chips");
@@ -164,6 +182,31 @@
         $('#categorizacion').DataTable();
     });
 
+    let Id;
+
+    
+    $('#categorizacion tbody').on('click', '#editCat', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        $.ajax({
+            url: '/MesaControl/Categorizar/',
+            type: 'GET',
+            data: { Id: Id },
+            success: function (res) {
+
+                $('#offcanvasRightEdit').html(res);
+                $('#createBodyEdit').modal('show');
+            },
+            error: function () {
+                alert("¡Hay un problema con el servicio, favor de reiniciar!")
+            }
+        });
+
+    });
+
+   
+
     $.ajax({
         url: '/MesaControl/Buscar',
         data: search,
@@ -188,7 +231,7 @@
                         "previous": "Anterior",
                         "next": "Siguiente"
                     },
-               
+
                 },
                 columns: [
                     { data: 'idEmisor' },
@@ -219,9 +262,18 @@
                             return '<a class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="modal" data-bs-target="#sendDoc" data-bs-whatever=' + full.rfc + ' data-bs-whatever2=' + full.correo + '><i class="bi bi-envelope-plus"></i></a>';
                         }
                     },
+                    {
+                        render: function (data, type, full, meta) {
+                            
+                            return '<a id="editCat" data-url="Categorizar" type="submit" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" data-bs-whatever=' + full.rfc + ' ><i class="bi bi-tags-fill"></i></a>';
+
+                        }
+                    },
+
                 ],
                 "rowCallback": function (row, data, dataIndex) {
 
+                    
 
                     if (data["estatus"] == "Pendiente") {
                         $(row).find('td:eq(6)').css('padding', '10px');
@@ -250,8 +302,14 @@
                         $(row).find('td:eq(7)').css('background-color', '#FF6767');
                         $(row).find('td:eq(7)').text('Rechazado');
                     }
+
+                   
+
                 }
+     
+
             });
+            //Enviar Documento por email obtener valores de correo y rfc por button
             var exampleModal = document.getElementById('sendDoc')
             exampleModal.addEventListener('show.bs.modal', function (event) {
 
@@ -268,7 +326,20 @@
                 modalBodyInput.value = fullcorreo
                 modalLabel.value = recipient
                 modalLabel.textContent = recipient
+
+              
             })
+
+            //obtiene valor del boton categorizar
+            var offcanvas = document.getElementById('offcanvasRightEdit')
+            offcanvas.addEventListener('show.bs.offcanvas', function (event) {
+                var button = event.relatedTarget
+
+                Id = button.getAttribute('data-bs-whatever')
+            })
+           
+            
+
         }
     });
 </script>
