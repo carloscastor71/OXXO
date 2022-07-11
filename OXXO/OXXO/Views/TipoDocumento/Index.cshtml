@@ -64,7 +64,7 @@
 
     <br />
 
-    <table id="tabletipos" class="table">
+    <table id="tabletipos" class="table" style="width:100%">
         <thead>
             <tr class="text-center">
                 <th scope="col">Nombre</th>
@@ -179,6 +179,7 @@
         idt = id;
     }
 
+    
 
     $('#tabletipos tbody').on('click', '#editDoc', function (event) {
         event.preventDefault();
@@ -217,9 +218,7 @@
             }
         });
     });
-    $(document).ready(function () {
-
-    });
+    
 
 </script>
 @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
