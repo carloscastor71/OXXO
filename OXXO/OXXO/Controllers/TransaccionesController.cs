@@ -15,29 +15,27 @@ using Microsoft.Extensions.Configuration;
 
 namespace OXXO.Controllers
 {
-    public class ReferenciasController : Controller
+    public class TransaccionesController : Controller
     {
         string dbConn = "";
         public IConfiguration Configuration { get; }
-        public ReferenciasController(IConfiguration configuration)
+        public TransaccionesController(IConfiguration configuration)
         {
             Configuration = configuration;
             dbConn = Configuration["ConnectionStrings:ConexionString"];
         }
-        public IActionResult Index(string? alert, Referencias data)
+        public IActionResult Index(string? alert, Transacciones data)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(dbConn))
                 {
                     string consulta = "";
-                    List<Referencias> listarefer = new List<Referencias>();
-                   
-                    
+                    List<Transacciones> listatrans = new List<Transacciones>();
 
-                    if (data.Fecha == null && data.Fecha == null && data.IdEmisor == null && data.Estatus == null)
+                    if (data.Fecha == null && data.Fecha == null && data.IdEmisor == null && data.TipoOperacion == null)
                     {
-                        consulta = "SELECT Fecha, Hora, T.IdEmisor, Tienda,NombreCompleto, NombreComercial, Monto, Referencia, NombreEstatus FROM Transaccion AS T LEFT JOIN Comercio AS C ON T.IdEmisor = C.IdEmisor INNER JOIN EstatusPago AS EP ON T.Estatus = EP.IdEstatusPagos";
+                        consulta = "SELECT Fecha, Hora, T.IdEmisor, Tienda,NombreCompleto, NombreComercial, Monto, Referencia, NombreOperacion FROM Transaccion AS T LEFT JOIN Comercio AS C ON T.IdEmisor = C.IdEmisor LEFT JOIN TipoOperacion AS TP ON T.IdTipoOperacion = TP.IdTipoOperacion";
                     }
                     else
                     {
@@ -53,15 +51,13 @@ namespace OXXO.Controllers
                         {
                             data.IdEmisor = "NULL";
                         }
-                        if (data.Estatus == null)
+                        if (data.TipoOperacion == null)
                         {
-                            data.Estatus = "NULL";
+                            data.TipoOperacion = "NULL";
                         }
-                        consulta = string.Format("exec SP_SelectReferencias '{0}', '{1}', {2}, {3}", data.Fecha, data.Fecha2, data.IdEmisor, data.Estatus);
+                        consulta = string.Format("exec SP_SelectTransacciones '{0}', '{1}', {2}, {3}", data.Fecha, data.Fecha2, data.IdEmisor, data.TipoOperacion);
                     }
 
-                    var dateAndTime = DateTime.Now;
-                    var date = dateAndTime.Date;
 
                     SqlCommand command = new SqlCommand(consulta,connection);
                     connection.Open();
@@ -69,33 +65,33 @@ namespace OXXO.Controllers
                     {
                         while (dr.Read())
                         {
-                            Referencias clsReferencias = new Referencias();
+                            Transacciones clsTransacciones = new Transacciones();
 
-                            clsReferencias.Fecha = Convert.ToString(dr["Fecha"]).Substring(0,10);
-                            clsReferencias.Hora = Convert.ToString(dr["Hora"]);
-                            clsReferencias.IdEmisor = dr.IsDBNull("IdEmisor") ? "N/A" : Convert.ToString(dr["IdEmisor"]);
+                            clsTransacciones.Fecha = Convert.ToString(dr["Fecha"]).Substring(0,10);
+                            clsTransacciones.Hora = Convert.ToString(dr["Hora"]);
+                            clsTransacciones.IdEmisor = dr.IsDBNull("IdEmisor") ? "N/A" : Convert.ToString(dr["IdEmisor"]);
                             if (dr.IsDBNull("NombreComercial") && dr.IsDBNull("NombreCompleto"))
                             {
-                                clsReferencias.Nombre = Convert.ToString(dr["Tienda"]);
+                                clsTransacciones.Nombre = Convert.ToString(dr["Tienda"]);
                             }
                             else if (dr.IsDBNull("NombreComercial"))
                             {
-                                clsReferencias.Nombre = Convert.ToString(dr["NombreCompleto"]);
+                                clsTransacciones.Nombre = Convert.ToString(dr["NombreCompleto"]);
                             }
                             else
                             {
-                                clsReferencias.Nombre = Convert.ToString(dr["NombreComercial"]);
+                                clsTransacciones.Nombre = Convert.ToString(dr["NombreComercial"]);
                             }
                             
-                            clsReferencias.Monto = Convert.ToString(dr["Monto"]);
-                            clsReferencias.Referencia = Convert.ToString(dr["Referencia"]);
-                            clsReferencias.Estatus = Convert.ToString(dr["NombreEstatus"]);
-                            listarefer.Add(clsReferencias);
+                            clsTransacciones.Monto = Convert.ToString(dr["Monto"]);
+                            clsTransacciones.Referencia = Convert.ToString(dr["Referencia"]);
+                            clsTransacciones.TipoOperacion = Convert.ToString(dr["NombreOperacion"]);
+                            listatrans.Add(clsTransacciones);
                         }
                         connection.Close();
                     }
 
-                    return View(listarefer);
+                    return View(listatrans);
                 }
             }
             catch (Exception ex)
@@ -107,5 +103,6 @@ namespace OXXO.Controllers
             
             
         }
+        
     }
 }
