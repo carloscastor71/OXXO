@@ -1,0 +1,164 @@
+﻿@model IEnumerable<OXXO.Models.Transacciones>
+
+<div class="container">
+    <div id="PlaceHolderHere"></div>
+    <style>
+
+        .input-validation-error {
+            border-color: red;
+        }
+    </style>
+    @if (ViewBag.Alert != null)
+    {
+        <div id="alerta" class="container body-content">
+            @Html.Raw(@ViewBag.Alert)
+        </div>
+    }
+
+    <h1 id="titulo">Transacciones</h1>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i> Filtrar</button>
+
+    <div class="accordion-bral">
+        <div>
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5>Filtrar</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form name="myForm" asp-controller="Transacciones" asp-action="Index" class="p-3">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="mb-3">
+                                <div class="col">
+                                    <label>Fecha desde*</label>
+                                    <input name="Fecha" class="form-control" type="date" autocomplete="off" onchange="vacio()" /><span name="Fecha" class="text-danger"></span>
+                                </div>
+                                <div class="col">
+                                    <label>Fecha hasta*</label>
+                                    <input name="Fecha2" class="form-control" type="date" autocomplete="off" onchange="vacio()" /><span name="Fecha2" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">IdEmisor</label>
+                                <input type="text" name="IdEmisor" class="form-control form-control-sm">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Tipo de Operación</label>
+                                <select id="ddPerfiles" name="TipoOperacion" class="form-select">
+                                    <option value="">Selecciona una opción...</option>
+                                    <option value="1">Consulta</option>
+                                    <option value="2">Pago</option>
+                                    <option value="3">Reversa</option>
+                                </select> <span name="TipoOperacion" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <input id="btnFiltrar" type="submit" value="Filtrar" class="btn btn-success float-right" />
+                        </div>
+                        <div class="row p-2">
+                            <input id="btnExportar" asp-controller="Transacciones" asp-action="Exportar" type="submit" value="Exportar" class="btn btn-warning float-right"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <table id="tableRef" class="table table-striped compact" style="width:100%">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">Fecha</th>
+                <th scope="col">Hora</th>
+                <th scope="col">IdEmisor</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Tipo de Operación</th>
+                <th scope="col">Importe</th>
+                <th scope="col">Referencia</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>@Html.DisplayFor(modelItem => item.Fecha)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Hora)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdEmisor)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TipoOperacion)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Monto)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Referencia)</td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+    <br />
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+
+    function vacio() {
+
+
+        if ($("input[name=Fecha]").val() != '' && $("input[name=Fecha2]").val() == '') {
+            $('#btnExportar').attr('disabled', true)
+            $('#btnFiltrar').attr('disabled', true)
+            Swal.fire('Recuerda seleccionar la fecha limite para poder filtrar o exportar.')
+            if ($("input[name=Fecha2]").val() != '') {
+                $('#btnFiltrar').attr('disabled', false)
+                $('#btnExportar').attr('disabled', false)
+            }
+
+        }
+        else if ($("input[name=Fecha2]").val() != '' && $("input[name=Fecha]").val() == '') {
+            $('#btnExportar').attr('disabled', true)
+            $('#btnFiltrar').attr('disabled', true)
+            Swal.fire('Recuerda seleccionar la fecha de inicio para poder filtrar o exportar.')
+            if ($("input[name=Fecha]").val() != '') {
+                $('#btnFiltrar').attr('disabled', false)
+                $('#btnExportar').attr('disabled', false)
+            }
+
+        }
+        else
+        {
+            $('#btnFiltrar').attr('disabled', false);
+            $('#btnExportar').attr('disabled', false);
+        }
+
+    }
+    
+
+    $(document).ready(function () {
+        $('#tableRef').DataTable({
+            paging: true,
+            destroy: true,
+            scrollX: true,
+            searching: true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "zeroRecords": "No se encontró ningun registro",
+                "info": "Mostrando _PAGE_ página(s) de _PAGES_",
+                "infoEmpty": "No hay registros encontrados",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Buscar",
+                "serchPlaceholder": "Buscar",
+                "paginate": {
+                    "previous": "Anterior",
+                    "next": "Siguiente"
+                },
+
+            },
+        });
+    });
+
+</script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
