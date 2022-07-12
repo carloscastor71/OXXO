@@ -621,12 +621,48 @@ namespace OXXO.Controllers
                         persona = "NULL";
                     }
 
+
+                    if (data.Estatus == "Pendiente")
+                    {
+                        data.Estatus = "1";
+                    }
+                    else if (data.Estatus == "Aprobado")
+                    {
+                        data.Estatus = "2";
+                    }
+                    else if (data.Estatus=="Rechazado")
+                    {
+                        data.Estatus = "3";
+                    }
+                    else
+                    {
+                        data.Estatus = "NULL";
+                    }
+
+
+                    if (data.EmailConfirmado == "Pendiente")
+                    {
+                        data.EmailConfirmado = "1";
+                    }
+                    else if (data.EmailConfirmado == "Aprobado")
+                    {
+                        data.EmailConfirmado = "2";
+                    }
+                    else if (data.EmailConfirmado == "Rechazado")
+                    {
+                        data.EmailConfirmado = "3";
+                    }
+                    else
+                    {
+                        data.EmailConfirmado = "NULL";
+                    }
+
                     List<Comercio> listComercio = new List<Comercio>();
 
                     message res = new message();
 
-                    string consulta = string.Format("exec SP_SelectComercios {0}, {1}, {2}, {3}, {4}, {5}", 1, persona, data.rfc, data.NombreCompleto, data.RazonSocial, "NULL");
-                    //string consulta = "select * from Comercio";
+                    string consulta = string.Format("exec SP_SelectComercios {0}, {1}, '{2}', '{3}', '{4}', {5}, {6}, '{7}'", 1, persona, data.rfc, data.NombreCompleto, data.RazonSocial, data.Estatus, data.EmailConfirmado, data.IdEmisor);
+         
 
                     SqlCommand command = new SqlCommand(consulta, connection);
                     connection.Open();
@@ -651,7 +687,7 @@ namespace OXXO.Controllers
                             cmc.Portal = Convert.ToString(dr["Portal"]);
                             cmc.PersonaMoral = Convert.ToInt32(dr["PersonaMoral"]);
                             cmc.PersonaFisica = Convert.ToInt32(dr["PersonaFisica"]);
-                            cmc.Estatus = Convert.ToString(dr["Estatus"]);
+                            cmc.Estatus = dr.IsDBNull("Estatus") ? "Pendiente": Convert.ToString(dr["Estatus"]);
                             cmc.Activo = Convert.ToInt32(dr["Activo"]);
                             cmc.IdCompania = Convert.ToString(dr["Compania"]);
                             cmc.IdTipoDeposito = Convert.ToString(dr["TipoDeposito"]);

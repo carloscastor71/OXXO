@@ -16,6 +16,8 @@ for (let CheckBox of document.getElementsByClassName('only-one')) {
 }
 
 $('#filtrar').click(function (e) {
+
+    let Id;
     var data = [];
     var search = [];
     const $elemento = document.querySelector("#chips");
@@ -47,7 +49,7 @@ $('#filtrar').click(function (e) {
                 destroy: true,
                 scrollX: true,
                 searching: true,
-                "language": {
+                language: {
                     "lengthMenu": "Mostrar _MENU_ registros",
                     "zeroRecords": "No se encontró ningun registro",
                     "info": "Mostrando _PAGE_ página(s) de _PAGES_",
@@ -90,39 +92,62 @@ $('#filtrar').click(function (e) {
                             return '<a class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="modal" data-bs-target="#sendDoc" data-bs-whatever=' + full.rfc + ' data-bs-whatever2=' + full.correo + '><i class="bi bi-envelope-plus"></i></a>';
                         }
                     },
+                    {
+                        render: function (data, type, full, meta) {
+
+                            return '<a id="editCat" data-url="Categorizar" type="submit" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" data-bs-whatever=' + full.rfc + ' ><i class="bi bi-tags-fill"></i></a>';
+
+                        }
+                    },
+
                 ],
-                "rowCallback": function (row, data, dataIndex) {
+                columnDefs: [
+                    {
+                        targets: 6,
+
+                        render: function (data, type, row, meta) {
+
+                            if (data == "Pendiente") {
+                                $(row).find('td:eq(6)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-warning btn-sm disabled-button" value="' + data + '"/>';
+                            }
+                            if (data == "Aprobado") {
+                                $(row).find('td:eq(6)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-success btn-sm disabled-button" value="' + data + '"/>';
+                            }
+                            if (data == "Rechazado") {
+                                $(row).find('td:eq(6)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-danger btn-sm disabled-button" value="' + data + '"/>';
+                            }
 
 
-                    if (data["estatus"] == "Pendiente") {
-                        $(row).find('td:eq(6)').css('padding', '10px');
-                        $(row).find('td:eq(6)').css('background-color', '#FFD500');
+                        }
+                    },
+                    {
+                        targets: 7,
+
+                        render: function (data, type, row, meta) {
+
+                            if (data == "1") {
+                                $(row).find('td:eq(7)').css('padding', '10px');
+
+                                return '<input type="button" class="btn btn-warning btn-sm disabled-button" value="Pendiente"/>';
+                            }
+                            if (data == "2") {
+                                $(row).find('td:eq(7)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-success btn-sm disabled-button" value="Aprobado"/>';
+                            }
+                            if (data == "3") {
+                                $(row).find('td:eq(7)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-danger btn-sm disabled-button" value="Rechazado"/>';
+                            }
+
+                        }
                     }
-                    if (data["estatus"] == "Aprobado") {
-                        $(row).find('td:eq(6)').css('padding', '10px');
-                        $(row).find('td:eq(6)').css('background-color', '#96FF71');
-                    }
-                    if (data["estatus"] == "Rechazado") {
-                        $(row).find('td:eq(6)').css('padding', '10px');
-                        $(row).find('td:eq(6)').css('background-color', '#FF6767');
-                    }
-                    if (data["emailConfirmado"] == "1") {
-                        $(row).find('td:eq(7)').css('padding', '10px');
-                        $(row).find('td:eq(7)').css('background-color', '#FFD500');
-                        $(row).find('td:eq(7)').text('Pendiente');
-                    }
-                    if (data["emailConfirmado"] == "2") {
-                        $(row).find('td:eq(7)').css('padding', '10px');
-                        $(row).find('td:eq(7)').css('background-color', '#96FF71');
-                        $(row).find('td:eq(7)').text('Aprobado');
-                    }
-                    if (data["emailConfirmado"] == "3") {
-                        $(row).find('td:eq(7)').css('padding', '10px');
-                        $(row).find('td:eq(7)').css('background-color', '#FF6767');
-                        $(row).find('td:eq(7)').text('Rechazado');
-                    }
-                }
+                ],
+
             });
+            //Enviar Documento por email obtener valores de correo y rfc por button
             var exampleModal = document.getElementById('sendDoc')
             exampleModal.addEventListener('show.bs.modal', function (event) {
 
@@ -139,7 +164,20 @@ $('#filtrar').click(function (e) {
                 modalBodyInput.value = fullcorreo
                 modalLabel.value = recipient
                 modalLabel.textContent = recipient
+
+
             })
+
+            //obtiene valor del boton categorizar
+            var offcanvas = document.getElementById('offcanvasRightEdit')
+            offcanvas.addEventListener('show.bs.offcanvas', function (event) {
+                var button = event.relatedTarget
+
+                Id = button.getAttribute('data-bs-whatever')
+            })
+
+
+
         }
     });
 });
