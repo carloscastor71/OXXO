@@ -15,6 +15,10 @@
     .red {
         background-color: red !important;
     }
+    .disabled-button {
+        pointer-events: none;
+      /*  font-size:12px;*/
+    }
 </style>
 <div class="container">
     <h1 id="titulo">Mesa de Control</h1>
@@ -35,18 +39,23 @@
                     <form id="dataForm" class="p-4">
                         <div class="row">
                             <div class="mb-2">
-                                <label for="exampleFormControlInput1" class="form-label">RFC</label>
+                                <label for="exampleFormControlInput1" class="form-label">ID Emisor: </label>
+                                <input type="text" name="IdEmisor" class="form-control form-control-sm" id="exampleFormControlInput1" style="text-transform:uppercase">
+                            </div>
+                            <div class="mb-2">
+                                <label for="exampleFormControlInput1" class="form-label">RFC: </label>
                                 <input type="text" name="Rfc" class="form-control form-control-sm" id="exampleFormControlInput1" maxlength="13" style="text-transform:uppercase">
                             </div>
                             <div class="mb-2">
-                                <label for="exampleFormControlInput1" class="form-label">Nombre Completo</label>
+                                <label for="exampleFormControlInput1" class="form-label">Nombre Completo: </label>
                                 <input type="text" name="NombreCompleto" class="form-control form-control-sm" id="exampleFormControlInput1">
                             </div>
                             <div class="mb-2">
-                                <label for="exampleFormControlInput1" class="form-label">Razon Social</label>
+                                <label for="exampleFormControlInput1" class="form-label">Razon Social: </label>
                                 <input type="text" name="RazonSocial" class="form-control form-control-sm" id="exampleFormControlInput1">
                             </div>
                             <div class="mb-2">
+                                <label for="exampleFormControlInput1" class="form-label">Tipo de Persona:</label>
                                 <div class="row">
                                     <div class="col-lg-5">
                                         <input type="checkbox" name="Persona" id="checkGrado" value="Fisica" class="only-one">Fisica
@@ -56,9 +65,27 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="mb-2">
+                                <label for="exampleFormControlInput1" class="form-label">Estatus del Comercio:</label>
+                                <select id="ddEstatus" name="Estatus" class="form-select">
+                                    <option value="">Selecciona una opción...</option>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Aprobado">Aprobado</option>
+                                    <option value="Rechazado">Rechazado</option>
+                                </select> <span name="Estatus" class="text-danger"></span>
+                            </div>
+                            <div class="mb-2">
+                                <label for="exampleFormControlInput1" class="form-label">Confirmación de Correo:</label>
+                                <select id="ddEstatus" name="EmailConfirmado" class="form-select">
+                                    <option value="">Selecciona una opción...</option>
+                                    <option value="Pendiente">Email Pendiente</option>
+                                    <option value="Aprobado">Email Aprobado</option>
+                                    <option value="Rechazado">Email Rechazado</option>
+                                </select> <span name="EmailConfirmado" class="text-danger"></span>
+                            </div>
                         </div>
                         <div class="row p-2">
-                            <button class="btn btn-primary" type="submit" id="filtrar" data-bs-dismiss="offcanvas" aria-label="Close" style="width: 120px; border-radius: 0px; " onclick="cargar()"><i class="bi bi-search"></i> Buscar</button>
+                            <button class="btn btn-primary" type="submit" id="filtrar" data-bs-dismiss="offcanvas" aria-label="Close"><i class="bi bi-search"></i> Buscar</button>
                         </div>
                     </form>
                 </div>
@@ -68,8 +95,7 @@
     <div class="content-chip row">
         <ul id="chips"></ul>
     </div>
-    <div class="row">
-        <div class="col-sm-12">
+    
             <table id="categorizacion" class="table-responsive table-striped" style="width:100%">
                 <thead>
                     <tr>
@@ -91,8 +117,7 @@
                 <tbody>
                 </tbody>
             </table>
-        </div>
-    </div>
+  
     <div class="modal fade" id="sendDoc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -174,9 +199,9 @@
 
     });
 
-    $(window).resize(function () {
-        $('#categorizacion').DataTable();
-    });
+    //$(window).resize(function () {
+    //    $('#categorizacion').DataTable();
+    //});
 
     let Id;
 
@@ -215,7 +240,7 @@
                 destroy: true,
                 scrollX: true,
                 searching: true,
-                "language": {
+                language: {
                     "lengthMenu": "Mostrar _MENU_ registros",
                     "zeroRecords": "No se encontró ningun registro",
                     "info": "Mostrando _PAGE_ página(s) de _PAGES_",
@@ -267,43 +292,50 @@
                     },
 
                 ],
-                "rowCallback": function (row, data, dataIndex) {
+                columnDefs: [
+                    {
+                        targets: 6,
 
-                    
+                        render: function (data, type, row, meta) {
 
-                    if (data["estatus"] == "Pendiente") {
-                        $(row).find('td:eq(6)').css('padding', '10px');
-                        $(row).find('td:eq(6)').css('background-color', '#FFD500');
-                    }
-                    if (data["estatus"] == "Aprobado") {
-                        $(row).find('td:eq(6)').css('padding', '10px');
-                        $(row).find('td:eq(6)').css('background-color', '#96FF71');
-                    }
-                    if (data["estatus"] == "Rechazado") {
-                        $(row).find('td:eq(6)').css('padding', '10px');
-                        $(row).find('td:eq(6)').css('background-color', '#FF6767');
-                    }
-                    if (data["emailConfirmado"] == "1") {
-                        $(row).find('td:eq(7)').css('padding', '10px');
-                        $(row).find('td:eq(7)').css('background-color', '#FFD500');
-                        $(row).find('td:eq(7)').text('Pendiente');
-                    }
-                    if (data["emailConfirmado"] == "2") {
-                        $(row).find('td:eq(7)').css('padding', '10px');
-                        $(row).find('td:eq(7)').css('background-color', '#96FF71');
-                        $(row).find('td:eq(7)').text('Aprobado');
-                    }
-                    if (data["emailConfirmado"] == "3") {
-                        $(row).find('td:eq(7)').css('padding', '10px');
-                        $(row).find('td:eq(7)').css('background-color', '#FF6767');
-                        $(row).find('td:eq(7)').text('Rechazado');
-                    }
+                            if (data == "Pendiente") {
+                                $(row).find('td:eq(6)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-warning btn-sm disabled-button" value="' + data + '"/>';
+                            }
+                            if (data == "Aprobado") {
+                                $(row).find('td:eq(6)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-success btn-sm disabled-button" value="' + data + '"/>';
+                            }
+                            if (data == "Rechazado") {
+                                $(row).find('td:eq(6)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-danger btn-sm disabled-button" value="' + data + '"/>';
+                            }
+                            
+                        }
+                    },
+                    {
+                        targets: 7,
 
-                   
+                        render: function (data, type, row, meta) {
 
-                }
-     
+                            if (data == "1") {
+                                $(row).find('td:eq(7)').css('padding', '10px');
+                             
+                                return '<input type="button" class="btn btn-warning btn-sm disabled-button" value="Pendiente"/>';
+                            }
+                            if (data == "2") {
+                                $(row).find('td:eq(7)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-success btn-sm disabled-button" value="Aprobado"/>';
+                            }
+                            if (data == "3") {
+                                $(row).find('td:eq(7)').css('padding', '10px');
+                                return '<input type="button" class="btn btn-danger btn-sm disabled-button" value="Rechazado"/>';
+                            }
 
+                        }
+                    }
+                ],
+               
             });
             //Enviar Documento por email obtener valores de correo y rfc por button
             var exampleModal = document.getElementById('sendDoc')
