@@ -7,6 +7,10 @@
         .input-validation-error {
             border-color: red;
         }
+        .btn-sm-menu {
+            width: 120px;
+            border-radius: 0px;
+        }
     </style>
     @if (ViewBag.Alert != null)
     {
@@ -17,7 +21,7 @@
 
     <h1 id="titulo">Referencias</h1>
     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i> Filtrar</button>
-
+    <a id="Exportar"></a>
     <div class="accordion-bral">
         <div>
 
@@ -87,7 +91,7 @@
                     <td>@Html.DisplayFor(modelItem => item.IdEmisor)</td>
                     <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                     <td>@Html.DisplayFor(modelItem => item.Estatus)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Monto)</td>
+                    <td>$@Html.DisplayFor(modelItem => item.Monto)</td>
                     <td>@Html.DisplayFor(modelItem => item.Referencia)</td>
 
                 </tr>
@@ -134,7 +138,7 @@
     
 
     $(document).ready(function () {
-        $('#tableRef').DataTable({
+        var table= $('#tableRef').DataTable({
             paging: true,
             destroy: true,
             scrollX: true,
@@ -154,6 +158,20 @@
 
             },
         });
+
+        var buttons = new $.fn.dataTable.Buttons(table, {
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Exportar',
+                    title: 'Referencias',
+                    className: 'btn btn-warning float-right btn-sm-menu',
+                    formButtons: [
+                        { text: 'Exportar', className: 'btn btn-warning float-right btn-sm-menu', action: function Exportar() { this.submit(); } },
+                    ]
+                }
+            ]
+        }).container().appendTo($('#Exportar'));
     });
 
 </script>

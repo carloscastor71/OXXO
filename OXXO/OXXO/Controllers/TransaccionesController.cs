@@ -35,7 +35,7 @@ namespace OXXO.Controllers
 
                     if (data.Fecha == null && data.Fecha == null && data.IdEmisor == null && data.TipoOperacion == null)
                     {
-                        consulta = "SELECT Fecha, Hora, T.IdEmisor, Tienda,NombreCompleto, NombreComercial, Monto, Referencia, NombreOperacion FROM Transaccion AS T LEFT JOIN Comercio AS C ON T.IdEmisor = C.IdEmisor LEFT JOIN TipoOperacion AS TP ON T.IdTipoOperacion = TP.IdTipoOperacion";
+                        consulta = "SELECT Fecha, Hora, T.IdEmisor, Tienda,NombreCompleto, NombreComercial, Monto, Referencia, NombreOperacion FROM Transaccion AS T LEFT JOIN Comercio AS C ON T.IdEmisor = C.IdEmisor INNER JOIN TipoOperacion AS TP ON T.IdTipoOperacion = TP.IdTipoOperacion";
                     }
                     else
                     {
@@ -99,10 +99,7 @@ namespace OXXO.Controllers
 
                 ViewBag.Alert = CommonServices.ShowAlert(Alerts.Danger, ex.Message);
                 return RedirectToAction(nameof(Index), new { alert = ViewBag.Alert });
-            }
-            
-            
+            }   
         }
-        
     }
 }

@@ -7,6 +7,13 @@
         .input-validation-error {
             border-color: red;
         }
+
+        .btn-sm-menu {
+
+            width: 120px;
+            border-radius: 0px;
+        }
+
     </style>
     @if (ViewBag.Alert != null)
     {
@@ -17,7 +24,8 @@
 
     <h1 id="titulo">Transacciones</h1>
     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i> Filtrar</button>
-
+   @* <button id="Exportar" class="btn btn-warning" type="button"  style="width: 120px; border-radius: 0px; "><i class="bi bi-funnel"></i> Exportar</button>*@
+    <a id="Exportar"></a>
     <div class="accordion-bral">
         <div>
 
@@ -57,9 +65,7 @@
                         <div class="row p-2">
                             <input id="btnFiltrar" type="submit" value="Filtrar" class="btn btn-success float-right" />
                         </div>
-                        <div class="row p-2">
-                            <input id="btnExportar" asp-controller="Transacciones" asp-action="Exportar" type="submit" value="Exportar" class="btn btn-warning float-right"/>
-                        </div>
+                       
                     </form>
                 </div>
             </div>
@@ -69,6 +75,7 @@
     <br />
 
     <table id="tableRef" class="table table-striped compact" style="width:100%">
+
         <thead>
             <tr class="text-center">
                 <th scope="col">Fecha</th>
@@ -89,7 +96,7 @@
                     <td>@Html.DisplayFor(modelItem => item.IdEmisor)</td>
                     <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                     <td>@Html.DisplayFor(modelItem => item.TipoOperacion)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Monto)</td>
+                    <td>$@Html.DisplayFor(modelItem => item.Monto)</td>
                     <td>@Html.DisplayFor(modelItem => item.Referencia)</td>
 
                 </tr>
@@ -128,21 +135,33 @@
             }
 
         }
-        else
-        {
+        else {
             $('#btnFiltrar').attr('disabled', false);
             $('#btnExportar').attr('disabled', false);
         }
 
     }
-    
+
 
     $(document).ready(function () {
-        $('#tableRef').DataTable({
+       var table= $('#tableRef').DataTable({
+   
+            
             paging: true,
             destroy: true,
             scrollX: true,
             searching: true,
+            //buttons: [
+            //    {
+            //        extend: 'excelHtml5',
+            //        text: 'Exportar a Excel',
+            //        title: 'Transacciones Filtradas',
+            //        className: 'btn btn-warning float-right btn-sm-menu',
+            //        formButtons: [
+            //            { text: 'Exportar', className: 'btn btn-warning float-right btn-sm-menu', action: function Exportar() { this.submit(); } },
+            //        ]
+            //    },
+            //],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros",
                 "zeroRecords": "No se encontró ningun registro",
@@ -155,9 +174,23 @@
                     "previous": "Anterior",
                     "next": "Siguiente"
                 },
-
             },
+
         });
+
+        var buttons = new $.fn.dataTable.Buttons(table, {
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Exportar',
+                    title: 'Transacciones',
+                    className: 'btn btn-warning float-right btn-sm-menu',
+                    formButtons: [
+                        { text: 'Exportar', className: 'btn btn-warning float-right btn-sm-menu', action: function Exportar() { this.submit(); } },
+                    ]
+                }
+            ]
+        }).container().appendTo($('#Exportar'));
     });
 
 </script>
