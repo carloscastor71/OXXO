@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Mail;
 using System.IO;
+using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace OXXO.Controllers
 {
@@ -600,11 +602,12 @@ namespace OXXO.Controllers
         }
 
         // Metodo encargado de llenar la tabla de comercion y filtrar la informacion
-        public JsonResult Buscar(searchConceptos data)
+        public object Buscar(searchConceptos data)
         {
-            //string currentUser = HttpContext.Session.GetString("IdUsuario").ToString();
+            string puestoUser = HttpContext.Session.GetString("IdPerfil");
             try
             {
+                Permisos permisos = new Permisos();
                 using (SqlConnection connection = new SqlConnection(dbConn))
                 {
                     var persona = "NULL";
@@ -661,6 +664,8 @@ namespace OXXO.Controllers
 
                     message res = new message();
 
+                    List<message> json = new List<message>();
+
                     string consulta = string.Format("exec SP_SelectComercios {0}, {1}, '{2}', '{3}', '{4}', {5}, {6}, '{7}'", 1, persona, data.rfc, data.NombreCompleto, data.RazonSocial, data.Estatus, data.EmailConfirmado, data.IdEmisor);
          
 
@@ -695,11 +700,19 @@ namespace OXXO.Controllers
                             listComercio.Add(cmc);
                         }
 
+                        var perms = new PermisosController(Configuration).GetPermisosUsuario("Index", "MesaControl", puestoUser);
+                        res.permiso = perms.Editar;
                         res.status = true;
                         res.mensaje = "Success";
                         res.data = listComercio;
+
+                        json.Add(res);
                         connection.Close();
-                        return Json(res);
+
+
+                       
+
+                        return JsonConvert.SerializeObject(json);
 
                     }
 
