@@ -10,6 +10,8 @@ namespace OXXO.Models
         public bool status { get; set; }
         public string mensaje { get; set; }
 
+        public bool permiso { get; set; }
+
         public List<Comercio> data { get; set; }
         public List<Documento> datad { get; set; }
     }

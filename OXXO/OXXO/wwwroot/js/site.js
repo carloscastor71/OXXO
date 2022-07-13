@@ -41,10 +41,11 @@ $('#filtrar').click(function (e) {
         url: '/MesaControl/Buscar',
         data: search,
         type: 'POST',
+        dataType: "json",
         bFilter: false,
         success: function (json) {
             $('#categorizacion').DataTable({
-                data: json.data,
+                data: json[0].data,
                 paging: true,
                 destroy: true,
                 scrollX: true,
@@ -64,39 +65,38 @@ $('#filtrar').click(function (e) {
 
                 },
                 columns: [
-                    { data: 'idEmisor' },
-                    { data: 'rfc' },
-                    { data: 'nombreCompleto' },
-                    { data: 'nombreComercial' },
-                    { data: 'direccion' },
-                    { data: 'banco' },
-                    { data: 'estatus' },
-                    { data: 'emailConfirmado' },
+                    { data: 'IdEmisor' },
+                    { data: 'RFC' },
+                    { data: 'NombreCompleto' },
+                    { data: 'NombreComercial' },
+                    { data: 'Direccion' },
+                    { data: 'Banco' },
+                    { data: 'Estatus' },
+                    { data: 'EmailConfirmado' },
                     {
                         render: function (data, type, full, meta) {
-                            return '<a href="/MesaControl/Editar?RFC=' + full.rfc + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-pencil-square"></i></a>';
+                            return '<a href="/MesaControl/Editar?RFC=' + full.RFC + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-pencil-square"></i></a>';
                         }
                     },
                     {
                         render: function (data, type, full, meta) {
-                            return '<a href="/CargaDocumentos/Index?RFC=' + full.rfc + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-folder-plus"></i></a>';
+                            return '<a href="/CargaDocumentos/Index?RFC=' + full.RFC + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-folder-plus"></i></a>';
                         }
                     },
                     {
                         render: function (data, type, full, meta) {
-                            return '<a href="/MesaControl/Verificacion?RFC=' + full.rfc + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
+                            return '<a href="/MesaControl/Verificacion?RFC=' + full.RFC + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
                         }
                     },
                     {
                         render: function (data, type, full, meta) {
-                            return '<a class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="modal" data-bs-target="#sendDoc" data-bs-whatever=' + full.rfc + ' data-bs-whatever2=' + full.correo + '><i class="bi bi-envelope-plus"></i></a>';
+                            return '<a class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="modal" data-bs-target="#sendDoc" data-bs-whatever=' + full.RFC + ' data-bs-whatever2=' + full.Correo + '><i class="bi bi-envelope-plus"></i></a>';
                         }
                     },
                     {
                         render: function (data, type, full, meta) {
 
-                            return '<a id="editCat" data-url="Categorizar" type="submit" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" data-bs-whatever=' + full.rfc + ' ><i class="bi bi-tags-fill"></i></a>';
-
+                            return '<a id="editCat" data-url="Categorizar" type="submit" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" data-bs-whatever=' + full.RFC + ' ><i class="bi bi-tags-fill"></i></a>';
                         }
                     },
 
@@ -120,7 +120,6 @@ $('#filtrar').click(function (e) {
                                 return '<input type="button" class="btn btn-danger btn-sm disabled-button" value="' + data + '"/>';
                             }
 
-
                         }
                     },
                     {
@@ -143,10 +142,60 @@ $('#filtrar').click(function (e) {
                             }
 
                         }
-                    }
+                    },
+
+                    {
+
+                        targets: 8,
+                        visible: json[0].permiso === false ? false : true,
+                        render: function (data, type, full, meta) {
+                            return '<a href="/MesaControl/Editar?RFC=' + full.RFC + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-pencil-square"></i></a>';
+
+                        }
+
+                    },
+                    {
+
+                        targets: 9,
+                        visible: json[0].permiso === false ? false : true,
+                        render: function (data, type, full, meta) {
+                            return '<a href="/CargaDocumentos/Index?RFC=' + full.RFC + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-folder-plus"></i></a>';
+                        }
+
+                    },
+                    {
+
+                        targets: 10,
+                        visible: json[0].permiso === false ? false : true,
+                        render: function (data, type, full, meta) {
+                            return '<a href="/MesaControl/Verificacion?RFC=' + full.RFC + '" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px; "><i class="bi bi-clipboard-check"></i></a>';
+                        }
+
+                    },
+                    {
+
+                        targets: 11,
+                        visible: json[0].permiso === false ? false : true,
+                        render: function (data, type, full, meta) {
+                            return '<a class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="modal" data-bs-target="#sendDoc" data-bs-whatever=' + full.RFC + ' data-bs-whatever2=' + full.Correo + '><i class="bi bi-envelope-plus"></i></a>';
+                        }
+
+                    },
+                    {
+                        targets: 12,
+                        visible: json[0].permiso === false ? false : true,
+                        render: function (data, type, full, meta) {
+
+                            return '<a id="editCat" data-url="Categorizar" type="submit" class="btn btn-outline-secundary btn-sm" style="border-radius: 0px;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRightEdit" data-bs-whatever=' + full.RFC + ' ><i class="bi bi-tags-fill"></i></a>';
+                        }
+
+                    },
                 ],
 
+
+
             });
+
             //Enviar Documento por email obtener valores de correo y rfc por button
             var exampleModal = document.getElementById('sendDoc')
             exampleModal.addEventListener('show.bs.modal', function (event) {
@@ -175,9 +224,15 @@ $('#filtrar').click(function (e) {
 
                 Id = button.getAttribute('data-bs-whatever')
             })
-
-
-
+        },
+        error: function () {
+            Swal.fire({
+                title: json[0].mensaje,
+                text: json[0].data,
+                icon: 'error',
+                confirmButtonText: 'cerrar'
+            });
         }
+
     });
 });
