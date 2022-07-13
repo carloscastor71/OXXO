@@ -37,11 +37,11 @@ namespace OXXO.Controllers
                 
                 if (!String.IsNullOrEmpty(IdEmisor))
                 {
-                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, IdBanco, E.Estatus, GC.Tasa, CL.NombreCluster FROM Comercio as C LEFT JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio LEFT JOIN Estatus as E ON C.Estatus = E.IdEstatus LEFT JOIN Cluster as CL ON C.IdCluster = CL.IdCluster WHERE IdEmisor LIKE '%" + IdEmisor + "%'";
+                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, NombreCompleto,CuentaDeposito, IdBanco, E.Estatus, GC.Tasa, CL.NombreCluster FROM Comercio as C LEFT JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio LEFT JOIN Estatus as E ON C.Estatus = E.IdEstatus LEFT JOIN Cluster as CL ON C.IdCluster = CL.IdCluster WHERE IdEmisor LIKE '%" + IdEmisor + "%' ORDER BY C.FUM DESC";
                 }
                 else
                 {
-                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, IdBanco, E.Estatus, GC.Tasa, CL.NombreCluster FROM Comercio as C LEFT JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio LEFT JOIN Estatus as E ON C.Estatus = E.IdEstatus LEFT JOIN Cluster as CL ON C.IdCluster = CL.IdCluster";
+                    consulta = "SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, NombreCompleto,CuentaDeposito, IdBanco, E.Estatus, GC.Tasa, CL.NombreCluster FROM Comercio as C LEFT JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio LEFT JOIN Estatus as E ON C.Estatus = E.IdEstatus LEFT JOIN Cluster as CL ON C.IdCluster = CL.IdCluster ORDER BY C.FUM DESC";
                 }
 
                 List<Categorizacion> ListaCategorizacion = new List<Categorizacion>();
@@ -60,7 +60,8 @@ namespace OXXO.Controllers
                                 Categorizacion clsCategorizacion = new Categorizacion();
                                 clsCategorizacion.IdComercio = Convert.ToInt32(dr["IdComercio"]);
                                 clsCategorizacion.IdEmisor = dr.IsDBNull("IdEmisor") ? 0 : Convert.ToInt32(dr["IdEmisor"]);
-                                clsCategorizacion.NombreComercial = dr.IsDBNull("NombreComercial") ? "N/A" : Convert.ToString(dr["NombreComercial"]);
+    
+                                clsCategorizacion.NombreComercial = dr.IsDBNull("NombreComercial") ? Convert.ToString(dr["NombreCompleto"]) : Convert.ToString(dr["NombreComercial"]);
                                 clsCategorizacion.NombreCluster = dr.IsDBNull("NombreCluster") ? "N/A" : Convert.ToString(dr["NombreCluster"]);
                                 clsCategorizacion.Comision = dr.IsDBNull("Tasa") ? "N/A " : Convert.ToString(dr["Tasa"]);
                                 clsCategorizacion.Estatus = Convert.ToString(dr["Estatus"]);
@@ -112,7 +113,7 @@ namespace OXXO.Controllers
                 ListadoDeClusters();
                 using (SqlConnection connection = new SqlConnection(dbConn))
                 {
-                    string consulta = $"SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, CuentaDeposito, B.Banco, E.Estatus, GC.Tasa, C.IdCluster FROM Comercio as C LEFT JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio LEFT JOIN Estatus as E ON C.Estatus = E.IdEstatus LEFT JOIN Banco as B ON C.IdBanco = B.IdBanco WHERE C.IdComercio = '{Id}'";
+                    string consulta = $"SELECT C.IdComercio ,IdEmisor, RFC, GC.GiroComercial, RazonSocial, NombreComercial, NombreCompleto,CuentaDeposito, B.Banco, E.Estatus, GC.Tasa, C.IdCluster FROM Comercio as C LEFT JOIN GiroComercio as GC ON C.IdGiroComercio = GC.IdGiroComercio LEFT JOIN Estatus as E ON C.Estatus = E.IdEstatus LEFT JOIN Banco as B ON C.IdBanco = B.IdBanco WHERE C.IdComercio = '{Id}' ";
                     SqlCommand command = new SqlCommand(consulta, connection);
 
                     connection.Open();
@@ -125,7 +126,7 @@ namespace OXXO.Controllers
                             clsCategorizacion.RFC = dr.IsDBNull("RFC") ? "N/A" : Convert.ToString(dr["RFC"]);
                             clsCategorizacion.Giro = dr.IsDBNull("GiroComercial") ? "N/A" : Convert.ToString(dr["GiroComercial"]);
                             clsCategorizacion.RazonSocial = dr.IsDBNull("RazonSocial") ? "N/A" : Convert.ToString(dr["RazonSocial"]);
-                            clsCategorizacion.NombreComercial = dr.IsDBNull("NombreComercial") ? "N/A" : Convert.ToString(dr["NombreComercial"]);
+                            clsCategorizacion.NombreComercial = dr.IsDBNull("NombreComercial") ? Convert.ToString(dr["NombreCompleto"]) : Convert.ToString(dr["NombreComercial"]);
                             clsCategorizacion.Cuenta = dr.IsDBNull("CuentaDeposito") ? "N/A" : Convert.ToString(dr["CuentaDeposito"]);
                             clsCategorizacion.Banco = dr.IsDBNull("Banco") ? "N/A" : Convert.ToString(dr["Banco"]);
                             clsCategorizacion.Estatus = dr.IsDBNull("Estatus") ? "N/A" : Convert.ToString(dr["Estatus"]);
