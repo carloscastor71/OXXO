@@ -30,9 +30,9 @@
     </div>
     <br />
 
-    <table id="tablecat" class="table">
+    <table id="tablecat" class="table table-striped" style="width:100%">
         <thead>
-            <tr class="text-center">
+            <tr>
                 <th scope="col">ID Emisor</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Cluster</th>
@@ -85,7 +85,6 @@
     function datos(id) {
         idt = id;
     }
-   
 
     $('#tablecat tbody').on('click', '#editCat', function (event) {
         event.preventDefault();
@@ -106,7 +105,25 @@
 
     });
     $(document).ready(function () {
+        $('#tablecat').dataTable({
+            dom: 'Blfrtip',
+            paging: true,
+            searching: true,
 
+            language: {
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "zeroRecords": "No se encontró ningun registro",
+                "info": "Mostrando _PAGE_ página(s) de _PAGES_",
+                "infoEmpty": "No hay registros encontrados",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Buscar",
+                "serchPlaceholder": "Buscar",
+                "paginate": {
+                    "previous": "Anterior",
+                    "next": "Siguiente"
+                },
+            },
+        });
     });
 
 </script>

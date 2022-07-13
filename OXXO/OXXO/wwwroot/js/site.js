@@ -102,21 +102,22 @@ $('#filtrar').click(function (e) {
 
                 ],
                 columnDefs: [
+                    { "className": "dt-center", "targets": "_all" },
                     {
                         targets: 6,
 
                         render: function (data, type, row, meta) {
 
                             if (data == "Pendiente") {
-                                $(row).find('td:eq(6)').css('padding', '10px');
+
                                 return '<input type="button" class="btn btn-warning btn-sm disabled-button" value="' + data + '"/>';
                             }
                             if (data == "Aprobado") {
-                                $(row).find('td:eq(6)').css('padding', '10px');
+
                                 return '<input type="button" class="btn btn-success btn-sm disabled-button" value="' + data + '"/>';
                             }
                             if (data == "Rechazado") {
-                                $(row).find('td:eq(6)').css('padding', '10px');
+
                                 return '<input type="button" class="btn btn-danger btn-sm disabled-button" value="' + data + '"/>';
                             }
 
@@ -128,16 +129,16 @@ $('#filtrar').click(function (e) {
                         render: function (data, type, row, meta) {
 
                             if (data == "1") {
-                                $(row).find('td:eq(7)').css('padding', '10px');
+
 
                                 return '<input type="button" class="btn btn-warning btn-sm disabled-button" value="Pendiente"/>';
                             }
                             if (data == "2") {
-                                $(row).find('td:eq(7)').css('padding', '10px');
+
                                 return '<input type="button" class="btn btn-success btn-sm disabled-button" value="Aprobado"/>';
                             }
                             if (data == "3") {
-                                $(row).find('td:eq(7)').css('padding', '10px');
+
                                 return '<input type="button" class="btn btn-danger btn-sm disabled-button" value="Rechazado"/>';
                             }
 
